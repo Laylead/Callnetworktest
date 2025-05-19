@@ -5,9 +5,71 @@
 </head>
 <body>
   <h2>Frontend2 - Receiver</h2>
-  <p id="coinDisplay">Coins left: 100</p>
-  <audio id="ringtone" src="ringtone.mp3" loop></audio>
+  <button id="acceptBtn" style="display:none">Accept Call</button>
+  <audio id="ringtone" src="https://cdn.pixabay.com/audio/2022/03/15/audio_0751b1a6ba.mp3" loop></audio>
+  <p id="status"></p>
+
   <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N-4.19.0.js"></script>
-  <script type="module" src="call.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlh428ba5aSFt6x2pPkVjeEk5D6AbIU7Y",
+      authDomain: "kheemz-fb9b6.firebaseapp.com",
+      projectId: "kheemz-fb9b6",
+      storageBucket: "kheemz-fb9b6.firebasestorage.app",
+      messagingSenderId: "593310501630",
+      appId: "1:593310501630:web:c241a05e0d7c4a810173af",
+      measurementId: "G-Q50WK6G76P"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const callRef = ref(db, "calls/current");
+
+    const ringtone = document.getElementById("ringtone");
+    const acceptBtn = document.getElementById("acceptBtn");
+    let callCode = null;
+
+    onValue(callRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data && data.status === "incoming") {
+        callCode = data.code;
+        ringtone.play();
+        document.getElementById("status").innerText = "Incoming Call...";
+        acceptBtn.style.display = "block";
+
+        if (Notification.permission === "granted") {
+          new Notification("Incoming Call", {
+            body: "Tap to join call",
+            icon: "https://cdn-icons-png.flaticon.com/512/597/597177.png"
+          });
+        } else {
+          Notification.requestPermission();
+        }
+      }
+    });
+
+    acceptBtn.onclick = async () => {
+      ringtone.pause();
+      acceptBtn.style.display = "none";
+      document.getElementById("status").innerText = "Call accepted, joining...";
+
+      const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+      const uid = Math.floor(Math.random() * 10000);
+
+      await client.join("974f4c7b124940a1a6ee5e526175118d", callCode, null, uid);
+      const track = await AgoraRTC.createMicrophoneAudioTrack();
+      await client.publish([track]);
+
+      client.on("user-published", async (user, mediaType) => {
+        await client.subscribe(user, mediaType);
+        if (mediaType === "audio") {
+          user.audioTrack.play();
+        }
+      });
+    };
+  </script>
 </body>
 </html>

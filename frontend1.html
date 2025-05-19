@@ -6,7 +6,50 @@
 <body>
   <h2>Frontend1 - Caller</h2>
   <button id="callBtn">Call Frontend2</button>
+
   <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N-4.19.0.js"></script>
-  <script type="module" src="call.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlh428ba5aSFt6x2pPkVjeEk5D6AbIU7Y",
+      authDomain: "kheemz-fb9b6.firebaseapp.com",
+      projectId: "kheemz-fb9b6",
+      storageBucket: "kheemz-fb9b6.firebasestorage.app",
+      messagingSenderId: "593310501630",
+      appId: "1:593310501630:web:c241a05e0d7c4a810173af",
+      measurementId: "G-Q50WK6G76P"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const appId = "974f4c7b124940a1a6ee5e526175118d";
+
+    document.getElementById("callBtn").onclick = async () => {
+      const channel = Math.random().toString(36).substring(2, 8); // Random 6-char code
+
+      await set(ref(db, "calls/current"), {
+        code: channel,
+        status: "incoming"
+      });
+
+      alert("Calling frontend2 with code: " + channel);
+
+      const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+      const uid = Math.floor(Math.random() * 10000);
+      await client.join(appId, channel, null, uid);
+      const track = await AgoraRTC.createMicrophoneAudioTrack();
+      await client.publish([track]);
+
+      client.on("user-published", async (user, mediaType) => {
+        await client.subscribe(user, mediaType);
+        if (mediaType === "audio") {
+          user.audioTrack.play();
+        }
+      });
+    };
+  </script>
 </body>
 </html>

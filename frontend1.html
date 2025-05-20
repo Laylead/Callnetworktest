@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Frontend1 - Caller</title>
+  <title>Frontend1 - Poster</title>
 </head>
 <body>
-  <h2>Frontend1 - Caller</h2>
-  <button id="callBtn">Call Frontend2</button>
+  <h2>Create Post</h2>
+  <textarea id="postText" placeholder="What's on your mind?"></textarea><br>
+  <input type="file" id="postImage"><br>
+  <button onclick="submitPost()">Post</button>
 
-  <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N-4.19.0.js"></script>
+  <h3>My Posts</h3>
+  <div id="postList"></div>
+
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-    import { firebaseConfig, agoraAppId } from './config.js';
+    import { createPost, loadPosts } from './post.js';
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    window.submitPost = async () => {
+      const text = document.getElementById('postText').value;
+      const fileInput = document.getElementById('postImage');
+      let base64 = "";
 
-    document.getElementById("callBtn").onclick = async () => {
-      const channel = Math.random().toString(36).substring(2, 8); // Random 6-char code
-
-      await set(ref(db, "calls/current"), {
-        code: channel,
-        status: "incoming"
-      });
-
-      alert("Calling frontend2 with code: " + channel);
-
-      const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-      const uid = Math.floor(Math.random() * 10000);
-      await client.join(agoraAppId, channel, null, uid);
-      const track = await AgoraRTC.createMicrophoneAudioTrack();
-      await client.publish([track]);
-
-      client.on("user-published", async (user, mediaType) => {
-        await client.subscribe(user, mediaType);
-        if (mediaType === "audio") {
-          user.audioTrack.play();
-        }
-      });
+      if (fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          base64 = reader.result;
+          await createPost(text, base64);
+          document.getElementById('postText').value = "";
+          fileInput.value = "";
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        await createPost(text, "");
+      }
     };
+
+    const renderPosts = (posts) => {
+      const container = document.getElementById('postList');
+      container.innerHTML = "";
+      for (let id in posts) {
+        const post = posts[id];
+        container.innerHTML += `
+          <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+            <p>${post.text}</p>
+            ${post.image ? `<img src="${post.image}" width="200">` : ""}
+            <p>${post.likes || 0} likes</p>
+            <h4>Comments</h4>
+            <ul>
+              ${(post.comments ? Object.values(post.comments).map(c => `<li>${c.text}</li>`).join('') : '')}
+            </ul>
+          </div>
+        `;
+      }
+    };
+
+    loadPosts(renderPosts);
   </script>
 </body>
 </html>

@@ -1,59 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Frontend2 - Viewer</title>
-</head>
+<head><title>Frontend2</title></head>
 <body>
-  <h2>View Posts</h2>
+  <h3>Incoming Call</h3>
+  <div id="callNotification"></div>
+
+  <h3>Posts</h3>
   <div id="postList"></div>
 
-  <!-- Call Popup UI -->
-  <div id="callPopup" style="display:none; position:fixed; bottom:10px; right:10px; background:#fff; border:1px solid #ccc; padding:20px; border-radius:10px;">
-    <p>In Call with Frontend1</p>
-    <button onclick="mute()">Mute</button>
-    <button onclick="end()">End</button>
-  </div>
-
-  <script type="module">
-    import { loadPosts, addComment, likePost } from './post.js';
-
-    const renderPosts = (posts) => {
-      const container = document.getElementById('postList');
-      container.innerHTML = "";
-      for (let id in posts) {
-        const post = posts[id];
-        container.innerHTML += `
-          <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-            <p>${post.text}</p>
-            ${post.image ? `<img src="${post.image}" width="200">` : ""}
-            <p>${post.likes || 0} likes</p>
-            <button onclick="likePost('${id}')">Like</button>
-            <input placeholder="Comment..." id="comment-${id}">
-            <button onclick="comment('${id}')">Send</button>
-            <ul>
-              ${(post.comments ? Object.values(post.comments).map(c => `<li>${c.text}</li>`).join('') : '')}
-            </ul>
-          </div>
-        `;
-      }
-    };
-
-    window.comment = async (postId) => {
-      const input = document.getElementById(`comment-${postId}`);
-      await addComment(postId, input.value);
-      input.value = "";
-    };
-
-    window.likePost = likePost;
-
-    loadPosts(renderPosts);
-
-    // Call popup when call starts
-    window.showCallPopup = () => {
-      document.getElementById('callPopup').style.display = 'block';
-    };
-    window.mute = () => alert("Muted (dummy)");
-    window.end = () => location.reload();
-  </script>
+  <script type="module" src="frontend2.js"></script>
 </body>
 </html>

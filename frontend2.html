@@ -1,66 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Frontend2 - Receiver</title>
+  <title>Frontend2 - Viewer</title>
 </head>
 <body>
-  <h2>Frontend2 - Receiver</h2>
-  <button id="acceptBtn" style="display:none">Accept Call</button>
-  <audio id="ringtone" src="https://cdn.pixabay.com/audio/2022/03/15/audio_0751b1a6ba.mp3" loop></audio>
-  <p id="status"></p>
+  <h2>View Posts</h2>
+  <div id="postList"></div>
 
-  <script src="https://cdn.agora.io/sdk/release/AgoraRTC_N-4.19.0.js"></script>
+  <!-- Call Popup UI -->
+  <div id="callPopup" style="display:none; position:fixed; bottom:10px; right:10px; background:#fff; border:1px solid #ccc; padding:20px; border-radius:10px;">
+    <p>In Call with Frontend1</p>
+    <button onclick="mute()">Mute</button>
+    <button onclick="end()">End</button>
+  </div>
+
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-    import { firebaseConfig, agoraAppId } from './config.js';
+    import { loadPosts, addComment, likePost } from './post.js';
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const callRef = ref(db, "calls/current");
-
-    const ringtone = document.getElementById("ringtone");
-    const acceptBtn = document.getElementById("acceptBtn");
-    let callCode = null;
-
-    onValue(callRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data && data.status === "incoming") {
-        callCode = data.code;
-        ringtone.play();
-        document.getElementById("status").innerText = "Incoming Call...";
-        acceptBtn.style.display = "block";
-
-        if (Notification.permission === "granted") {
-          new Notification("Incoming Call", {
-            body: "Tap to join call",
-            icon: "https://cdn-icons-png.flaticon.com/512/597/597177.png"
-          });
-        } else {
-          Notification.requestPermission();
-        }
+    const renderPosts = (posts) => {
+      const container = document.getElementById('postList');
+      container.innerHTML = "";
+      for (let id in posts) {
+        const post = posts[id];
+        container.innerHTML += `
+          <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+            <p>${post.text}</p>
+            ${post.image ? `<img src="${post.image}" width="200">` : ""}
+            <p>${post.likes || 0} likes</p>
+            <button onclick="likePost('${id}')">Like</button>
+            <input placeholder="Comment..." id="comment-${id}">
+            <button onclick="comment('${id}')">Send</button>
+            <ul>
+              ${(post.comments ? Object.values(post.comments).map(c => `<li>${c.text}</li>`).join('') : '')}
+            </ul>
+          </div>
+        `;
       }
-    });
-
-    acceptBtn.onclick = async () => {
-      ringtone.pause();
-      acceptBtn.style.display = "none";
-      document.getElementById("status").innerText = "Call accepted, joining...";
-
-      const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-      const uid = Math.floor(Math.random() * 10000);
-
-      await client.join(agoraAppId, callCode, null, uid);
-      const track = await AgoraRTC.createMicrophoneAudioTrack();
-      await client.publish([track]);
-
-      client.on("user-published", async (user, mediaType) => {
-        await client.subscribe(user, mediaType);
-        if (mediaType === "audio") {
-          user.audioTrack.play();
-        }
-      });
     };
+
+    window.comment = async (postId) => {
+      const input = document.getElementById(`comment-${postId}`);
+      await addComment(postId, input.value);
+      input.value = "";
+    };
+
+    window.likePost = likePost;
+
+    loadPosts(renderPosts);
+
+    // Call popup when call starts
+    window.showCallPopup = () => {
+      document.getElementById('callPopup').style.display = 'block';
+    };
+    window.mute = () => alert("Muted (dummy)");
+    window.end = () => location.reload();
   </script>
 </body>
 </html>

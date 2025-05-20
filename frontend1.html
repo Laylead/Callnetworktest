@@ -1,59 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Frontend1 - Poster</title>
-</head>
+<head><title>Frontend1</title></head>
 <body>
-  <h2>Create Post</h2>
-  <textarea id="postText" placeholder="What's on your mind?"></textarea><br>
+  <h3>Create Post</h3>
+  <textarea id="postText"></textarea><br>
   <input type="file" id="postImage"><br>
-  <button onclick="submitPost()">Post</button>
+  <input type="file" id="postAudio" accept="audio/*"><br>
+  <button onclick="submitPost()">Post</button><br><br>
 
-  <h3>My Posts</h3>
+  <h3>Record Voice Note</h3>
+  <button onclick="startRecording()">Record</button>
+  <button onclick="stopRecording()">Stop</button><br><br>
+
+  <h3>Posts</h3>
   <div id="postList"></div>
 
-  <script type="module">
-    import { createPost, loadPosts } from './post.js';
+  <button onclick="makeCall()">Call</button>
 
-    window.submitPost = async () => {
-      const text = document.getElementById('postText').value;
-      const fileInput = document.getElementById('postImage');
-      let base64 = "";
-
-      if (fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = async () => {
-          base64 = reader.result;
-          await createPost(text, base64);
-          document.getElementById('postText').value = "";
-          fileInput.value = "";
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        await createPost(text, "");
-      }
-    };
-
-    const renderPosts = (posts) => {
-      const container = document.getElementById('postList');
-      container.innerHTML = "";
-      for (let id in posts) {
-        const post = posts[id];
-        container.innerHTML += `
-          <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-            <p>${post.text}</p>
-            ${post.image ? `<img src="${post.image}" width="200">` : ""}
-            <p>${post.likes || 0} likes</p>
-            <h4>Comments</h4>
-            <ul>
-              ${(post.comments ? Object.values(post.comments).map(c => `<li>${c.text}</li>`).join('') : '')}
-            </ul>
-          </div>
-        `;
-      }
-    };
-
-    loadPosts(renderPosts);
-  </script>
+  <script type="module" src="frontend1.js"></script>
 </body>
 </html>

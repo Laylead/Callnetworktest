@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head><title>Frontend1</title></head>
+<head>
+  <title>Frontend1</title>
+  <style>
+    /* Add your CSS styles here */
+  </style>
+</head>
 <body>
   <h3>Create Post</h3>
-  <textarea id="postText"></textarea><br>
+  <textarea id="postText" placeholder="What's on your mind?"></textarea><br>
   <input type="file" id="postImage"><br>
   <input type="file" id="postAudio" accept="audio/*"><br>
   <button onclick="submitPost()">Post</button><br><br>
 
   <h3>Record Voice Note</h3>
   <button onclick="startRecording()">Record</button>
-  <button onclick="stopRecording()">Stop</button><br><br>
+  <button onclick="stopRecording()">Stop</button>
+  <div id="recordingStatus"></div>
+  <audio id="audioPreview" controls style="display:none;"></audio>
+  <button onclick="deleteRecording()" style="display:none;" id="deleteRecordingBtn">Delete Recording</button><br><br>
 
   <h3>Posts</h3>
   <div id="postList"></div>

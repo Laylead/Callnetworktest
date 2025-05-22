@@ -201,3 +201,79 @@ window.addReply = (postId, commentId) => {
 };
 
 renderPosts();
+// Full continuation of frontend1.js
+import { getDatabase, ref, onValue, update, push, set, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+function renderPosts() {
+  const db = getDatabase();
+  const postRef = ref(db, 'posts');
+
+  onValue(postRef, (snapshot) => {
+    const posts = snapshot.val() || {};
+    const now = Date.now();
+    const postList = document.getElementById('postList');
+    postList.innerHTML = '';
+
+    Object.entries(posts).forEach(([key, post]) => {
+      if (now - post.timestamp > 86400000) {
+        remove(ref(db, 'posts/' + key));
+        return;
+      }
+
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <p>${post.text}</p>
+        ${post.image ? `<img src="${post.image}" width="200">` : ''}
+        ${post.audio ? `<audio controls src="${post.audio}"></audio>` : ''}
+        <p>${post.likes || 0} likes</p>
+        <button onclick="likePost('${key}')">Like</button>
+        <button onclick="editPost('${key}')">Edit</button>
+        <button onclick="deletePost('${key}')">Delete</button>
+        <div id="comments_${key}"></div>
+        <input type="text" id="comment_${key}" placeholder="Add a comment">
+        <button onclick="addComment('${key}')">Comment</button>
+      `;
+      postList.appendChild(div);
+
+      if (post.comments) {
+        const commentsDiv = document.getElementById(`comments_${key}`);
+        Object.entries(post.comments).forEach(([cid, comment]) => {
+          const commentDiv = document.createElement('div');
+          commentDiv.innerHTML = `
+            <p>${comment.text}</p>
+            <button onclick="likeComment('${key}', '${cid}')">Like (${comment.likes || 0})</button>
+            <input type="text" id="reply_${cid}" placeholder="Reply">
+            <button onclick="addReply('${key}', '${cid}')">Reply</button>
+            <div id="replies_${cid}"></div>
+          `;
+          commentsDiv.appendChild(commentDiv);
+
+          if (comment.replies) {
+            const repliesDiv = document.getElementById(`replies_${cid}`);
+            Object.entries(comment.replies).forEach(([rid, reply]) => {
+              const replyDiv = document.createElement('div');
+              replyDiv.innerHTML = `<p>${reply.text}</p>`;
+              repliesDiv.appendChild(replyDiv);
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+window.likePost = (postId) => {
+  const db = getDatabase();
+  const postRef = ref(db, 'posts/' + postId);
+  onValue(postRef, (snap) => {
+    const post = snap.val();
+    if (!post.likedBy || !post.likedBy["frontend1"]) {
+      update(postRef, {
+        likes: (post.likes || 0) + 1,
+        [`likedBy/frontend1`]: true
+      });
+    }
+  }, { onlyOnce: true });
+};
+
+renderPosts();

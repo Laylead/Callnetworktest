@@ -1,0 +1,2578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CallConnect - Social Audio & Video</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        :root {
+            --primary: #ff4757;
+            --primary-light: #ff6b81;
+            --primary-dark: #e84118;
+            --secondary: #57606f;
+            --secondary-light: #a4b0be;
+            --light: #f1f2f6;
+            --dark: #2f3542;
+            --dark-light: #57606f;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --info: #1e90ff;
+            --purple: #7e57c2;
+            
+            --bg-color: #f8f9fa;
+            --text-color: #2f3542;
+            --text-light: #57606f;
+            --card-bg: white;
+            --sidebar-bg: white;
+            --nav-bg: white;
+            --input-bg: white;
+            --border-color: #dfe4ea;
+            
+            --story-border: linear-gradient(45deg, #ff4757, #ffa502, #2ed573, #1e90ff);
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-full: 999px;
+            
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --sidebar-width: 280px;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #f1f2f6;
+            --text-light: #a4b0be;
+            --card-bg: #2d3436;
+            --sidebar-bg: #2d3436;
+            --nav-bg: #2d3436;
+            --input-bg: #3d4547;
+            --border-color: #3d4547;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h1, h2, h3, h4, h5, h6 { font-weight: 600; line-height: 1.3; }
+        .text-sm { font-size: 0.875rem; }
+        .text-muted { color: var(--text-light); }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 60px;
+        }
+        
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+        }
+        
+        .header-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+        }
+        
+        .notification-btn, .message-btn {
+            position: relative;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            transition: var(--transition);
+        }
+        
+        .notification-btn:hover, .message-btn:hover { 
+            background-color: rgba(255, 71, 87, 0.1); 
+        }
+        
+        .notification-badge, .message-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background-color: var(--primary);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.625rem;
+            font-weight: 600;
+            border: 2px solid var(--card-bg);
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--sidebar-bg);
+            height: calc(100vh - 60px);
+            position: fixed;
+            top: 60px;
+            left: 0;
+            overflow-y: auto;
+            z-index: 90;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            border-right: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+        
+        .sidebar.active { transform: translateX(0); }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            transition: var(--transition);
+        }
+        
+        .theme-toggle:hover { background-color: rgba(255, 71, 87, 0.1); }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+            background-color: var(--input-bg);
+        }
+        
+        .user-profile:hover { background-color: rgba(255, 71, 87, 0.1); }
+        
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+        
+        .user-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .user-info h3 {
+            font-size: 0.9375rem;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-info p {
+            font-size: 0.8125rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+        }
+        
+        .coins { color: var(--warning); margin-left: 0.25rem; font-weight: 600; }
+        
+        .top-up-btn {
+            background-color: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .top-up-btn:hover { background-color: var(--warning); opacity: 0.9; }
+        
+        .menu-section { margin-bottom: 1.5rem; }
+        
+        .logout-btn {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.75rem;
+            width: 100%;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .logout-btn:hover { background-color: rgba(255, 71, 87, 0.1); }
+        
+        .main-content {
+            flex: 1;
+            padding: 1rem;
+            margin-top: 60px;
+            margin-bottom: 80px;
+            transition: margin-left 0.3s;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding-bottom: 120px;
+        }
+        
+        .sidebar.active + .main-content { margin-left: var(--sidebar-width); }
+        
+        .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 80px; min-height: calc(100vh - 140px); }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page.active { display: block; }
+        
+        .menu-toggle {
+            display: none;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+            font-size: 0.875rem;
+        }
+        
+        .menu-toggle:hover { background-color: var(--primary-light); }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+        
+        .section-title { font-size: 1.25rem; font-weight: 600; }
+        
+        .view-all {
+            color: var(--primary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .view-all:hover { text-decoration: underline; }
+        
+        .stories-container {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .stories-container::-webkit-scrollbar { display: none; }
+        
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 72px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .story-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            padding: 2px;
+            background: var(--story-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .story-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--card-bg);
+        }
+        
+        .story-username {
+            font-size: 0.75rem;
+            text-align: center;
+            max-width: 72px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        
+        .feed-container { display: flex; flex-direction: column; gap: 1.25rem; }
+        
+        .feed-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .feed-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feed-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .feed-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            margin-right: 0.75rem;
+        }
+        
+        .feed-user-info h4 { font-size: 0.9375rem; margin-bottom: 0.125rem; font-weight: 600; }
+        .feed-user-info p { font-size: 0.8125rem; color: var(--text-light); }
+        
+        .feed-content { padding: 0 1rem 1rem; }
+        .feed-text { margin-bottom: 0.75rem; font-size: 0.9375rem; white-space: pre-wrap; }
+        .feed-image { width: 100%; border-radius: var(--radius-sm); margin-bottom: 0.75rem; max-height: 500px; object-fit: contain; }
+        
+        .feed-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .feed-action {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.375rem 0.5rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .feed-action:hover {
+            color: var(--primary);
+            background-color: rgba(255, 71, 87, 0.1);
+        }
+        
+        .feed-action.active { color: var(--primary); }
+        
+        .live-rooms {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .live-room-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .live-room-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .live-badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .live-badge::before {
+            content: "";
+            display: block;
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .live-room-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        
+        .live-room-info { padding: 0.75rem; }
+        .live-room-title { font-size: 0.9375rem; margin-bottom: 0.5rem; font-weight: 600; }
+        
+        .live-room-members {
+            display: flex;
+            align-items: center;
+            font-size: 0.8125rem;
+            color: var(--text-light);
+        }
+        
+        .live-room-members img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .join-room-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            width: 100%;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .join-room-btn:hover { background-color: var(--primary-light); }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 99;
+            border-top: 1px solid var(--border-color);
+            height: 60px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: var(--transition);
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            flex: 1;
+            max-width: 80px;
+        }
+        
+        .nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            transition: var(--transition);
+        }
+        
+        .nav-item.active { color: var(--primary); }
+        .nav-item:hover { background-color: rgba(255, 71, 87, 0.1); }
+        
+        .notifications-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0.5rem;
+            width: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 1rem;
+            z-index: 110;
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .notifications-dropdown.active { display: block; }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .notification-header h3 { font-size: 1rem; font-weight: 600; }
+        
+        .mark-all-read {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.8125rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .mark-all-read:hover { text-decoration: underline; }
+        
+        .notification-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+        }
+        
+        .notification-item:hover { background-color: var(--input-bg); }
+        .notification-item:last-child { border-bottom: none; }
+        
+        .notification-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        
+        .notification-content { flex: 1; }
+        .notification-text { font-size: 0.875rem; }
+        .notification-time { font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem; }
+        
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--dark);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+            max-width: 90%;
+            text-align: center;
+        }
+        
+        /* Floating Widget */
+        .floating-widget {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .post-floating-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .live-floating-btn {
+            background-color: var(--purple);
+            color: white;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Create Post Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 1rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        
+        .post-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            resize: vertical;
+            margin-bottom: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background-color: var(--input-bg);
+        }
+        
+        .file-preview {
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--radius-sm);
+        }
+        
+        .recording-ui {
+            display: none;
+            margin-bottom: 1rem;
+            background-color: var(--input-bg);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .recording-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .timer {
+            margin-left: auto;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .record-btn, .stop-btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .record-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .record-btn:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .stop-btn {
+            background-color: var(--secondary-light);
+            color: var(--dark);
+        }
+        
+        /* WhatsApp style voice note */
+        .voice-note-player {
+            display: flex;
+            align-items: center;
+            background-color: var(--input-bg);
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 250px;
+            position: relative;
+        }
+        
+        .play-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--primary);
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .waveform {
+            display: flex;
+            align-items: center;
+            height: 30px;
+            flex-grow: 1;
+        }
+        
+        .wave-bar {
+            width: 2px;
+            background-color: var(--primary);
+            margin: 0 1px;
+            border-radius: 1px;
+            animation: wave 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes wave {
+            0%, 100% { height: 20%; }
+            50% { height: 80%; }
+        }
+        
+        .duration {
+            margin-left: 10px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .voice-note-preview {
+            display: none;
+            flex-direction: column;
+            margin: 10px 0;
+            background-color: var(--input-bg);
+            padding: 10px;
+            border-radius: var(--radius-sm);
+        }
+        
+        .preview-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .preview-btn {
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .send-voice-btn {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .delete-voice-btn {
+            background-color: var(--secondary-light);
+            color: var(--dark);
+        }
+        
+        .post-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+        }
+        
+        .post-btn:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .post-btn:disabled {
+            background-color: var(--secondary-light);
+            cursor: not-allowed;
+        }
+        
+        /* Facebook-like comments */
+        .comment-section {
+            padding: 0.75rem 1rem;
+            background-color: var(--input-bg);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .comment {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+        
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        
+        .comment-content {
+            flex: 1;
+            background-color: var(--card-bg);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+        
+        .comment-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        
+        .comment-text {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        
+        .comment-action {
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .comment-action:hover {
+            color: var(--primary);
+        }
+        
+        .replies {
+            margin-top: 0.75rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--border-color);
+        }
+        
+        .add-comment {
+            display: flex;
+            margin-top: 1rem;
+            gap: 0.75rem;
+        }
+        
+        .comment-input {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .send-comment-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+        
+        /* Go Live Modal */
+        .go-live-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .schedule-options {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .link-container {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .live-link {
+            display: flex;
+            align-items: center;
+            background-color: var(--input-bg);
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            margin-top: 0.5rem;
+        }
+        
+        .link-text {
+            flex: 1;
+            font-size: 0.875rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .copy-link-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--input-bg);
+        }
+        
+        /* Role badges */
+        .ceo-badge {
+            background: var(--warning);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: var(--radius-sm);
+            margin-left: 0.25rem;
+        }
+        
+        .admin-badge {
+            background: var(--info);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: var(--radius-sm);
+            margin-left: 0.25rem;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 71, 87, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Call notification */
+        .call-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 300px;
+        }
+        
+        .caller-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .caller-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .call-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .call-action-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .accept-call {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .reject-call {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        @media (min-width: 768px) {
+            .header { padding: 0.75rem 1.5rem; }
+            .main-content { padding: 1.5rem; }
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar {
+                width: 280px;
+                height: 100vh;
+                top: 0;
+                padding-top: 70px;
+            }
+            
+            .menu-toggle { display: flex; }
+            .live-rooms { grid-template-columns: 1fr; }
+            .floating-widget {
+                bottom: 80px;
+                right: 15px;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .sidebar { transform: translateX(0); }
+            .main-content { margin-left: var(--sidebar-width); }
+            .menu-toggle { display: none; }
+        }
+        
+        @media (max-width: 575px) {
+            .header { padding: 0.75rem; }
+            .logo { font-size: 1.1rem; }
+            .logo-icon { width: 28px; height: 28px; font-size: 0.9rem; }
+            .notification-btn, .message-btn { width: 36px; height: 36px; font-size: 1.1rem; }
+            .notification-badge, .message-badge { width: 16px; height: 16px; font-size: 0.6rem; }
+            .main-content { padding: 1rem 0.75rem; }
+            .section-title { font-size: 1.1rem; }
+            .view-all { font-size: 0.8rem; }
+            .story-avatar { width: 48px; height: 48px; }
+            .story-username { font-size: 0.7rem; }
+            .feed-card { border-radius: var(--radius-sm); }
+            .feed-header { padding: 0.75rem; }
+            .feed-content { padding: 0 0.75rem 0.75rem; }
+            .feed-actions { padding: 0.5rem 0.75rem; }
+            .feed-action { padding: 0.25rem 0.5rem; font-size: 0.8rem; }
+            .live-room-image { height: 120px; }
+            .bottom-nav { padding: 0.5rem 0; }
+            .nav-item { font-size: 0.7rem; padding: 0.5rem 0.25rem; }
+            .nav-item i { font-size: 1.1rem; }
+            .floating-btn { 
+                width: 46px;
+                height: 46px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" id="app-container">
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </span>
+                CallConnect
+            </div>
+            <div class="header-actions">
+                <button class="message-btn" id="message-btn">
+                    <i class="fas fa-envelope"></i>
+                    <span class="message-badge">2</span>
+                </button>
+                <button class="notification-btn" id="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="notifications-dropdown" id="notifications-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div id="notifications-list">
+                        <!-- Notifications will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="user-profile" id="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar" id="user-avatar">
+                <div class="user-info">
+                    <h3 id="username-display">John Doe</h3>
+                    <p>Balance: <span class="coins" id="user-coins">250 <i class="fas fa-coins"></i></span></p>
+                    <button class="top-up-btn" id="top-up-btn">
+                        <i class="fas fa-plus"></i> Top Up
+                    </button>
+                </div>
+            </div>
+            
+            <button class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+        
+        <div class="main-content">
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i> Menu
+            </button>
+            
+            <div class="page active" id="home-page">
+                <div class="stories-container" id="stories-container">
+                    <!-- Stories will be loaded here -->
+                </div>
+                
+                <div class="section-header">
+                    <h2 class="section-title">Live Rooms</h2>
+                    <a href="#" class="view-all">View all</a>
+                </div>
+                <div class="live-rooms" id="live-rooms">
+                    <!-- Live rooms will be loaded here -->
+                </div>
+                
+                <div class="section-header">
+                    <h2 class="section-title">Community Feed</h2>
+                    <div class="filter-controls">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="following">Following</button>
+                        <button class="filter-btn" data-filter="ceo">CEO Posts</button>
+                        <button class="filter-btn" data-filter="admin">Admin Crew</button>
+                    </div>
+                </div>
+                <div class="feed-container" id="feed-container">
+                    <!-- Community feed will be loaded here -->
+                    <div id="loading-activities">
+                        <p style="text-align: center; padding: 2rem;">
+                            <span class="loading"></span> Loading community activities...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Widget -->
+        <div class="floating-widget">
+            <button class="floating-btn live-floating-btn" id="go-live-btn">
+                <i class="fas fa-video"></i>
+            </button>
+            <button class="floating-btn post-floating-btn" id="create-post-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        
+        <!-- Create Post Modal -->
+        <div class="modal" id="create-post-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Create Post</h3>
+                    <button class="close-modal" id="close-post-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="post-textarea" id="post-text" placeholder="What's on your mind?"></textarea>
+                    
+                    <div class="file-preview" id="image-preview">
+                        <img class="preview-image" id="preview-image">
+                    </div>
+                    
+                    <div class="recording-ui" id="recording-ui">
+                        <div class="recording-controls">
+                            <button class="record-btn" id="record-btn">
+                                <i class="fas fa-microphone"></i> Record
+                            </button>
+                            <button class="stop-btn" id="stop-btn" disabled>
+                                <i class="fas fa-stop"></i> Stop
+                            </button>
+                            <div class="timer" id="timer">0:00</div>
+                        </div>
+                        <div class="voice-note-player" id="waveform-preview" style="display: none;">
+                            <button class="play-btn" id="play-recorded-btn"><i class="fas fa-play"></i></button>
+                            <div class="waveform" id="waveform-container"></div>
+                            <span id="recorded-duration">0:00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="voice-note-preview" id="voice-note-preview">
+                        <div class="voice-note-player">
+                            <button class="play-btn" id="preview-play-btn"><i class="fas fa-play"></i></button>
+                            <div class="waveform" id="preview-waveform"></div>
+                            <span id="preview-duration">0:00</span>
+                        </div>
+                        <div class="preview-controls">
+                            <button class="preview-btn send-voice-btn" id="send-voice-btn">Send</button>
+                            <button class="preview-btn delete-voice-btn" id="delete-voice-btn">Delete</button>
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn" id="add-image-btn">
+                            <i class="fas fa-image"></i> Photo
+                        </button>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        
+                        <button class="action-btn" id="add-voice-btn">
+                            <i class="fas fa-microphone"></i> Voice Note
+                        </button>
+                    </div>
+                    
+                    <button class="post-btn" id="submit-post-btn">Post</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Go Live Modal -->
+        <div class="modal" id="go-live-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Go Live</h3>
+                    <button class="close-modal" id="close-live-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="go-live-form">
+                        <div class="form-group">
+                            <label class="form-label">Live Session Title</label>
+                            <input type="text" class="form-control" id="live-title" placeholder="Enter session title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Session Type</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="podcast" name="session-type" value="podcast" checked>
+                                    <label for="podcast">Podcast (Audio Only)</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="stream" name="session-type" value="stream">
+                                    <label for="stream">Live Stream (Video)</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">When do you want to start?</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="start-now" name="start-time" value="now" checked>
+                                    <label for="start-now">Start Now</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="schedule" name="start-time" value="schedule">
+                                    <label for="schedule">Schedule for Later</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-options" id="schedule-options">
+                            <div class="form-group">
+                                <label class="form-label">Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="live-date">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cover Image (Optional)</label>
+                            <input type="file" class="form-control" id="cover-image" accept="image/*">
+                        </div>
+                        
+                        <div class="link-container" id="link-container">
+                            <label class="form-label">Your Live Session Link</label>
+                            <div class="live-link">
+                                <div class="link-text" id="live-link-text">https://callconnect.live/join/abc123</div>
+                                <button class="copy-link-btn" id="copy-link-btn">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons" id="action-buttons">
+                            <button type="button" class="btn btn-primary" id="start-live-btn">Start Live Session</button>
+                            <button type="button" class="btn btn-outline" id="cancel-live-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call Notification -->
+        <div class="call-notification" id="call-notification" style="display: none;">
+            <div class="caller-info">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Caller" class="caller-avatar">
+                <div>
+                    <h4>Sarah Miller</h4>
+                    <p>Incoming Call...</p>
+                </div>
+            </div>
+            <div class="call-actions">
+                <button class="call-action-btn accept-call" id="accept-call-btn">
+                    <i class="fas fa-phone"></i>
+                </button>
+                <button class="call-action-btn reject-call" id="reject-call-btn">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item" data-page="shop">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Shop</span>
+            </a>
+            <a href="#" class="nav-item" data-page="wallet">
+                <i class="fas fa-wallet"></i>
+                <span>Wallet</span>
+            </a>
+            <a href="#" class="nav-item" data-page="fun">
+                <i class="fas fa-gamepad"></i>
+                <span>Fun</span>
+            </a>
+            <a href="#" class="nav-item" data-page="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, update, push, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        
+        // Firebase configuration (to be moved to config.js later)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlh428ba5aSFt6x2pPkVjeEk5D6AbIU7Y",
+            authDomain: "kheemz-fb9b6.firebaseapp.com",
+            projectId: "kheemz-fb9b6",
+            storageBucket: "kheemz-fb9b6.firebasestorage.app",
+            messagingSenderId: "593310501630",
+            appId: "1:593310501630:web:c241a05e0d7c4a810173af",
+            measurementId: "G-Q50WK6G76P"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        // Agora App ID (to be moved to config.js later)
+        const agoraAppId = "974f4c7b124940a1a6ee5e526175118d";
+        
+        // DOM Elements
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const themeToggle = document.getElementById('theme-toggle');
+        const logoutBtn = document.getElementById('logout-btn');
+        const notificationBtn = document.getElementById('notification-btn');
+        const messageBtn = document.getElementById('message-btn');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        const markAllReadBtn = document.getElementById('mark-all-read');
+        const topUpBtn = document.getElementById('top-up-btn');
+        const createPostBtn = document.getElementById('create-post-btn');
+        const createPostModal = document.getElementById('create-post-modal');
+        const closePostModalBtn = document.getElementById('close-post-modal');
+        const goLiveBtn = document.getElementById('go-live-btn');
+        const goLiveModal = document.getElementById('go-live-modal');
+        const closeLiveModalBtn = document.getElementById('close-live-modal');
+        const postText = document.getElementById('post-text');
+        const addImageBtn = document.getElementById('add-image-btn');
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreview = document.getElementById('preview-image');
+        const imagePreviewContainer = document.getElementById('image-preview');
+        const addVoiceBtn = document.getElementById('add-voice-btn');
+        const recordingUI = document.getElementById('recording-ui');
+        const recordBtn = document.getElementById('record-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const timer = document.getElementById('timer');
+        const submitPostBtn = document.getElementById('submit-post-btn');
+        const appContainer = document.getElementById('app-container');
+        const usernameDisplay = document.getElementById('username-display');
+        const userAvatar = document.getElementById('user-avatar');
+        const userCoins = document.getElementById('user-coins');
+        const storiesContainer = document.getElementById('stories-container');
+        const liveRoomsContainer = document.getElementById('live-rooms');
+        const feedContainer = document.getElementById('feed-container');
+        const loadingActivities = document.getElementById('loading-activities');
+        const navItems = document.querySelectorAll('.nav-item');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const scheduleOptions = document.getElementById('schedule-options');
+        const linkContainer = document.getElementById('link-container');
+        const liveLinkText = document.getElementById('live-link-text');
+        const copyLinkBtn = document.getElementById('copy-link-btn');
+        const actionButtons = document.getElementById('action-buttons');
+        const startNowRadio = document.getElementById('start-now');
+        const scheduleRadio = document.getElementById('schedule');
+        const startLiveBtn = document.getElementById('start-live-btn');
+        const callNotification = document.getElementById('call-notification');
+        const acceptCallBtn = document.getElementById('accept-call-btn');
+        const rejectCallBtn = document.getElementById('reject-call-btn');
+        
+        // Audio recording variables
+        let recorder, audioChunks = [];
+        let audioData = "";
+        let recordingInterval;
+        let recordingSeconds = 0;
+        let audioContext;
+        let audioSource;
+        let audioAnalyser;
+        let animationFrameId;
+        
+        // Current user
+        const currentUserId = 'user1'; // In a real app, this would come from authentication
+        let currentUser = {
+            id: currentUserId,
+            name: "John Doe",
+            avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+            coins: 250,
+            role: "user",
+            following: ['user2', 'user3', 'ceo1']
+        };
+
+        // Initialize app
+        function init() {
+            // Update user profile
+            updateUserProfile();
+            
+            // Load data from Firebase
+            loadStories();
+            loadLiveRooms();
+            loadNotifications();
+            loadCommunityFeed();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Initialize theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Listen for incoming calls
+            listenForCalls();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Menu toggle
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('active');
+            });
+            
+            // Notification toggle
+            notificationBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationsDropdown.classList.toggle('active');
+            });
+            
+            // Message button
+            messageBtn.addEventListener('click', () => {
+                window.location.href = 'message.html';
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!notificationsDropdown.contains(e.target) && e.target !== notificationBtn) {
+                    notificationsDropdown.classList.remove('active');
+                }
+                if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+                    sidebar.classList.remove('active');
+                }
+                if (!createPostModal.contains(e.target) && e.target !== createPostBtn) {
+                    closePostModal();
+                }
+                if (!goLiveModal.contains(e.target) && e.target !== goLiveBtn) {
+                    closeLiveModal();
+                }
+            });
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Logout
+            logoutBtn.addEventListener('click', logout);
+            
+            // Top up coins
+            topUpBtn.addEventListener('click', addCoins);
+            
+            // Create post button
+            createPostBtn.addEventListener('click', () => {
+                createPostModal.style.display = 'flex';
+            });
+            
+            // Close post modal
+            closePostModalBtn.addEventListener('click', closePostModal);
+            
+            // Go live button
+            goLiveBtn.addEventListener('click', () => {
+                goLiveModal.style.display = 'flex';
+            });
+            
+            // Close live modal
+            closeLiveModalBtn.addEventListener('click', closeLiveModal);
+            
+            // Schedule options toggle
+            startNowRadio.addEventListener('change', toggleScheduleOptions);
+            scheduleRadio.addEventListener('change', toggleScheduleOptions);
+            
+            // Start live session
+            startLiveBtn.addEventListener('click', startLiveSession);
+            
+            // Copy link button
+            copyLinkBtn.addEventListener('click', copyLink);
+            
+            // Add image button
+            addImageBtn.addEventListener('click', () => {
+                imageUpload.click();
+            });
+            
+            // Image upload
+            imageUpload.addEventListener('change', handleImageUpload);
+            
+            // Add voice button
+            addVoiceBtn.addEventListener('click', () => {
+                recordingUI.style.display = 'block';
+            });
+            
+            // Start recording
+            recordBtn.addEventListener('click', startRecording);
+            
+            // Stop recording
+            stopBtn.addEventListener('click', stopRecording);
+            
+            // Play recorded audio
+            document.getElementById('play-recorded-btn').addEventListener('click', playRecordedAudio);
+            
+            // Submit post
+            submitPostBtn.addEventListener('click', submitPost);
+            
+            // Navigation items
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    setActiveNav(item);
+                });
+            });
+            
+            // Mark all as read
+            markAllReadBtn.addEventListener('click', markAllAsRead);
+            
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterCommunityFeed(btn.dataset.filter);
+                });
+            });
+            
+            // Cancel live button
+            document.getElementById('cancel-live-btn').addEventListener('click', closeLiveModal);
+            
+            // Call actions
+            acceptCallBtn.addEventListener('click', answerCall);
+            rejectCallBtn.addEventListener('click', rejectCall);
+        }
+        
+        // Close post modal and reset form
+        function closePostModal() {
+            createPostModal.style.display = 'none';
+            postText.value = '';
+            imagePreviewContainer.style.display = 'none';
+            imagePreview.src = '';
+            imageUpload.value = '';
+            recordingUI.style.display = 'none';
+            audioData = '';
+            stopRecording();
+            clearInterval(recordingInterval);
+            recordingSeconds = 0;
+            timer.textContent = '0:00';
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+            document.getElementById('waveform-preview').style.display = 'none';
+            document.getElementById('waveform-container').innerHTML = '';
+        }
+        
+        // Close live modal
+        function closeLiveModal() {
+            goLiveModal.style.display = 'none';
+            scheduleOptions.style.display = 'none';
+            linkContainer.style.display = 'none';
+            actionButtons.style.display = 'flex';
+            document.getElementById('live-title').value = '';
+            document.getElementById('cover-image').value = '';
+            document.getElementById('live-date').value = '';
+            startNowRadio.checked = true;
+        }
+        
+        // Toggle schedule options
+        function toggleScheduleOptions() {
+            if (scheduleRadio.checked) {
+                scheduleOptions.style.display = 'block';
+            } else {
+                scheduleOptions.style.display = 'none';
+            }
+        }
+        
+        // Start live session
+        function startLiveSession() {
+            const title = document.getElementById('live-title').value;
+            if (!title) {
+                alert('Please enter a title for your live session');
+                return;
+            }
+            
+            const sessionType = document.querySelector('input[name="session-type"]:checked').value;
+            const startTime = document.querySelector('input[name="start-time"]:checked').value;
+            const dateTime = document.getElementById('live-date').value;
+            
+            // Generate a random link for the session
+            const sessionId = Math.random().toString(36).substr(2, 8);
+            const liveLink = `https://callconnect.live/join/${sessionId}`;
+            liveLinkText.textContent = liveLink;
+            
+            // Show the link container
+            linkContainer.style.display = 'block';
+            
+            // Change button text based on start time
+            if (startTime === 'now') {
+                startLiveBtn.textContent = 'Start Live Now';
+                startLiveBtn.onclick = () => {
+                    showToast('Live session starting...');
+                    closeLiveModal();
+                };
+            } else {
+                startLiveBtn.textContent = 'Schedule Live Session';
+                startLiveBtn.onclick = () => {
+                    showToast('Live session scheduled successfully!');
+                    closeLiveModal();
+                };
+            }
+        }
+        
+        // Copy link to clipboard
+        function copyLink() {
+            navigator.clipboard.writeText(liveLinkText.textContent)
+                .then(() => {
+                    showToast('Link copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+        }
+        
+        // Handle image upload
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imagePreview.src = event.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Start recording audio
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioChunks = [];
+                recorder = new MediaRecorder(stream);
+                
+                recorder.ondataavailable = e => {
+                    audioChunks.push(e.data);
+                };
+                
+                recorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        audioData = reader.result;
+                        document.getElementById('waveform-preview').style.display = 'flex';
+                        generateWaveformBars('waveform-container', 30);
+                    };
+                    reader.readAsDataURL(audioBlob);
+                };
+                
+                recorder.start();
+                recordBtn.disabled = true;
+                stopBtn.disabled = false;
+                
+                // Start timer
+                recordingSeconds = 0;
+                recordingInterval = setInterval(() => {
+                    recordingSeconds++;
+                    const minutes = Math.floor(recordingSeconds / 60);
+                    const seconds = recordingSeconds % 60;
+                    timer.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                }, 1000);
+            } catch (err) {
+                console.error('Error starting recording:', err);
+                alert('Error accessing microphone. Please check permissions.');
+            }
+        }
+        
+        // Stop recording
+        function stopRecording() {
+            if (recorder && recorder.state === 'recording') {
+                recorder.stop();
+                clearInterval(recordingInterval);
+                recordBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+        
+        // Play recorded audio
+        function playRecordedAudio() {
+            if (!audioData) return;
+            
+            const audio = new Audio(audioData);
+            audio.play();
+            
+            // Visualize audio
+            visualizeAudio(audio);
+        }
+        
+        // Visualize audio
+        function visualizeAudio(audio) {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                audioAnalyser = audioContext.createAnalyser();
+                audioAnalyser.fftSize = 256;
+            }
+            
+            if (audioSource) {
+                audioSource.disconnect();
+            }
+            
+            const source = audioContext.createMediaElementSource(audio);
+            source.connect(audioAnalyser);
+            audioAnalyser.connect(audioContext.destination);
+            
+            const bufferLength = audioAnalyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            
+            const waveformContainer = document.getElementById('waveform-container');
+            waveformContainer.innerHTML = '';
+            
+            function draw() {
+                animationFrameId = requestAnimationFrame(draw);
+                audioAnalyser.getByteFrequencyData(dataArray);
+                
+                waveformContainer.innerHTML = '';
+                
+                for (let i = 0; i < bufferLength; i++) {
+                    const barHeight = dataArray[i] / 2;
+                    const bar = document.createElement('div');
+                    bar.className = 'wave-bar';
+                    bar.style.height = `${barHeight}px`;
+                    bar.style.width = '2px';
+                    bar.style.margin = '0 1px';
+                    bar.style.backgroundColor = 'var(--primary)';
+                    bar.style.borderRadius = '1px';
+                    waveformContainer.appendChild(bar);
+                }
+            }
+            
+            draw();
+            
+            audio.onended = () => {
+                cancelAnimationFrame(animationFrameId);
+            };
+        }
+        
+        // Generate waveform bars (simulated)
+        function generateWaveformBars(containerId, count) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'wave-bar';
+                const height = Math.floor(Math.random() * 80) + 20; // Random height between 20-100%
+                bar.style.height = `${height}%`;
+                container.appendChild(bar);
+            }
+        }
+        
+        // Submit post to Firebase
+        function submitPost() {
+            const text = postText.value.trim();
+            const imageFile = imageUpload.files[0];
+            let imageBase64 = '';
+            
+            if (!text && !imageFile && !audioData) {
+                alert('Please add text, image, or audio.');
+                return;
+            }
+            
+            // Create a new post
+            const postId = push(ref(db, 'posts')).key;
+            const timestamp = Date.now();
+            
+            const newPost = {
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userAvatar: currentUser.avatar,
+                role: 'user',
+                content: text,
+                image: imageBase64,
+                audio: audioData,
+                timestamp: timestamp,
+                likes: 0,
+                comments: []
+            };
+            
+            // If image is uploaded
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    newPost.image = event.target.result;
+                    set(ref(db, `posts/${postId}`), newPost)
+                        .then(() => {
+                            showToast('Post created successfully!');
+                            closePostModal();
+                        })
+                        .catch(error => {
+                            console.error('Error creating post:', error);
+                            showToast('Error creating post. Please try again.');
+                        });
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                // No image
+                set(ref(db, `posts/${postId}`), newPost)
+                    .then(() => {
+                        showToast('Post created successfully!');
+                        closePostModal();
+                    })
+                    .catch(error => {
+                        console.error('Error creating post:', error);
+                        showToast('Error creating post. Please try again.');
+                    });
+            }
+        }
+        
+        // Update user profile display
+        function updateUserProfile() {
+            if (currentUser) {
+                usernameDisplay.textContent = currentUser.name;
+                userAvatar.src = currentUser.avatar;
+                userCoins.textContent = currentUser.coins;
+            }
+        }
+
+        // Load notifications
+        function loadNotifications() {
+            const notificationsRef = ref(db, 'notifications');
+            onValue(notificationsRef, (snapshot) => {
+                const notifications = snapshot.val() || [];
+                const unreadCount = notifications.filter(n => !n.read).length;
+                document.querySelector('.notification-badge').textContent = unreadCount;
+                
+                const list = document.getElementById('notifications-list');
+                list.innerHTML = '';
+                
+                notifications.forEach(notification => {
+                    const notificationElement = document.createElement('div');
+                    notificationElement.className = `notification-item ${notification.read ? '' : 'unread'}`;
+                    notificationElement.innerHTML = `
+                        <img src="${notification.senderAvatar}" class="notification-avatar">
+                        <div class="notification-content">
+                            <div class="notification-text">${notification.content}</div>
+                            <div class="notification-time">${formatDate(notification.timestamp)}</div>
+                        </div>
+                    `;
+                    notificationElement.addEventListener('click', () => {
+                        if (!notification.read) {
+                            update(ref(db, `notifications/${notification.id}`), { read: true })
+                                .then(() => {
+                                    loadNotifications();
+                                });
+                        }
+                    });
+                    list.appendChild(notificationElement);
+                });
+            });
+        }
+        
+        // Mark all notifications as read
+        function markAllAsRead() {
+            const notificationsRef = ref(db, 'notifications');
+            onValue(notificationsRef, (snapshot) => {
+                const notifications = snapshot.val() || [];
+                notifications.forEach(notification => {
+                    if (!notification.read) {
+                        update(ref(db, `notifications/${notification.id}`), { read: true });
+                    }
+                });
+                loadNotifications();
+            });
+        }
+
+        // Load community feed
+        function loadCommunityFeed() {
+            if (loadingActivities) loadingActivities.remove();
+            
+            const postsRef = ref(db, 'posts');
+            onValue(postsRef, (snapshot) => {
+                const posts = snapshot.val() || [];
+                
+                // Filter posts: only show followed users and CEO/admin posts, exclude current user's posts
+                const filteredPosts = posts.filter(post => 
+                    (currentUser.following.includes(post.userId) || 
+                    (post.role === 'ceo' || post.role === 'admin')) && 
+                    post.userId !== currentUser.id
+                );
+                
+                renderCommunityFeed(filteredPosts);
+            });
+        }
+        
+        // Render community feed
+        function renderCommunityFeed(posts) {
+            feedContainer.innerHTML = '';
+            
+            if (posts.length === 0) {
+                feedContainer.innerHTML = '<p class="text-muted" style="text-align: center; padding: 2rem;">No posts found. Follow more users to see their updates!</p>';
+                return;
+            }
+            
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                feedContainer.appendChild(postElement);
+            });
+        }
+        
+        // Filter community feed
+        function filterCommunityFeed(filter) {
+            const postsRef = ref(db, 'posts');
+            onValue(postsRef, (snapshot) => {
+                const posts = snapshot.val() || [];
+                let filteredPosts = [];
+                
+                switch(filter) {
+                    case 'following':
+                        filteredPosts = posts.filter(post => 
+                            currentUser.following.includes(post.userId) && 
+                            post.userId !== currentUser.id
+                        );
+                        break;
+                    case 'ceo':
+                        filteredPosts = posts.filter(post => 
+                            post.role === 'ceo' && 
+                            post.userId !== currentUser.id
+                        );
+                        break;
+                    case 'admin':
+                        filteredPosts = posts.filter(post => 
+                            post.role === 'admin' && 
+                            post.userId !== currentUser.id
+                        );
+                        break;
+                    default:
+                        filteredPosts = posts.filter(post => 
+                            (currentUser.following.includes(post.userId) || 
+                            post.role === 'ceo' || 
+                            post.role === 'admin') && 
+                            post.userId !== currentUser.id
+                        );
+                }
+                
+                renderCommunityFeed(filteredPosts);
+            });
+        }
+        
+        // Create post element
+        function createPostElement(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'feed-card';
+            postElement.dataset.id = post.id;
+            
+            let roleBadge = '';
+            if (post.role === 'ceo') {
+                roleBadge = '<span class="ceo-badge">CEO</span>';
+            } else if (post.role === 'admin') {
+                roleBadge = '<span class="admin-badge">ADMIN</span>';
+            }
+            
+            // Create voice note player if audio exists
+            let voiceNotePlayer = '';
+            if (post.audio) {
+                voiceNotePlayer = `
+                    <div class="voice-note-player">
+                        <button class="play-btn"><i class="fas fa-play"></i></button>
+                        <div class="waveform">
+                            ${generateWaveformHTML(30)}
+                        </div>
+                        <span class="duration">0:30</span>
+                    </div>
+                `;
+            }
+            
+            // Create comments section
+            let commentsHtml = '';
+            if (post.comments && post.comments.length > 0) {
+                commentsHtml = `<div class="comment-section">`;
+                post.comments.forEach(comment => {
+                    commentsHtml += `
+                        <div class="comment">
+                            <img src="${comment.userAvatar}" class="comment-avatar">
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-user">${comment.userName}</span>
+                                    <span class="comment-time">${formatDate(comment.timestamp)}</span>
+                                </div>
+                                <div class="comment-text">${comment.content}</div>
+                                <div class="comment-actions">
+                                    <span class="comment-action">Like (${comment.likes || 0})</span>
+                                    <span class="comment-action">Reply</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                commentsHtml += `
+                    <div class="add-comment">
+                        <input type="text" class="comment-input" placeholder="Write a comment...">
+                        <button class="send-comment-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                `;
+                commentsHtml += `</div>`;
+            }
+            
+            postElement.innerHTML = `
+                <div class="feed-header">
+                    <img src="${post.userAvatar}" class="feed-user-avatar">
+                    <div class="feed-user-info">
+                        <h4>${post.userName} ${roleBadge}</h4>
+                        <p>${formatDate(post.timestamp)}</p>
+                    </div>
+                </div>
+                <div class="feed-content">
+                    ${post.content ? `<div class="feed-text">${post.content}</div>` : ''}
+                    ${post.image ? `<img src="${post.image}" class="feed-image">` : ''}
+                    ${voiceNotePlayer}
+                </div>
+                <div class="feed-actions">
+                    <div class="feed-action like-btn" data-id="${post.id}">
+                        <i class="far fa-heart"></i>
+                        <span>${post.likes} likes</span>
+                    </div>
+                    <div class="feed-action comment-btn" data-id="${post.id}">
+                        <i class="far fa-comment"></i>
+                        <span>${post.comments.length} comments</span>
+                    </div>
+                    <div class="feed-action">
+                        <i class="far fa-share-square"></i>
+                        <span>Share</span>
+                    </div>
+                </div>
+                ${commentsHtml}
+            `;
+            
+            // Add event listeners for like and comment buttons
+            const likeBtn = postElement.querySelector('.like-btn');
+            if (likeBtn) {
+                likeBtn.addEventListener('click', () => {
+                    handleLikePost(post.id);
+                });
+            }
+            
+            const commentBtn = postElement.querySelector('.comment-btn');
+            if (commentBtn) {
+                commentBtn.addEventListener('click', () => {
+                    const commentSection = postElement.querySelector('.comment-section');
+                    if (commentSection) {
+                        commentSection.style.display = commentSection.style.display === 'none' ? 'block' : 'none';
+                    }
+                });
+            }
+            
+            // Add event listener for comment submission
+            const sendCommentBtn = postElement.querySelector('.send-comment-btn');
+            if (sendCommentBtn) {
+                sendCommentBtn.addEventListener('click', () => {
+                    const commentInput = postElement.querySelector('.comment-input');
+                    if (commentInput && commentInput.value.trim() !== '') {
+                        addComment(post.id, commentInput.value.trim());
+                        commentInput.value = '';
+                    }
+                });
+            }
+            
+            return postElement;
+        }
+        
+        // Handle like on a post
+        function handleLikePost(postId) {
+            const postRef = ref(db, `posts/${postId}`);
+            onValue(postRef, (snapshot) => {
+                const post = snapshot.val();
+                if (post) {
+                    const likes = (post.likes || 0) + 1;
+                    update(postRef, { likes })
+                        .then(() => {
+                            showToast('Liked the post!');
+                        })
+                        .catch(error => {
+                            console.error('Error liking post:', error);
+                        });
+                }
+            }, { onlyOnce: true });
+        }
+        
+        // Add comment to a post
+        function addComment(postId, content) {
+            const commentId = push(ref(db, `posts/${postId}/comments`)).key;
+            const newComment = {
+                id: commentId,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userAvatar: currentUser.avatar,
+                content: content,
+                timestamp: Date.now(),
+                likes: 0
+            };
+            
+            set(ref(db, `posts/${postId}/comments/${commentId}`), newComment)
+                .then(() => {
+                    showToast('Comment added!');
+                })
+                .catch(error => {
+                    console.error('Error adding comment:', error);
+                });
+        }
+        
+        // Generate waveform HTML
+        function generateWaveformHTML(count) {
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                const height = Math.floor(Math.random() * 80) + 20; // Random height between 20-100%
+                html += `<div class="wave-bar" style="height: ${height}%"></div>`;
+            }
+            return html;
+        }
+        
+        // Format date
+        function formatDate(date) {
+            if (!date) return "Just now";
+            
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            
+            if (minutes < 1) return "Just now";
+            if (minutes < 60) return `${minutes} min ago`;
+            if (minutes < 1440) return `${Math.floor(minutes / 60)} hours ago`;
+            return `${Math.floor(minutes / 1440)} days ago`;
+        }
+
+        // Load stories
+        function loadStories() {
+            const storiesRef = ref(db, 'stories');
+            onValue(storiesRef, (snapshot) => {
+                const stories = snapshot.val() || [];
+                storiesContainer.innerHTML = '';
+                
+                stories.forEach(story => {
+                    const storyElement = document.createElement('div');
+                    storyElement.className = 'story';
+                    storyElement.innerHTML = `
+                        <div class="story-avatar">
+                            <img src="${story.avatar}">
+                        </div>
+                        <div class="story-username">${story.name}</div>
+                    `;
+                    storiesContainer.appendChild(storyElement);
+                });
+            });
+        }
+
+        // Load live rooms
+        function loadLiveRooms() {
+            const liveRoomsRef = ref(db, 'liveRooms');
+            onValue(liveRoomsRef, (snapshot) => {
+                const liveRooms = snapshot.val() || [];
+                liveRoomsContainer.innerHTML = '';
+                
+                liveRooms.forEach(room => {
+                    const roomElement = document.createElement('div');
+                    roomElement.className = 'live-room-card';
+                    roomElement.innerHTML = `
+                        <div class="live-badge">LIVE</div>
+                        <img src="${room.image}" class="live-room-image">
+                        <div class="live-room-info">
+                            <h4 class="live-room-title">${room.title}</h4>
+                            <div class="live-room-members">
+                                <img src="${room.hostAvatar}">
+                                <span>${room.members} listening</span>
+                            </div>
+                        </div>
+                        <button class="join-room-btn" data-room="${room.id}">
+                            <i class="fas fa-headphones"></i> Join Room
+                        </button>
+                    `;
+                    liveRoomsContainer.appendChild(roomElement);
+                });
+                
+                // Add event listeners to join buttons
+                document.querySelectorAll('.join-room-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const roomId = btn.dataset.room;
+                        joinLiveRoom(roomId);
+                    });
+                });
+            });
+        }
+        
+        // Join live room
+        function joinLiveRoom(roomId) {
+            showToast(`Joining room ${roomId}...`);
+            // In a real app, this would initialize the Agora SDK
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            const darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', darkMode ? '' : 'dark');
+            themeToggle.innerHTML = darkMode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', darkMode ? '' : 'dark');
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                showToast('Logging out...');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            }
+        }
+
+        // Add coins
+        function addCoins() {
+            if (currentUser) {
+                currentUser.coins += 100;
+                userCoins.textContent = currentUser.coins;
+                showToast('100 coins added to your balance!');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Set active navigation
+        function setActiveNav(activeItem) {
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            activeItem.classList.add('active');
+        }
+        
+        // Listen for incoming calls
+        function listenForCalls() {
+            const callRef = ref(db, 'calls/current');
+            onValue(callRef, (snapshot) => {
+                const callData = snapshot.val();
+                if (callData && Date.now() - callData.timestamp < 30000) {
+                    showCallNotification(callData);
+                } else {
+                    callNotification.style.display = 'none';
+                }
+            });
+        }
+        
+        // Show call notification
+        function showCallNotification(callData) {
+            callNotification.style.display = 'flex';
+            
+            // Update caller info
+            const callerAvatar = callNotification.querySelector('.caller-avatar');
+            const callerName = callNotification.querySelector('h4');
+            
+            callerAvatar.src = callData.callerAvatar;
+            callerName.textContent = callData.callerName;
+        }
+        
+        // Answer call
+        function answerCall() {
+            showToast('Call started...');
+            callNotification.style.display = 'none';
+            
+            // In a real app, this would initialize the Agora call
+        }
+        
+        // Reject call
+        function rejectCall() {
+            showToast('Call rejected');
+            callNotification.style.display = 'none';
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

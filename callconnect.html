@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CallConnect - Social Audio & Video Platform</title>
+    <title>CallConnect - Social Audio & Video</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <!-- Firebase Config -->
+    <script src="config.js"></script>
     <style>
+        /* ... (all CSS styles remain unchanged) ... */
         * {
             margin: 0;
             padding: 0;
@@ -98,7 +107,6 @@
             position: relative;
         }
         
-        /* Header Styles */
         .header {
             display: flex;
             justify-content: space-between;
@@ -191,7 +199,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
-        /* Sidebar Styles */
         .sidebar {
             width: var(--sidebar-width);
             background-color: var(--sidebar-bg);
@@ -215,7 +222,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
+            padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border-color);
         }
         
@@ -369,7 +376,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -381,7 +388,6 @@
             transform: translateY(-2px);
         }
         
-        /* Main Content */
         .main-content {
             flex: 1;
             padding: 1.5rem;
@@ -426,7 +432,6 @@
             transform: translateY(-2px);
         }
         
-        /* Section Styles */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -461,7 +466,6 @@
             gap: 0.5rem;
         }
         
-        /* Stories Styles */
         .stories-container {
             display: flex;
             gap: 1rem;
@@ -541,48 +545,11 @@
             font-weight: 600;
         }
         
-        .add-status {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .add-status-circle {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background-color: var(--input-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.75rem;
-            border: 2px dashed var(--primary);
-        }
-        
-        .add-status-circle i {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .status-indicator {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: var(--success);
-            border: 2px solid var(--card-bg);
-            z-index: 2;
-        }
-        
         @keyframes rotate {
             from { transform: rotate(0); }
             to { transform: rotate(360deg); }
         }
         
-        /* Feed Styles */
         .feed-container { display: flex; flex-direction: column; gap: 1.5rem; }
         
         .feed-card {
@@ -687,115 +654,6 @@
             transform: scale(1.1);
         }
         
-        /* Comment Section */
-        .comment-section {
-            padding: 0.75rem 1.25rem;
-            background-color: var(--input-bg);
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .comment {
-            display: flex;
-            margin-bottom: 0.75rem;
-        }
-        
-        .comment-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-            margin-right: 0.75rem;
-            flex-shrink: 0;
-            border: 2px solid var(--primary);
-        }
-        
-        .comment-content {
-            flex: 1;
-            background-color: var(--card-bg);
-            padding: 0.75rem;
-            border-radius: var(--radius-md);
-        }
-        
-        .comment-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.25rem;
-        }
-        
-        .comment-user {
-            font-weight: 600;
-            font-size: 0.9375rem;
-            margin-right: 0.5rem;
-        }
-        
-        .comment-time {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            margin-top: 0.25rem;
-        }
-        
-        .comment-text {
-            font-size: 0.9375rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .comment-actions {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.8125rem;
-            color: var(--text-light);
-        }
-        
-        .comment-action {
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .comment-action:hover {
-            color: var(--primary);
-        }
-        
-        .replies {
-            margin-top: 0.75rem;
-            padding-left: 1.5rem;
-            border-left: 2px solid var(--border-color);
-        }
-        
-        .add-comment {
-            display: flex;
-            margin-top: 1rem;
-            gap: 0.75rem;
-        }
-        
-        .comment-input {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-        }
-        
-        .send-comment-btn {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 1.25rem;
-            width: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-        
-        .send-comment-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        /* Live Rooms */
         .live-rooms {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -912,7 +770,6 @@
             transform: translateY(-2px);
         }
         
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -925,7 +782,7 @@
             box-shadow: var(--shadow-sm);
             z-index: 99;
             border-top: 1px solid var(--border-color);
-            height: 85px; /* Increased height for better spacing */
+            height: 70px;
             backdrop-filter: blur(10px);
             background-color: rgba(255, 255, 255, 0.85);
         }
@@ -946,7 +803,6 @@
             border-radius: var(--radius-sm);
             flex: 1;
             max-width: 80px;
-            justify-content: center;
         }
         
         .nav-item i {
@@ -961,12 +817,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .nav-item span {
-            display: block;
-            margin-top: 0.25rem;
-            font-size: 0.75rem;
         }
         
         .nav-item.active { 
@@ -987,7 +837,6 @@
             transform: translateY(-5px);
         }
         
-        /* Floating Widget */
         .floating-widget {
             position: fixed;
             bottom: 90px;
@@ -1034,7 +883,6 @@
             100% { transform: translateY(0px); }
         }
         
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 90px;
@@ -1060,7 +908,419 @@
             color: var(--primary);
         }
         
-        /* Responsive Adjustments */
+        .notifications-dropdown {
+            position: absolute;
+            top: 70px;
+            right: 1.5rem;
+            width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            padding: 1.25rem;
+            z-index: 110;
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .notifications-dropdown.active { display: block; }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .notification-header h3 { font-size: 1.125rem; font-weight: 700; }
+        
+        .mark-all-read {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .mark-all-read:hover { text-decoration: underline; }
+        
+        .notification-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+        }
+        
+        .notification-item:hover { background-color: var(--input-bg); }
+        .notification-item:last-child { border-bottom: none; }
+        
+        .notification-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--primary);
+        }
+        
+        .notification-content { flex: 1; }
+        .notification-text { font-size: 0.9375rem; font-weight: 500; }
+        .notification-time { font-size: 0.8125rem; color: var(--text-light); margin-top: 0.5rem; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .modal-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 1.25rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .post-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            resize: vertical;
+            margin-bottom: 1.25rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        .file-preview {
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .recording-ui {
+            display: none;
+            margin-bottom: 1.25rem;
+            background-color: var(--input-bg);
+            padding: 1.25rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .recording-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .timer {
+            margin-left: auto;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.125rem;
+        }
+        
+        .record-btn, .stop-btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+        
+        .record-btn {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .record-btn:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .stop-btn {
+            background-color: var(--secondary-light);
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+        
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            flex: 1;
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--input-bg);
+        }
+        
+        .ceo-badge {
+            background: var(--warning);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+        }
+        
+        .admin-badge {
+            background: var(--info);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 71, 87, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-light);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .empty-state p {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background-color: var(--bg-color);
+        }
+        
+        .login-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .login-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 1.5rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .login-input {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            width: 100%;
+        }
+        
+        .login-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .login-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .signup-link {
+            margin-top: 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .signup-link a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
         @media (min-width: 768px) {
             .header { padding: 0.75rem 2rem; }
             .main-content { padding: 2rem; }
@@ -1085,18 +1345,6 @@
                 width: 54px;
                 height: 54px;
                 font-size: 1.3rem;
-            }
-            
-            .bottom-nav {
-                height: 85px;
-            }
-            
-            .nav-item {
-                padding: 0.5rem 0.25rem;
-            }
-            
-            .nav-item span {
-                font-size: 0.7rem;
             }
         }
         
@@ -1123,785 +1371,515 @@
             .feed-actions { padding: 0.5rem 1rem; }
             .feed-action { padding: 0.375rem; font-size: 0.875rem; }
             .live-room-image { height: 140px; }
-            .bottom-nav { padding: 0.75rem 0; height: 85px; }
+            .bottom-nav { padding: 0.75rem 0; height: 65px; }
             .nav-item { font-size: 0.75rem; padding: 0.5rem 0.25rem; }
             .nav-item i { 
                 font-size: 1.15rem; 
                 width: 40px;
                 height: 40px;
             }
-            .nav-item span {
-                font-size: 0.7rem;
-            }
-        }
-        
-        /* Role badges */
-        .ceo-badge {
-            background: var(--warning);
-            color: white;
-            font-size: 0.75rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-        }
-        
-        .admin-badge {
-            background: var(--info);
-            color: white;
-            font-size: 0.75rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-        }
-        
-        /* Loading animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 71, 87, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 0.5rem;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1.5rem;
-            color: var(--text-light);
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--secondary-light);
-        }
-        
-        .empty-state h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-        
-        .empty-state p {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        /* Status Modal */
-        .status-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 200;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .status-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .status-modal-content {
-            background-color: var(--card-bg);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-        }
-        
-        .status-input {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            margin: 1.5rem 0;
-            font-size: 1rem;
-            background-color: var(--input-bg);
-            color: var(--text-color);
-        }
-        
-        .status-submit {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 0.875rem 1.5rem;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .status-submit:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        /* Create Post Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 200;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-content {
-            background-color: var(--card-bg);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-        
-        .post-textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            resize: vertical;
-            margin-bottom: 1.5rem;
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 1rem;
-        }
-        
-        .post-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            justify-content: center;
-        }
-        
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: none;
-            border: none;
-            color: var(--text-light);
-            cursor: pointer;
-            padding: 0.75rem;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-            font-weight: 500;
-        }
-        
-        .action-btn:hover {
-            background-color: var(--input-bg);
-            color: var(--primary);
-        }
-        
-        .post-submit {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: var(--transition);
-        }
-        
-        .post-submit:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        /* Live Session Modal */
-        .live-modal-content {
-            background-color: var(--card-bg);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            width: 90%;
-            max-width: 600px;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 0.875rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 1rem;
-        }
-        
-        .radio-group {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1rem;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        
-        .btn {
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            flex: 1;
-            text-align: center;
-            font-size: 1rem;
-        }
-        
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: white;
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-        }
-        
-        .btn-primary:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--input-bg);
         }
     </style>
 </head>
 <body>
     <div class="app-container" id="app-container">
-        <div class="header">
-            <div class="logo">
-                <span class="logo-icon">
-                    <i class="fas fa-phone-alt"></i>
-                </span>
-                CallConnect
-            </div>
-            <div class="header-actions">
-                <button class="message-btn" id="message-btn">
-                    <i class="fas fa-envelope"></i>
-                    <span class="message-badge">2</span>
-                </button>
-                <button class="notification-btn" id="notification-btn">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
+        <!-- Login screen (initially shown) -->
+        <div class="login-container" id="login-container">
+            <div class="login-card">
+                <div class="login-logo">
+                    <span class="login-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </span>
+                    CallConnect
+                </div>
+                <h2>Welcome to CallConnect</h2>
+                <p class="text-muted">Connect with friends through audio and video calls</p>
+                
+                <div class="login-form">
+                    <input type="email" id="login-email" class="login-input" placeholder="Email" required>
+                    <input type="password" id="login-password" class="login-input" placeholder="Password" required>
+                    <button class="login-btn" id="login-btn">Login</button>
+                    <p class="signup-link">Don't have an account? <a href="#" id="signup-link">Sign Up</a></p>
+                </div>
             </div>
         </div>
-
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h3>Menu</h3>
-                <button class="theme-toggle" id="theme-toggle">
-                    <i class="fas fa-moon"></i>
-                </button>
+        
+        <!-- Main app content (initially hidden) -->
+        <div id="app-content" style="display:none">
+            <div class="header">
+                <div class="logo">
+                    <span class="logo-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </span>
+                    CallConnect
+                </div>
+                <div class="header-actions">
+                    <button class="message-btn" id="message-btn">
+                        <i class="fas fa-envelope"></i>
+                        <span class="message-badge">2</span>
+                    </button>
+                    <button class="notification-btn" id="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="notifications-dropdown" id="notifications-dropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                        </div>
+                        <div id="notifications-list"></div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="user-profile" id="user-profile">
-                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Callie" alt="User" class="user-avatar" id="user-avatar">
-                <div class="status-indicator"></div>
-                <div class="user-info">
-                    <h3 id="username-display">John Doe</h3>
-                    <p>Balance: <span class="coins" id="user-coins">250 <i class="fas fa-coins"></i></span></p>
-                    <button class="top-up-btn" id="top-up-btn">
-                        <i class="fas fa-plus"></i> Top Up
+
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Menu</h3>
+                    <button class="theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
                     </button>
                 </div>
+                
+                <div class="user-profile" id="user-profile">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar" id="user-avatar">
+                    <div class="user-info">
+                        <h3 id="username-display">John Doe</h3>
+                        <p>Balance: <span class="coins" id="user-coins">250 <i class="fas fa-coins"></i></span></p>
+                        <button class="top-up-btn" id="top-up-btn">
+                            <i class="fas fa-plus"></i> Top Up
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Shop</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-wallet"></i>
+                        <span>Wallet</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Fun</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Friends</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-video"></i>
+                        <span>Live Sessions</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                </div>
+                
+                <button class="logout-btn" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
             
-            <div class="menu-section">
-                <div class="menu-item active">
+            <div class="main-content">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i> Menu
+                </button>
+                
+                <div class="page active" id="home-page">
+                    <div class="stories-container" id="stories-container">
+                        <!-- Stories will be dynamically loaded here -->
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2 class="section-title">Live Rooms</h2>
+                        <a href="#" class="view-all">
+                            View all <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="live-rooms" id="live-rooms">
+                        <!-- Live rooms will be dynamically loaded here -->
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2 class="section-title">Community Feed</h2>
+                        <div class="view-all">
+                            See more <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    <div class="feed-container" id="feed-container">
+                        <div id="loading-activities">
+                            <p style="text-align: center; padding: 3rem;">
+                                <span class="loading"></span> Loading community activities...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-widget">
+                <button class="floating-btn live-floating-btn" id="go-live-btn">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="floating-btn post-floating-btn" id="create-post-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            
+            <div class="modal" id="create-post-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Create Post</h3>
+                        <button class="close-modal" id="close-post-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="post-textarea" id="post-text" placeholder="What's on your mind?"></textarea>
+                        
+                        <div class="file-preview" id="image-preview">
+                            <img class="preview-image" id="preview-image">
+                        </div>
+                        
+                        <div class="recording-ui" id="recording-ui">
+                            <div class="recording-controls">
+                                <button class="record-btn" id="record-btn">
+                                    <i class="fas fa-microphone"></i> Record
+                                </button>
+                                <button class="stop-btn" id="stop-btn" disabled>
+                                    <i class="fas fa-stop"></i> Stop
+                                </button>
+                                <div class="timer" id="timer">0:00</div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-outline" id="add-image-btn">
+                                <i class="fas fa-image"></i> Add Image
+                            </button>
+                            <button class="btn btn-outline" id="add-voice-btn">
+                                <i class="fas fa-microphone"></i> Add Voice
+                            </button>
+                        </div>
+                        
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        
+                        <button class="btn btn-primary" id="submit-post-btn" style="margin-top: 1rem;">Post</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="go-live-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Go Live</h3>
+                        <button class="close-modal" id="close-live-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="go-live-form">
+                            <div class="form-group">
+                                <label class="form-label">Live Session Title</label>
+                                <input type="text" class="form-control" id="live-title" placeholder="Enter session title" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Session Type</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="podcast" name="session-type" value="podcast" checked>
+                                        <label for="podcast">Podcast (Audio Only)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="stream" name="session-type" value="stream">
+                                        <label for="stream">Live Stream (Video)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">When do you want to start?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="start-now" name="start-time" value="now" checked>
+                                        <label for="start-now">Start Now</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="schedule" name="start-time" value="schedule">
+                                        <label for="schedule">Schedule for Later</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="schedule-options" id="schedule-options" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label">Date & Time</label>
+                                    <input type="datetime-local" class="form-control" id="live-date">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Cover Image (Optional)</label>
+                                <input type="file" class="form-control" id="cover-image" accept="image/*">
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-primary" id="start-live-btn">Start Live Session</button>
+                                <button type="button" class="btn btn-outline" id="cancel-live-btn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="#" class="nav-item active" data-page="home">
                     <i class="fas fa-home"></i>
                     <span>Home</span>
-                </div>
-                <div class="menu-item">
+                </a>
+                <a href="#" class="nav-item" data-page="shop">
                     <i class="fas fa-shopping-bag"></i>
                     <span>Shop</span>
-                </div>
-                <div class="menu-item">
+                </a>
+                <a href="#" class="nav-item" data-page="wallet">
                     <i class="fas fa-wallet"></i>
                     <span>Wallet</span>
-                </div>
-                <div class="menu-item">
+                </a>
+                <a href="#" class="nav-item" data-page="fun">
                     <i class="fas fa-gamepad"></i>
                     <span>Fun</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-users"></i>
-                    <span>Friends</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-video"></i>
-                    <span>Live Sessions</span>
-                </div>
-                <div class="menu-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </div>
-            </div>
-            
-            <button class="logout-btn" id="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-        
-        <div class="main-content">
-            <button class="menu-toggle" id="menu-toggle">
-                <i class="fas fa-bars"></i> Menu
-            </button>
-            
-            <div class="page active" id="home-page">
-                <div class="stories-container" id="stories-container">
-                    <!-- Stories will be loaded here -->
-                </div>
-                
-                <div class="section-header">
-                    <h2 class="section-title">Live Rooms</h2>
-                    <a href="#" class="view-all">
-                        View all <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="live-rooms" id="live-rooms">
-                    <!-- Live rooms will be loaded here -->
-                </div>
-                
-                <div class="section-header">
-                    <h2 class="section-title">Community Feed</h2>
-                    <div class="view-all">
-                        See more <i class="fas fa-arrow-right"></i>
-                    </div>
-                </div>
-                <div class="feed-container" id="feed-container">
-                    <!-- Community feed will be loaded here -->
-                    <div id="loading-activities">
-                        <p style="text-align: center; padding: 3rem;">
-                            <span class="loading"></span> Loading community activities...
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Floating Widget -->
-        <div class="floating-widget">
-            <button class="floating-btn live-floating-btn" id="go-live-btn">
-                <i class="fas fa-video"></i>
-            </button>
-            <button class="floating-btn post-floating-btn" id="create-post-btn">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        
-        <div class="bottom-nav">
-            <a href="#" class="nav-item active" data-page="home">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="#" class="nav-item" data-page="shop">
-                <i class="fas fa-shopping-bag"></i>
-                <span>Shop</span>
-            </a>
-            <a href="#" class="nav-item" data-page="wallet">
-                <i class="fas fa-wallet"></i>
-                <span>Wallet</span>
-            </a>
-            <a href="#" class="nav-item" data-page="fun">
-                <i class="fas fa-gamepad"></i>
-                <span>Fun</span>
-            </a>
-            <a href="#" class="nav-item" data-page="profile">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </div>
-        
-        <!-- Status Modal -->
-        <div class="status-modal" id="status-modal">
-            <div class="status-modal-content">
-                <h3>Add Your Status</h3>
-                <p>Your status will disappear after 24 hours</p>
-                <input type="text" class="status-input" id="status-input" placeholder="What's on your mind?">
-                <button class="status-submit" id="status-submit">Post Status</button>
-            </div>
-        </div>
-        
-        <!-- Create Post Modal -->
-        <div class="modal" id="create-post-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Create New Post</h3>
-                    <button class="close-modal" id="close-post-modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <textarea class="post-textarea" id="post-text" placeholder="What's happening?"></textarea>
-                    <div class="post-actions">
-                        <button class="action-btn" id="add-image-btn">
-                            <i class="fas fa-image"></i> Photo
-                        </button>
-                        <button class="action-btn" id="add-video-btn">
-                            <i class="fas fa-video"></i> Video
-                        </button>
-                        <button class="action-btn" id="add-audio-btn">
-                            <i class="fas fa-microphone"></i> Audio
-                        </button>
-                    </div>
-                    <button class="post-submit" id="submit-post-btn">Post</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Go Live Modal -->
-        <div class="modal" id="go-live-modal">
-            <div class="live-modal-content">
-                <div class="modal-header">
-                    <h3>Start a Live Session</h3>
-                    <button class="close-modal" id="close-live-modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="form-label">Session Title</label>
-                        <input type="text" class="form-control" id="live-title" placeholder="Enter session title">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Session Type</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="audio-only" name="session-type" value="audio" checked>
-                                <label for="audio-only">Audio Only</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="video" name="session-type" value="video">
-                                <label for="video">Video</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Privacy</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="public" name="privacy" value="public" checked>
-                                <label for="public">Public</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="private" name="privacy" value="private">
-                                <label for="private">Private</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" id="start-live-btn">Go Live</button>
-                        <button class="btn btn-outline" id="cancel-live-btn">Cancel</button>
-                    </div>
-                </div>
+                </a>
+                <a href="#" class="nav-item" data-page="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    
     <script>
-        // Firebase configuration (replace with your actual config)
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
+        // Initialize Firebase using the config from config.js
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        // Mock config.js data (will be replaced with Firebase data)
-        const appConfig = {
-            users: [
-                {
-                    id: 'user1',
-                    name: 'John Doe',
-                    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Callie',
-                    coins: 250,
-                    role: 'user',
-                    following: ['user2', 'user3', 'ceo1'],
-                    status: { text: "Exploring new features!", timestamp: new Date(Date.now() - 6 * 3600000) }
-                },
-                {
-                    id: 'user2',
-                    name: 'Sarah Miller',
-                    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Sarah',
-                    coins: 420,
-                    role: 'user',
-                    following: ['user1', 'user3'],
-                    status: { text: "Working on a new project", timestamp: new Date(Date.now() - 12 * 3600000) }
-                },
-                {
-                    id: 'ceo1',
-                    name: 'Alex Johnson',
-                    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Alex',
-                    coins: 5000,
-                    role: 'ceo',
-                    following: [],
-                    status: { text: "Excited about our new release!", timestamp: new Date(Date.now() - 2 * 3600000) }
-                },
-                {
-                    id: 'admin1',
-                    name: 'David Wilson',
-                    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=David',
-                    coins: 1200,
-                    role: 'admin',
-                    following: [],
-                    status: { text: "Improving platform performance", timestamp: new Date(Date.now() - 18 * 3600000) }
-                }
-            ],
+        
+        // Service implementations
+        const authService = {
+            auth: firebase.auth(),
             
-            posts: [
-                {
-                    id: 'post1',
-                    userId: 'ceo1',
-                    userName: 'Alex Johnson',
-                    userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Alex',
-                    role: 'ceo',
-                    content: 'Exciting news! We just reached 1 million users on CallConnect! Thank you all for your support. Stay tuned for some amazing new features coming next month!',
-                    timestamp: new Date(Date.now() - 5 * 60000),
-                    likes: 125,
-                    comments: [
-                        {
-                            id: 'comment1',
-                            userId: 'user1',
-                            userName: 'John Doe',
-                            userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Callie',
-                            content: 'Congratulations! This is amazing news!',
-                            timestamp: new Date(Date.now() - 4 * 60000),
-                            likes: 12
-                        },
-                        {
-                            id: 'comment2',
-                            userId: 'user2',
-                            userName: 'Sarah Miller',
-                            userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Sarah',
-                            content: 'So proud to be part of this community!',
-                            timestamp: new Date(Date.now() - 3 * 60000),
-                            likes: 8
-                        }
-                    ],
-                    image: null
-                },
-                {
-                    id: 'post2',
-                    userId: 'admin1',
-                    userName: 'David Wilson',
-                    userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=David',
-                    role: 'admin',
-                    content: 'We just deployed a performance update. Let us know if you notice any improvements!',
-                    timestamp: new Date(Date.now() - 30 * 60000),
-                    likes: 27,
-                    comments: [
-                        {
-                            id: 'comment3',
-                            userId: 'user1',
-                            userName: 'John Doe',
-                            userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Callie',
-                            content: 'The app is much faster now! Great work!',
-                            timestamp: new Date(Date.now() - 25 * 60000),
-                            likes: 5
-                        }
-                    ],
-                    image: null
-                },
-                {
-                    id: 'post3',
-                    userId: 'user2',
-                    userName: 'Sarah Miller',
-                    userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Sarah',
-                    role: 'user',
-                    content: 'Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic.',
-                    timestamp: new Date(Date.now() - 60 * 60000),
-                    likes: 18,
-                    comments: [],
-                    image: null
-                },
-                {
-                    id: 'post4',
-                    userId: 'user1',
-                    userName: 'John Doe',
-                    userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Callie',
-                    role: 'user',
-                    content: 'Just created my first live room. Join me to discuss mobile app development!',
-                    timestamp: new Date(Date.now() - 90 * 60000),
-                    likes: 32,
-                    comments: [
-                        {
-                            id: 'comment4',
-                            userId: 'admin1',
-                            userName: 'David Wilson',
-                            userAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=David',
-                            content: 'Great topic! I\'ll join as soon as I can.',
-                            timestamp: new Date(Date.now() - 85 * 60000),
-                            likes: 3
-                        }
-                    ],
-                    image: null
-                }
-            ],
+            registerUser: function(email, password) {
+                return this.auth.createUserWithEmailAndPassword(email, password);
+            },
             
-            notifications: [
-                {
-                    id: 1,
-                    type: 'new_post',
-                    sender: 'Sarah Miller',
-                    senderAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Sarah',
-                    content: 'Sarah just posted a new update',
-                    timestamp: new Date(Date.now() - 10 * 60000),
-                    read: false
-                },
-                {
-                    id: 2,
-                    type: 'ceo_announcement',
-                    sender: 'CallConnect CEO',
-                    senderAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Alex',
-                    content: 'New platform update is coming next week!',
-                    timestamp: new Date(Date.now() - 45 * 60000),
-                    read: false
-                },
-                {
-                    id: 3,
-                    type: 'like',
-                    sender: 'Mike Thompson',
-                    senderAvatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Mike',
-                    content: 'Mike liked your post',
-                    timestamp: new Date(Date.now() - 120 * 60000),
-                    read: true
-                }
-            ],
+            loginUser: function(email, password) {
+                return this.auth.signInWithEmailAndPassword(email, password);
+            },
             
-            stories: [
-                { id: 1, name: "Sarah", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Sarah", new: true },
-                { id: 2, name: "Mike", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Mike", new: true },
-                { id: 3, name: "Emma", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Emma", new: false },
-                { id: 4, name: "David", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=David", new: false },
-                { id: 5, name: "Lisa", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Lisa", new: true }
-            ],
+            logoutUser: function() {
+                return this.auth.signOut();
+            },
             
-            liveRooms: [
-                {
-                    id: 1,
-                    title: "Music & Chill - Late Night Vibes",
-                    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
-                    host: "Sarah",
-                    hostAvatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Sarah",
-                    members: 12
-                },
-                {
-                    id: 2,
-                    title: "Tech Talk: Future of Web Development",
-                    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
-                    host: "Mike",
-                    hostAvatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Mike",
-                    members: 8
-                },
-                {
-                    id: 3,
-                    title: "Gaming Session - Join the Battle",
-                    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
-                    host: "David",
-                    hostAvatar: "https://api.dicebear.com/7.x/bottts/svg?seed=David",
-                    members: 15
-                }
-            ]
+            onAuthStateChanged: function(callback) {
+                return this.auth.onAuthStateChanged(callback);
+            }
         };
 
-        // DOM Elements
+        const firestoreService = {
+            db: firebase.firestore(),
+            
+            createUserProfile: async function(userId, userData) {
+                const userRef = this.db.collection('users').doc(userId);
+                await userRef.set({
+                    ...userData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                return userRef.get();
+            },
+            
+            getUserProfile: async function(userId) {
+                const userRef = this.db.collection('users').doc(userId);
+                const docSnap = await userRef.get();
+                return docSnap.exists() ? docSnap.data() : null;
+            },
+            
+            updateUserCoins: async function(userId, amount) {
+                const userRef = this.db.collection('users').doc(userId);
+                await userRef.update({
+                    coins: firebase.firestore.FieldValue.increment(amount)
+                });
+                return userRef.get();
+            },
+            
+            createPost: async function(postData) {
+                const postsRef = this.db.collection('posts');
+                const newPostRef = postsRef.doc();
+                await newPostRef.set({
+                    ...postData,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                return newPostRef.id;
+            },
+            
+            getFeedPosts: async function(followingIds) {
+                if (followingIds.length === 0) return [];
+                
+                const postsRef = this.db.collection('posts');
+                const q = postsRef
+                    .where("userId", "in", followingIds)
+                    .orderBy("timestamp", "desc")
+                    .limit(20);
+                
+                const querySnapshot = await q.get();
+                return querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+            },
+            
+            likePost: async function(postId, userId) {
+                const postRef = this.db.collection('posts').doc(postId);
+                await postRef.update({
+                    likes: firebase.firestore.FieldValue.arrayUnion(userId)
+                });
+            },
+            
+            createLiveRoom: async function(roomData) {
+                const roomsRef = this.db.collection('liveRooms');
+                const newRoomRef = roomsRef.doc();
+                await newRoomRef.set({
+                    ...roomData,
+                    status: "live",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                return newRoomRef.id;
+            },
+            
+            getActiveLiveRooms: async function() {
+                const roomsRef = this.db.collection('liveRooms');
+                const q = roomsRef
+                    .where("status", "==", "live")
+                    .orderBy("createdAt", "desc")
+                    .limit(10);
+                
+                const querySnapshot = await q.get();
+                return querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+            }
+        };
+
+        const storageService = {
+            storage: firebase.storage(),
+            
+            uploadFile: async function(file, path) {
+                const storageRef = this.storage.ref(`${path}/${Date.now()}_${file.name}`);
+                await storageRef.put(file);
+                return storageRef.getDownloadURL();
+            },
+            
+            uploadAudio: async function(audioBlob) {
+                const storageRef = this.storage.ref(`audio/${Date.now()}.mp3`);
+                await storageRef.put(audioBlob);
+                return storageRef.getDownloadURL();
+            },
+            
+            uploadImage: async function(imageFile) {
+                return this.uploadFile(imageFile, 'images');
+            },
+            
+            uploadRoomCover: async function(imageFile) {
+                return this.uploadFile(imageFile, 'roomCovers');
+            }
+        };
+
+        const rtdbService = {
+            rtdb: firebase.database(),
+            
+            joinLiveRoom: async function(roomId, userId) {
+                const roomRef = this.rtdb.ref(`liveRooms/${roomId}/participants/${userId}`);
+                await roomRef.set({
+                    joinedAt: Date.now(),
+                    active: true
+                });
+            },
+            
+            leaveLiveRoom: async function(roomId, userId) {
+                const roomRef = this.rtb.ref(`liveRooms/${roomId}/participants/${userId}`);
+                await roomRef.set(null);
+            },
+            
+            sendRoomMessage: async function(roomId, message) {
+                const messagesRef = this.rtdb.ref(`liveRooms/${roomId}/messages/${Date.now()}`);
+                await messagesRef.set(message);
+            },
+            
+            listenToRoomMessages: function(roomId, callback) {
+                const messagesRef = this.rtdb.ref(`liveRooms/${roomId}/messages`);
+                messagesRef.on('value', (snapshot) => {
+                    const messages = [];
+                    snapshot.forEach(childSnapshot => {
+                        messages.push({
+                            id: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
+                    });
+                    callback(messages);
+                });
+                
+                return () => messagesRef.off();
+            },
+            
+            listenToParticipants: function(roomId, callback) {
+                const participantsRef = this.rtdb.ref(`liveRooms/${roomId}/participants`);
+                participantsRef.on('value', (snapshot) => {
+                    const participants = [];
+                    snapshot.forEach(childSnapshot => {
+                        participants.push({
+                            userId: childSnapshot.key,
+                            ...childSnapshot.val()
+                        });
+                    });
+                    callback(participants);
+                });
+                
+                return () => participantsRef.off();
+            }
+        };
+
+        // DOM elements
+        const appContainer = document.getElementById('app-container');
+        const loginContainer = document.getElementById('login-container');
+        const appContent = document.getElementById('app-content');
+        const loginBtn = document.getElementById('login-btn');
+        const signupLink = document.getElementById('signup-link');
+        const logoutBtn = document.getElementById('logout-btn');
         const menuToggle = document.getElementById('menu-toggle');
         const sidebar = document.getElementById('sidebar');
         const themeToggle = document.getElementById('theme-toggle');
-        const logoutBtn = document.getElementById('logout-btn');
         const notificationBtn = document.getElementById('notification-btn');
-        const messageBtn = document.getElementById('message-btn');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        const markAllReadBtn = document.getElementById('mark-all-read');
         const topUpBtn = document.getElementById('top-up-btn');
         const createPostBtn = document.getElementById('create-post-btn');
+        const createPostModal = document.getElementById('create-post-modal');
+        const closePostModalBtn = document.getElementById('close-post-modal');
         const goLiveBtn = document.getElementById('go-live-btn');
-        const appContainer = document.getElementById('app-container');
+        const goLiveModal = document.getElementById('go-live-modal');
+        const closeLiveModalBtn = document.getElementById('close-live-modal');
+        const postText = document.getElementById('post-text');
+        const addImageBtn = document.getElementById('add-image-btn');
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreview = document.getElementById('preview-image');
+        const imagePreviewContainer = document.getElementById('image-preview');
+        const addVoiceBtn = document.getElementById('add-voice-btn');
+        const recordingUI = document.getElementById('recording-ui');
+        const recordBtn = document.getElementById('record-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const timer = document.getElementById('timer');
+        const submitPostBtn = document.getElementById('submit-post-btn');
         const usernameDisplay = document.getElementById('username-display');
         const userAvatar = document.getElementById('user-avatar');
         const userCoins = document.getElementById('user-coins');
@@ -1910,283 +1888,228 @@
         const feedContainer = document.getElementById('feed-container');
         const loadingActivities = document.getElementById('loading-activities');
         const navItems = document.querySelectorAll('.nav-item');
-        const statusModal = document.getElementById('status-modal');
-        const statusInput = document.getElementById('status-input');
-        const statusSubmit = document.getElementById('status-submit');
-        const createPostModal = document.getElementById('create-post-modal');
-        const closePostModalBtn = document.getElementById('close-post-modal');
-        const submitPostBtn = document.getElementById('submit-post-btn');
-        const postText = document.getElementById('post-text');
-        const goLiveModal = document.getElementById('go-live-modal');
-        const closeLiveModalBtn = document.getElementById('close-live-modal');
+        const scheduleOptions = document.getElementById('schedule-options');
+        const startNowRadio = document.getElementById('start-now');
+        const scheduleRadio = document.getElementById('schedule');
         const startLiveBtn = document.getElementById('start-live-btn');
         const cancelLiveBtn = document.getElementById('cancel-live-btn');
         
-        // Current user
-        let currentUser = appConfig.users.find(u => u.id === 'user1');
+        // Global variables
+        let currentUser = null;
+        let currentUserData = null;
+        let recorder, audioChunks = [];
+        let audioData = "";
+        let recordingInterval;
+        let recordingSeconds = 0;
+        let posts = [];
+        let liveRooms = [];
+        let stories = [];
 
-        // Initialize app
+        // Initialize the app
         function init() {
-            // Update user profile
-            updateUserProfile();
-            
-            // Load data from config
+            setupEventListeners();
+            checkAuthState();
+        }
+
+        // Check authentication state
+        function checkAuthState() {
+            authService.onAuthStateChanged(async (user) => {
+                if (user) {
+                    currentUser = user;
+                    
+                    // Get user profile
+                    currentUserData = await firestoreService.getUserProfile(user.uid);
+                    if (!currentUserData) {
+                        // Create new user profile
+                        currentUserData = {
+                            name: user.displayName || 'New User',
+                            avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
+                            coins: 100,
+                            following: []
+                        };
+                        await firestoreService.createUserProfile(user.uid, currentUserData);
+                    }
+                    
+                    updateUserProfile(currentUserData);
+                    loadAppData();
+                    
+                    // Show app content
+                    loginContainer.style.display = 'none';
+                    appContent.style.display = 'block';
+                } else {
+                    currentUser = null;
+                    currentUserData = null;
+                    // Show login screen
+                    loginContainer.style.display = 'flex';
+                    appContent.style.display = 'none';
+                }
+            });
+        }
+
+        function updateUserProfile(userData) {
+            usernameDisplay.textContent = userData.name;
+            userAvatar.src = userData.avatar;
+            userCoins.textContent = userData.coins;
+        }
+
+        function loadAppData() {
             loadStories();
             loadLiveRooms();
             loadCommunityFeed();
-            
-            // Set up event listeners
-            setupEventListeners();
-            
-            // Initialize theme
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
         }
 
-        // Set up event listeners
-        function setupEventListeners() {
-            // Menu toggle
-            menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('active');
-            });
-            
-            // Theme toggle
-            themeToggle.addEventListener('click', toggleTheme);
-            
-            // Logout
-            logoutBtn.addEventListener('click', logout);
-            
-            // Top up coins
-            topUpBtn.addEventListener('click', addCoins);
-            
-            // Create post button
-            createPostBtn.addEventListener('click', () => {
-                createPostModal.classList.add('active');
-            });
-            
-            // Close post modal
-            closePostModalBtn.addEventListener('click', () => {
-                createPostModal.classList.remove('active');
-            });
-            
-            // Submit post
-            submitPostBtn.addEventListener('click', submitPost);
-            
-            // Go live button
-            goLiveBtn.addEventListener('click', () => {
-                goLiveModal.classList.add('active');
-            });
-            
-            // Close live modal
-            closeLiveModalBtn.addEventListener('click', () => {
-                goLiveModal.classList.remove('active');
-            });
-            
-            // Start live session
-            startLiveBtn.addEventListener('click', startLiveSession);
-            
-            // Cancel live session
-            cancelLiveBtn.addEventListener('click', () => {
-                goLiveModal.classList.remove('active');
-            });
-            
-            // Navigation items
-            navItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    setActiveNav(item);
-                });
-            });
-            
-            // Status submit
-            statusSubmit.addEventListener('click', addStatus);
-            
-            // Close modals when clicking outside
-            document.addEventListener('click', (e) => {
-                if (e.target === statusModal) {
-                    statusModal.classList.remove('active');
-                }
-                if (e.target === createPostModal) {
-                    createPostModal.classList.remove('active');
-                }
-                if (e.target === goLiveModal) {
-                    goLiveModal.classList.remove('active');
-                }
-            });
-        }
-        
-        // Theme toggle
-        function toggleTheme() {
-            const darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-            document.documentElement.setAttribute('data-theme', darkMode ? '' : 'dark');
-            themeToggle.innerHTML = darkMode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-            localStorage.setItem('theme', darkMode ? '' : 'dark');
+        async function loadStories() {
+            // In a real app, this would fetch stories from Firestore
+            stories = [
+                { id: 1, username: "Emma", avatar: "https://randomuser.me/api/portraits/women/32.jpg", new: true },
+                { id: 2, username: "Michael", avatar: "https://randomuser.me/api/portraits/men/22.jpg", new: true },
+                { id: 3, username: "Sophia", avatar: "https://randomuser.me/api/portraits/women/12.jpg", new: false },
+                { id: 4, username: "Daniel", avatar: "https://randomuser.me/api/portraits/men/42.jpg", new: false },
+                { id: 5, username: "Olivia", avatar: "https://randomuser.me/api/portraits/women/44.jpg", new: true },
+                { id: 6, username: "James", avatar: "https://randomuser.me/api/portraits/men/15.jpg", new: false },
+                { id: 7, username: "Ava", avatar: "https://randomuser.me/api/portraits/women/67.jpg", new: false },
+            ];
+            renderStories();
         }
 
-        // Logout function
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                showToast('Logging out...');
-                setTimeout(() => {
-                    // Firebase logout would go here
-                    window.location.href = 'login.html';
-                }, 1500);
-            }
-        }
-
-        // Add coins
-        function addCoins() {
-            if (currentUser) {
-                currentUser.coins += 100;
-                userCoins.textContent = currentUser.coins;
-                showToast('100 coins added to your balance!');
-            }
-        }
-
-        // Show toast notification
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 3000);
-        }
-
-        // Set active navigation
-        function setActiveNav(activeItem) {
-            navItems.forEach(item => {
-                item.classList.remove('active');
-            });
-            activeItem.classList.add('active');
-        }
-
-        // Update user profile display
-        function updateUserProfile() {
-            if (currentUser) {
-                usernameDisplay.textContent = currentUser.name;
-                userAvatar.src = currentUser.avatar;
-                userCoins.textContent = currentUser.coins;
-            }
-        }
-
-        // Load stories
-        function loadStories() {
+        function renderStories() {
             storiesContainer.innerHTML = '';
             
-            // Add current user's status circle
-            const addStatusElement = document.createElement('div');
-            addStatusElement.className = 'story add-status';
-            addStatusElement.innerHTML = `
-                <div class="add-status-circle">
-                    <i class="fas fa-plus"></i>
-                </div>
-                <div class="story-username">Your Status</div>
-            `;
-            addStatusElement.addEventListener('click', () => {
-                statusModal.classList.add('active');
-            });
-            storiesContainer.appendChild(addStatusElement);
-            
-            // Add other users' stories
-            appConfig.stories.forEach(story => {
-                const user = appConfig.users.find(u => u.name === story.name);
-                if (!user || !user.status || isStatusExpired(user.status.timestamp)) return;
-                
-                const storyElement = document.createElement('div');
-                storyElement.className = `story ${story.new ? 'new' : ''}`;
-                storyElement.innerHTML = `
+            // Add user's own story
+            storiesContainer.innerHTML += `
+                <div class="story new">
                     <div class="story-avatar">
-                        <img src="${story.avatar}">
+                        <img src="${userAvatar.src}" alt="Your story">
                     </div>
-                    <div class="story-username">${story.name}</div>
+                    <div class="story-username">Your Story</div>
+                </div>
+            `;
+            
+            // Add other stories
+            stories.forEach(story => {
+                storiesContainer.innerHTML += `
+                    <div class="story ${story.new ? 'new' : ''}">
+                        <div class="story-avatar">
+                            <img src="${story.avatar}" alt="${story.username}">
+                        </div>
+                        <div class="story-username">${story.username}</div>
+                    </div>
                 `;
-                storiesContainer.appendChild(storyElement);
             });
         }
-        
-        // Check if status is expired (older than 24 hours)
-        function isStatusExpired(timestamp) {
-            const now = new Date();
-            const diff = now - timestamp;
-            return diff > 24 * 60 * 60 * 1000;
+
+        async function loadLiveRooms() {
+            // In a real app, this would fetch live rooms from Firestore
+            liveRooms = [
+                { 
+                    id: 1, 
+                    title: "Morning Coffee Chat", 
+                    host: "Alex Johnson", 
+                    hostAvatar: "https://randomuser.me/api/portraits/men/41.jpg", 
+                    members: 12,
+                    type: "podcast",
+                    cover: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                },
+                { 
+                    id: 2, 
+                    title: "Tech Talk Live", 
+                    host: "Sarah Williams", 
+                    hostAvatar: "https://randomuser.me/api/portraits/women/68.jpg", 
+                    members: 24,
+                    type: "stream",
+                    cover: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                },
+                { 
+                    id: 3, 
+                    title: "Music Jam Session", 
+                    host: "David Chen", 
+                    hostAvatar: "https://randomuser.me/api/portraits/men/29.jpg", 
+                    members: 8,
+                    type: "podcast",
+                    cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                },
+                { 
+                    id: 4, 
+                    title: "Fitness Motivation", 
+                    host: "Jessica Miller", 
+                    hostAvatar: "https://randomuser.me/api/portraits/women/44.jpg", 
+                    members: 15,
+                    type: "stream",
+                    cover: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                }
+            ];
+            renderLiveRooms();
         }
 
-        // Add status
-        function addStatus() {
-            const statusText = statusInput.value.trim();
-            if (!statusText) return;
-            
-            // Update current user's status
-            currentUser.status = {
-                text: statusText,
-                timestamp: new Date()
-            };
-            
-            // Close modal and reload stories
-            statusModal.classList.remove('active');
-            statusInput.value = '';
-            loadStories();
-            showToast('Status updated!');
-        }
-
-        // Load live rooms
-        function loadLiveRooms() {
+        function renderLiveRooms() {
             liveRoomsContainer.innerHTML = '';
-            appConfig.liveRooms.forEach(room => {
-                const roomElement = document.createElement('div');
-                roomElement.className = 'live-room-card';
-                roomElement.innerHTML = `
-                    <div class="live-badge">LIVE</div>
-                    <img src="${room.image}" class="live-room-image">
-                    <div class="live-room-info">
-                        <h4 class="live-room-title">${room.title}</h4>
-                        <div class="live-room-members">
-                            <img src="${room.hostAvatar}">
-                            <span>${room.members} listening</span>
+            
+            liveRooms.forEach(room => {
+                liveRoomsContainer.innerHTML += `
+                    <div class="live-room-card">
+                        <div class="live-badge">
+                            <i class="fas fa-circle"></i> LIVE
+                        </div>
+                        <img src="${room.cover}" alt="${room.title}" class="live-room-image">
+                        <div class="live-room-info">
+                            <h3 class="live-room-title">${room.title}</h3>
+                            <div class="live-room-members">
+                                <img src="${room.hostAvatar}" alt="${room.host}">
+                                <span>${room.host} • ${room.members} participants</span>
+                            </div>
+                            <button class="join-room-btn">
+                                <i class="fas fa-${room.type === 'podcast' ? 'headphones' : 'video'}"></i> 
+                                Join ${room.type === 'podcast' ? 'Podcast' : 'Stream'}
+                            </button>
                         </div>
                     </div>
-                    <button class="join-room-btn" data-room="${room.id}">
-                        <i class="fas fa-headphones"></i> Join Room
-                    </button>
                 `;
-                liveRoomsContainer.appendChild(roomElement);
-            });
-            
-            // Add event listeners to join buttons
-            document.querySelectorAll('.join-room-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const roomId = btn.dataset.room;
-                    showToast(`Joining room...`);
-                });
             });
         }
 
-        // Load community feed
-        function loadCommunityFeed() {
-            if (loadingActivities) loadingActivities.remove();
-            
-            // Filter posts: only show followed users and CEO/admin posts, exclude current user's posts
-            const filteredPosts = appConfig.posts.filter(post => 
-                (currentUser.following.includes(post.userId) || 
-                (post.role === 'ceo' || post.role === 'admin') && 
-                post.userId !== currentUser.id
-            );
-            
-            renderCommunityFeed(filteredPosts);
+        async function loadCommunityFeed() {
+            // Simulate loading delay
+            setTimeout(() => {
+                // In a real app, this would fetch posts from Firestore
+                posts = [
+                    {
+                        id: 1,
+                        userName: "Michael Chen",
+                        userAvatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                        content: "Just had an amazing conversation with @SarahW on CallConnect! The audio quality is crystal clear 👌",
+                        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                        timestamp: new Date(Date.now() - 3600000),
+                        likes: 24,
+                        comments: 8
+                    },
+                    {
+                        id: 2,
+                        userName: "Emma Rodriguez",
+                        userAvatar: "https://randomuser.me/api/portraits/women/32.jpg",
+                        content: "Hosted my first live podcast on CallConnect today! Thanks to everyone who joined the discussion about future tech trends 🚀",
+                        image: "",
+                        timestamp: new Date(Date.now() - 7200000),
+                        likes: 42,
+                        comments: 12,
+                        role: "ceo"
+                    },
+                    {
+                        id: 3,
+                        userName: "Alex Johnson",
+                        userAvatar: "https://randomuser.me/api/portraits/men/41.jpg",
+                        content: "The video call feature works flawlessly even on my average internet connection. Great job CallConnect team!",
+                        image: "https://images.unsplash.com/photo-1463171379579-3fdfb86d6285?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                        timestamp: new Date(Date.now() - 10800000),
+                        likes: 31,
+                        comments: 5
+                    }
+                ];
+                renderCommunityFeed();
+            }, 1500);
         }
-        
-        // Render community feed
-        function renderCommunityFeed(posts) {
+
+        function renderCommunityFeed() {
+            loadingActivities.style.display = 'none';
             feedContainer.innerHTML = '';
             
             if (posts.length === 0) {
@@ -2205,55 +2128,17 @@
                 feedContainer.appendChild(postElement);
             });
         }
-        
-        // Create post element
+
         function createPostElement(post) {
             const postElement = document.createElement('div');
             postElement.className = 'feed-card';
             postElement.dataset.id = post.id;
             
             let roleBadge = '';
-            if (post.role === 'ceo') {
-                roleBadge = '<span class="ceo-badge">CEO</span>';
-            } else if (post.role === 'admin') {
-                roleBadge = '<span class="admin-badge">ADMIN</span>';
-            }
+            if (post.role === 'ceo') roleBadge = '<span class="ceo-badge">CEO</span>';
+            else if (post.role === 'admin') roleBadge = '<span class="admin-badge">ADMIN</span>';
             
-            // Format timestamp
             const formattedTime = formatDate(post.timestamp);
-            
-            // Create comments section
-            let commentsHtml = '';
-            if (post.comments && post.comments.length > 0) {
-                commentsHtml = `<div class="comment-section">`;
-                post.comments.forEach(comment => {
-                    commentsHtml += `
-                        <div class="comment">
-                            <img src="${comment.userAvatar}" class="comment-avatar">
-                            <div class="comment-content">
-                                <div class="comment-header">
-                                    <span class="comment-user">${comment.userName}</span>
-                                    <span class="comment-time">${formatDate(comment.timestamp)}</span>
-                                </div>
-                                <div class="comment-text">${comment.content}</div>
-                                <div class="comment-actions">
-                                    <span class="comment-action">Like (${comment.likes || 0})</span>
-                                    <span class="comment-action">Reply</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                commentsHtml += `
-                    <div class="add-comment">
-                        <input type="text" class="comment-input" placeholder="Write a comment...">
-                        <button class="send-comment-btn">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                `;
-                commentsHtml += `</div>`;
-            }
             
             postElement.innerHTML = `
                 <div class="feed-header">
@@ -2265,6 +2150,7 @@
                 </div>
                 <div class="feed-content">
                     <div class="feed-text">${post.content}</div>
+                    ${post.image ? `<img src="${post.image}" class="feed-image">` : ''}
                 </div>
                 <div class="feed-actions">
                     <div class="feed-action like-btn" data-id="${post.id}">
@@ -2273,111 +2159,230 @@
                     </div>
                     <div class="feed-action comment-btn" data-id="${post.id}">
                         <i class="far fa-comment"></i>
-                        <span>${post.comments.length} comments</span>
+                        <span>${post.comments} comments</span>
                     </div>
                     <div class="feed-action">
                         <i class="far fa-share-square"></i>
                         <span>Share</span>
                     </div>
                 </div>
-                ${commentsHtml}
             `;
             
-            // Add event listeners for like button
-            const likeBtn = postElement.querySelector('.like-btn');
-            if (likeBtn) {
-                likeBtn.addEventListener('click', () => {
-                    handleLikePost(post.id);
-                });
-            }
-            
-            // Add event listener for comment submission
-            const sendCommentBtn = postElement.querySelector('.send-comment-btn');
-            if (sendCommentBtn) {
-                sendCommentBtn.addEventListener('click', () => {
-                    const commentInput = postElement.querySelector('.comment-input');
-                    if (commentInput && commentInput.value.trim() !== '') {
-                        addComment(post.id, commentInput.value.trim());
-                        commentInput.value = '';
-                    }
-                });
-            }
+            // Add event listener for like button
+            postElement.querySelector('.like-btn').addEventListener('click', () => {
+                handleLikePost(post.id);
+            });
             
             return postElement;
         }
-        
-        // Handle like on a post
-        function handleLikePost(postId) {
-            const post = appConfig.posts.find(p => p.id === postId);
-            if (post) {
-                post.likes++;
-                loadCommunityFeed();
-                showToast('Liked the post!');
-            }
-        }
-        
-        // Add comment to a post
-        function addComment(postId, content) {
-            const post = appConfig.posts.find(p => p.id === postId);
-            if (post) {
-                const newComment = {
-                    id: 'comment' + Date.now(),
-                    userId: currentUser.id,
-                    userName: currentUser.name,
-                    userAvatar: currentUser.avatar,
-                    content: content,
-                    timestamp: Date.now(),
-                    likes: 0
-                };
-                
-                post.comments.push(newComment);
-                loadCommunityFeed();
-                showToast('Comment added!');
-            }
-        }
-        
-        // Format date
+
         function formatDate(date) {
-            if (!date) return "Just now";
-            
             const now = new Date();
             const diff = now - date;
             const minutes = Math.floor(diff / 60000);
             
             if (minutes < 1) return "Just now";
             if (minutes < 60) return `${minutes} min ago`;
-            if (minutes < 1440) return `${Math.floor(minutes / 60)} hours ago`;
-            return `${Math.floor(minutes / 1440)} days ago`;
+            
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} hr ago`;
+            
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
-        
-        // Submit a new post
-        function submitPost() {
-            const content = postText.value.trim();
-            if (!content) {
-                showToast('Please enter some content for your post');
+
+        // Event handlers
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                showToast('Please enter email and password');
                 return;
             }
             
-            const newPost = {
-                id: 'post' + Date.now(),
-                userId: currentUser.id,
-                userName: currentUser.name,
-                userAvatar: currentUser.avatar,
-                role: 'user',
-                content: content,
-                timestamp: new Date(),
+            try {
+                await authService.loginUser(email, password);
+                showToast('Login successful!');
+            } catch (error) {
+                showToast(`Login failed: ${error.message}`);
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                showToast('Please enter email and password');
+                return;
+            }
+            
+            try {
+                await authService.registerUser(email, password);
+                showToast('Account created successfully!');
+            } catch (error) {
+                showToast(`Signup failed: ${error.message}`);
+            }
+        }
+
+        function logout() {
+            authService.logoutUser()
+                .then(() => showToast('Logged out successfully'))
+                .catch(error => showToast(`Logout failed: ${error.message}`));
+        }
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        }
+
+        function toggleNotifications() {
+            notificationsDropdown.classList.toggle('active');
+        }
+
+        function markAllAsRead() {
+            document.querySelectorAll('.notification-badge, .message-badge').forEach(badge => {
+                badge.style.display = 'none';
+            });
+            notificationsDropdown.classList.remove('active');
+            showToast('All notifications marked as read');
+        }
+
+        function addCoins() {
+            if (!currentUserData) return;
+            
+            const newCoins = currentUserData.coins + 50;
+            userCoins.textContent = newCoins;
+            showToast('50 coins added to your account!');
+        }
+
+        function showCreatePostModal() {
+            createPostModal.style.display = 'flex';
+            postText.value = '';
+            imagePreviewContainer.style.display = 'none';
+            recordingUI.style.display = 'none';
+        }
+
+        function closePostModal() {
+            createPostModal.style.display = 'none';
+        }
+
+        function showGoLiveModal() {
+            goLiveModal.style.display = 'flex';
+            document.getElementById('live-title').value = '';
+            document.getElementById('podcast').checked = true;
+            document.getElementById('start-now').checked = true;
+            scheduleOptions.style.display = 'none';
+        }
+
+        function closeGoLiveModal() {
+            goLiveModal.style.display = 'none';
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+                imagePreviewContainer.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function showRecordingUI() {
+            recordingUI.style.display = 'block';
+        }
+
+        function startRecording() {
+            // In a real app, this would use the Web Audio API
+            recordBtn.disabled = true;
+            stopBtn.disabled = false;
+            recordingSeconds = 0;
+            
+            recordingInterval = setInterval(() => {
+                recordingSeconds++;
+                const minutes = Math.floor(recordingSeconds / 60);
+                const seconds = recordingSeconds % 60;
+                timer.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }, 1000);
+            
+            showToast('Recording started...');
+        }
+
+        function stopRecording() {
+            clearInterval(recordingInterval);
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+            showToast('Recording stopped');
+        }
+
+        async function submitPost() {
+            const text = postText.value.trim();
+            const imageFile = imageUpload.files[0];
+            
+            if (!text && !imageFile) {
+                showToast('Please add text or an image');
+                return;
+            }
+            
+            const postData = {
+                userId: currentUser.uid,
+                userName: currentUserData.name,
+                userAvatar: currentUserData.avatar,
+                content: text,
                 likes: 0,
-                comments: []
+                comments: 0
             };
             
-            appConfig.posts.unshift(newPost);
-            createPostModal.classList.remove('active');
-            postText.value = '';
-            loadCommunityFeed();
-            showToast('Post created successfully!');
+            try {
+                // In a real app, this would upload to Firebase
+                if (imageFile) {
+                    // Simulate image upload
+                    postData.image = URL.createObjectURL(imageFile);
+                }
+                
+                // Add new post to the beginning
+                posts.unshift({
+                    ...postData,
+                    id: Date.now(),
+                    timestamp: new Date()
+                });
+                
+                showToast('Post created successfully!');
+                closePostModal();
+                renderCommunityFeed();
+            } catch (error) {
+                showToast(`Error creating post: ${error.message}`);
+            }
         }
-        
-        // Start a live session
+
+        function handleLikePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.likes++;
+                renderCommunityFeed();
+                showToast('Post liked!');
+            }
+        }
+
+        function toggleScheduleOptions() {
+            scheduleOptions.style.display = scheduleRadio.checked ? 'block' : 'none';
+        }
+
         function startLiveSession() {
             const title = document.getElementById('live-title').value;
             if (!title) {
@@ -2386,14 +2391,129 @@
             }
             
             const sessionType = document.querySelector('input[name="session-type"]:checked').value;
-            const privacy = document.querySelector('input[name="privacy"]:checked').value;
+            const startTime = document.querySelector('input[name="start-time"]:checked').value;
+            const dateTime = document.getElementById('live-date').value;
             
-            showToast(`Starting ${sessionType} live session: ${title}`);
-            goLiveModal.classList.remove('active');
-            document.getElementById('live-title').value = '';
+            if (startTime === 'schedule' && !dateTime) {
+                showToast('Please select a date and time');
+                return;
+            }
+            
+            // Create live room object
+            const newRoom = {
+                title: title,
+                host: usernameDisplay.textContent,
+                hostAvatar: userAvatar.src,
+                sessionType: sessionType,
+                startTime: startTime === 'now' ? new Date() : new Date(dateTime),
+                status: 'live',
+                members: 1
+            };
+            
+            // Add to rooms
+            liveRooms.unshift({
+                ...newRoom,
+                id: Date.now(),
+                cover: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+                members: 1
+            });
+            
+            showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
+            closeGoLiveModal();
+            renderLiveRooms();
         }
 
-        // Initialize when DOM is loaded
+        function setActiveNav(e) {
+            e.preventDefault();
+            const page = this.dataset.page;
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // In a real app, this would load the appropriate page
+            showToast(`Navigating to ${page} page...`);
+        }
+
+        function closeModals(e) {
+            // Close notifications dropdown if clicking outside
+            if (!notificationBtn.contains(e.target) {
+                notificationsDropdown.classList.remove('active');
+            }
+            
+            // Close modals if clicking outside
+            if (createPostModal.style.display === 'flex' && !createPostModal.contains(e.target)) {
+                closePostModal();
+            }
+            
+            if (goLiveModal.style.display === 'flex' && !goLiveModal.contains(e.target)) {
+                closeGoLiveModal();
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login
+            loginBtn.addEventListener('click', handleLogin);
+            signupLink.addEventListener('click', handleSignup);
+            
+            // Navigation
+            menuToggle.addEventListener('click', toggleSidebar);
+            logoutBtn.addEventListener('click', logout);
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Notifications
+            notificationBtn.addEventListener('click', toggleNotifications);
+            markAllReadBtn.addEventListener('click', markAllAsRead);
+            
+            // Content creation
+            topUpBtn.addEventListener('click', addCoins);
+            createPostBtn.addEventListener('click', showCreatePostModal);
+            closePostModalBtn.addEventListener('click', closePostModal);
+            goLiveBtn.addEventListener('click', showGoLiveModal);
+            closeLiveModalBtn.addEventListener('click', closeGoLiveModal);
+            cancelLiveBtn.addEventListener('click', closeGoLiveModal);
+            
+            // Post creation
+            addImageBtn.addEventListener('click', () => imageUpload.click());
+            imageUpload.addEventListener('change', handleImageUpload);
+            addVoiceBtn.addEventListener('click', showRecordingUI);
+            recordBtn.addEventListener('click', startRecording);
+            stopBtn.addEventListener('click', stopRecording);
+            submitPostBtn.addEventListener('click', submitPost);
+            
+            // Live session
+            startNowRadio.addEventListener('change', toggleScheduleOptions);
+            scheduleRadio.addEventListener('change', toggleScheduleOptions);
+            startLiveBtn.addEventListener('click', startLiveSession);
+            
+            // Bottom navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', setActiveNav);
+            });
+            
+            // Close modals when clicking outside
+            document.addEventListener('click', closeModals);
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+
+        // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>

@@ -15,7 +15,6 @@
     <!-- Firebase Config -->
     <script src="config.js"></script>
     <style>
-        /* ... (all CSS styles remain unchanged) ... */
         * {
             margin: 0;
             padding: 0;
@@ -315,7 +314,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+                            gap: 0.5rem;
             font-weight: 600;
             transition: var(--transition);
             box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
@@ -1238,7 +1237,7 @@
             background-color: var(--bg-color);
         }
         
-        .login-card {
+        .auth-card {
             background-color: var(--card-bg);
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-lg);
@@ -1248,10 +1247,14 @@
             text-align: center;
         }
         
-        .login-logo {
+        .auth-header {
+            margin-bottom: 2rem;
+        }
+        
+        .auth-logo {
             font-size: 2.5rem;
             font-weight: 800;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             background: var(--gradient-primary);
             -webkit-background-clip: text;
             background-clip: text;
@@ -1262,7 +1265,7 @@
             gap: 1rem;
         }
         
-        .login-icon {
+        .auth-icon {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1275,14 +1278,13 @@
             box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
         }
         
-        .login-form {
+        .auth-form {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
-            margin-top: 2rem;
+            gap: 1.25rem;
         }
         
-        .login-input {
+        .auth-input {
             padding: 1rem;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
@@ -1292,7 +1294,7 @@
             width: 100%;
         }
         
-        .login-btn {
+        .auth-btn {
             background: var(--gradient-primary);
             color: white;
             border: none;
@@ -1305,20 +1307,41 @@
             box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
         }
         
-        .login-btn:hover {
+        .auth-btn:hover {
             opacity: 0.9;
             transform: translateY(-2px);
         }
         
-        .signup-link {
+        .auth-footer {
             margin-top: 1.5rem;
             color: var(--text-light);
         }
         
-        .signup-link a {
+        .auth-footer a {
             color: var(--primary);
             font-weight: 600;
             text-decoration: none;
+        }
+        
+        .auth-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .auth-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .hidden {
+            display: none;
         }
         
         @media (min-width: 768px) {
@@ -1345,6 +1368,10 @@
                 width: 54px;
                 height: 54px;
                 font-size: 1.3rem;
+            }
+            
+            .auth-card {
+                padding: 1.5rem;
             }
         }
         
@@ -1383,23 +1410,57 @@
 </head>
 <body>
     <div class="app-container" id="app-container">
-        <!-- Login screen (initially shown) -->
+        <!-- Login/Signup screen -->
         <div class="login-container" id="login-container">
-            <div class="login-card">
-                <div class="login-logo">
-                    <span class="login-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </span>
-                    CallConnect
+            <div class="auth-card">
+                <!-- Login Form -->
+                <div id="login-form">
+                    <div class="auth-header">
+                        <div class="auth-logo">
+                            <span class="auth-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </span>
+                            CallConnect
+                        </div>
+                        <h2>Welcome Back</h2>
+                        <p class="text-muted">Connect with friends through audio and video calls</p>
+                    </div>
+                    
+                    <form class="auth-form" id="login-form-element">
+                        <input type="email" id="login-email" class="auth-input" placeholder="Email" required>
+                        <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
+                        <button class="auth-btn" id="login-btn">Login</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+                    </div>
                 </div>
-                <h2>Welcome to CallConnect</h2>
-                <p class="text-muted">Connect with friends through audio and video calls</p>
                 
-                <div class="login-form">
-                    <input type="email" id="login-email" class="login-input" placeholder="Email" required>
-                    <input type="password" id="login-password" class="login-input" placeholder="Password" required>
-                    <button class="login-btn" id="login-btn">Login</button>
-                    <p class="signup-link">Don't have an account? <a href="#" id="signup-link">Sign Up</a></p>
+                <!-- Signup Form -->
+                <div id="signup-form" class="hidden">
+                    <div class="auth-header">
+                        <div class="auth-logo">
+                            <span class="auth-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </span>
+                            CallConnect
+                        </div>
+                        <h2>Create Account</h2>
+                        <p class="text-muted">Join our community of audio and video enthusiasts</p>
+                    </div>
+                    
+                    <form class="auth-form" id="signup-form-element">
+                        <input type="text" id="signup-name" class="auth-input" placeholder="Full Name" required>
+                        <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
+                        <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
+                        <input type="password" id="signup-confirm-password" class="auth-input" placeholder="Confirm Password" required>
+                        <button class="auth-btn" id="signup-btn">Create Account</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1668,8 +1729,14 @@
         const authService = {
             auth: firebase.auth(),
             
-            registerUser: function(email, password) {
-                return this.auth.createUserWithEmailAndPassword(email, password);
+            registerUser: function(email, password, name) {
+                return this.auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Update user profile with display name
+                        return userCredential.user.updateProfile({
+                            displayName: name
+                        }).then(() => userCredential);
+                    });
             },
             
             loginUser: function(email, password) {
@@ -1710,142 +1777,6 @@
                     coins: firebase.firestore.FieldValue.increment(amount)
                 });
                 return userRef.get();
-            },
-            
-            createPost: async function(postData) {
-                const postsRef = this.db.collection('posts');
-                const newPostRef = postsRef.doc();
-                await newPostRef.set({
-                    ...postData,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                return newPostRef.id;
-            },
-            
-            getFeedPosts: async function(followingIds) {
-                if (followingIds.length === 0) return [];
-                
-                const postsRef = this.db.collection('posts');
-                const q = postsRef
-                    .where("userId", "in", followingIds)
-                    .orderBy("timestamp", "desc")
-                    .limit(20);
-                
-                const querySnapshot = await q.get();
-                return querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-            },
-            
-            likePost: async function(postId, userId) {
-                const postRef = this.db.collection('posts').doc(postId);
-                await postRef.update({
-                    likes: firebase.firestore.FieldValue.arrayUnion(userId)
-                });
-            },
-            
-            createLiveRoom: async function(roomData) {
-                const roomsRef = this.db.collection('liveRooms');
-                const newRoomRef = roomsRef.doc();
-                await newRoomRef.set({
-                    ...roomData,
-                    status: "live",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                return newRoomRef.id;
-            },
-            
-            getActiveLiveRooms: async function() {
-                const roomsRef = this.db.collection('liveRooms');
-                const q = roomsRef
-                    .where("status", "==", "live")
-                    .orderBy("createdAt", "desc")
-                    .limit(10);
-                
-                const querySnapshot = await q.get();
-                return querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-            }
-        };
-
-        const storageService = {
-            storage: firebase.storage(),
-            
-            uploadFile: async function(file, path) {
-                const storageRef = this.storage.ref(`${path}/${Date.now()}_${file.name}`);
-                await storageRef.put(file);
-                return storageRef.getDownloadURL();
-            },
-            
-            uploadAudio: async function(audioBlob) {
-                const storageRef = this.storage.ref(`audio/${Date.now()}.mp3`);
-                await storageRef.put(audioBlob);
-                return storageRef.getDownloadURL();
-            },
-            
-            uploadImage: async function(imageFile) {
-                return this.uploadFile(imageFile, 'images');
-            },
-            
-            uploadRoomCover: async function(imageFile) {
-                return this.uploadFile(imageFile, 'roomCovers');
-            }
-        };
-
-        const rtdbService = {
-            rtdb: firebase.database(),
-            
-            joinLiveRoom: async function(roomId, userId) {
-                const roomRef = this.rtdb.ref(`liveRooms/${roomId}/participants/${userId}`);
-                await roomRef.set({
-                    joinedAt: Date.now(),
-                    active: true
-                });
-            },
-            
-            leaveLiveRoom: async function(roomId, userId) {
-                const roomRef = this.rtb.ref(`liveRooms/${roomId}/participants/${userId}`);
-                await roomRef.set(null);
-            },
-            
-            sendRoomMessage: async function(roomId, message) {
-                const messagesRef = this.rtdb.ref(`liveRooms/${roomId}/messages/${Date.now()}`);
-                await messagesRef.set(message);
-            },
-            
-            listenToRoomMessages: function(roomId, callback) {
-                const messagesRef = this.rtdb.ref(`liveRooms/${roomId}/messages`);
-                messagesRef.on('value', (snapshot) => {
-                    const messages = [];
-                    snapshot.forEach(childSnapshot => {
-                        messages.push({
-                            id: childSnapshot.key,
-                            ...childSnapshot.val()
-                        });
-                    });
-                    callback(messages);
-                });
-                
-                return () => messagesRef.off();
-            },
-            
-            listenToParticipants: function(roomId, callback) {
-                const participantsRef = this.rtdb.ref(`liveRooms/${roomId}/participants`);
-                participantsRef.on('value', (snapshot) => {
-                    const participants = [];
-                    snapshot.forEach(childSnapshot => {
-                        participants.push({
-                            userId: childSnapshot.key,
-                            ...childSnapshot.val()
-                        });
-                    });
-                    callback(participants);
-                });
-                
-                return () => participantsRef.off();
             }
         };
 
@@ -1853,8 +1784,12 @@
         const appContainer = document.getElementById('app-container');
         const loginContainer = document.getElementById('login-container');
         const appContent = document.getElementById('app-content');
+        const loginForm = document.getElementById('login-form-element');
+        const signupForm = document.getElementById('signup-form-element');
         const loginBtn = document.getElementById('login-btn');
-        const signupLink = document.getElementById('signup-link');
+        const signupBtn = document.getElementById('signup-btn');
+        const showSignupLink = document.getElementById('show-signup');
+        const showLoginLink = document.getElementById('show-login');
         const logoutBtn = document.getElementById('logout-btn');
         const menuToggle = document.getElementById('menu-toggle');
         const sidebar = document.getElementById('sidebar');
@@ -1893,6 +1828,8 @@
         const scheduleRadio = document.getElementById('schedule');
         const startLiveBtn = document.getElementById('start-live-btn');
         const cancelLiveBtn = document.getElementById('cancel-live-btn');
+        const loginFormDiv = document.getElementById('login-form');
+        const signupFormDiv = document.getElementById('signup-form');
         
         // Global variables
         let currentUser = null;
@@ -1915,6 +1852,7 @@
         function checkAuthState() {
             authService.onAuthStateChanged(async (user) => {
                 if (user) {
+                    console.log("User authenticated:", user.email);
                     currentUser = user;
                     
                     // Get user profile
@@ -1922,7 +1860,7 @@
                     if (!currentUserData) {
                         // Create new user profile
                         currentUserData = {
-                            name: user.displayName || 'New User',
+                            name: user.displayName || user.email.split('@')[0],
                             avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
                             coins: 100,
                             following: []
@@ -1937,6 +1875,7 @@
                     loginContainer.style.display = 'none';
                     appContent.style.display = 'block';
                 } else {
+                    console.log("No authenticated user");
                     currentUser = null;
                     currentUserData = null;
                     // Show login screen
@@ -2196,7 +2135,8 @@
         }
 
         // Event handlers
-        async function handleLogin() {
+        async function handleLogin(e) {
+            e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             
@@ -2215,16 +2155,23 @@
 
         async function handleSignup(e) {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
             
-            if (!email || !password) {
-                showToast('Please enter email and password');
+            if (!name || !email || !password || !confirmPassword) {
+                showToast('Please fill all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match');
                 return;
             }
             
             try {
-                await authService.registerUser(email, password);
+                await authService.registerUser(email, password, name);
                 showToast('Account created successfully!');
             } catch (error) {
                 showToast(`Signup failed: ${error.message}`);
@@ -2438,7 +2385,7 @@
 
         function closeModals(e) {
             // Close notifications dropdown if clicking outside
-            if (!notificationBtn.contains(e.target) {
+            if (!notificationBtn.contains(e.target)) {
                 notificationsDropdown.classList.remove('active');
             }
             
@@ -2463,11 +2410,31 @@
             }, 3000);
         }
 
+        function toggleAuthForm() {
+            loginFormDiv.classList.toggle('hidden');
+            signupFormDiv.classList.toggle('hidden');
+        }
+
         // Setup event listeners
         function setupEventListeners() {
             // Login
+            loginForm.addEventListener('submit', handleLogin);
             loginBtn.addEventListener('click', handleLogin);
-            signupLink.addEventListener('click', handleSignup);
+            
+            // Signup
+            signupForm.addEventListener('submit', handleSignup);
+            signupBtn.addEventListener('click', handleSignup);
+            
+            // Toggle between login/signup
+            showSignupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForm();
+            });
+            
+            showLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForm();
+            });
             
             // Navigation
             menuToggle.addEventListener('click', toggleSidebar);

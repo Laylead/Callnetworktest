@@ -11,9 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
-    <!-- Firebase Config -->
-    <script src="config.js"></script>
     <style>
         * {
             margin: 0;
@@ -314,7 +311,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-                            gap: 0.5rem;
+            gap: 0.5rem;
             font-weight: 600;
             transition: var(--transition);
             box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
@@ -1344,6 +1341,119 @@
             display: none;
         }
         
+        /* Comments Section */
+        .comments-section {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
+        
+        .comments-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .comment {
+            display: flex;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .comment:last-child {
+            border-bottom: none;
+        }
+        
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--primary);
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .comment-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        
+        .comment-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .add-comment {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .comment-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .post-comment-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .post-comment-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .comment-action {
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .comment-action:hover {
+            color: var(--primary);
+        }
+        
+        .like-count {
+            margin-left: 0.25rem;
+        }
+        
         @media (min-width: 768px) {
             .header { padding: 0.75rem 2rem; }
             .main-content { padding: 2rem; }
@@ -1722,7 +1832,17 @@
     </div>
 
     <script>
-        // Initialize Firebase using the config from config.js
+        // Firebase configuration - replace with your config.js file
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxM7K0P5m3vVzQ4X7b3J4Z4jK1l2m3n4o",
+            authDomain: "callconnect-app.firebaseapp.com",
+            projectId: "callconnect-app",
+            storageBucket: "callconnect-app.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+        };
+        
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         
         // Service implementations
@@ -1777,6 +1897,119 @@
                     coins: firebase.firestore.FieldValue.increment(amount)
                 });
                 return userRef.get();
+            },
+            
+            createPost: async function(postData) {
+                return this.db.collection('posts').add({
+                    ...postData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: 0,
+                    comments: 0
+                });
+            },
+            
+            createLiveRoom: async function(roomData) {
+                return this.db.collection('liveRooms').add({
+                    ...roomData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    members: 1,
+                    status: 'live'
+                });
+            },
+            
+            addComment: async function(postId, commentData) {
+                return this.db.collection('posts').doc(postId).collection('comments').add({
+                    ...commentData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: 0
+                });
+            },
+            
+            likePost: async function(postId, userId) {
+                const postRef = this.db.collection('posts').doc(postId);
+                const likeRef = postRef.collection('likes').doc(userId);
+                
+                const exists = (await likeRef.get()).exists;
+                if (exists) {
+                    await likeRef.delete();
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(-1)
+                    });
+                    return false;
+                } else {
+                    await likeRef.set({
+                        userId: userId,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                    return true;
+                }
+            },
+            
+            getPosts: async function() {
+                const snapshot = await this.db.collection('posts')
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getLiveRooms: async function() {
+                const snapshot = await this.db.collection('liveRooms')
+                    .where('status', '==', 'live')
+                    .orderBy('createdAt', 'desc')
+                    .limit(10)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getStories: async function() {
+                const snapshot = await this.db.collection('stories')
+                    .where('expiresAt', '>', new Date())
+                    .orderBy('expiresAt', 'asc')
+                    .limit(10)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getComments: async function(postId) {
+                const snapshot = await this.db.collection('posts').doc(postId)
+                    .collection('comments')
+                    .orderBy('createdAt', 'asc')
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            // Real-time listeners
+            listenForPosts: function(callback) {
+                return this.db.collection('posts')
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
+                    .onSnapshot(snapshot => {
+                        const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        callback(posts);
+                    });
+            },
+            
+            listenForLiveRooms: function(callback) {
+                return this.db.collection('liveRooms')
+                    .where('status', '==', 'live')
+                    .onSnapshot(snapshot => {
+                        const rooms = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        callback(rooms);
+                    });
+            },
+            
+            listenForComments: function(postId, callback) {
+                return this.db.collection('posts').doc(postId)
+                    .collection('comments')
+                    .orderBy('createdAt', 'asc')
+                    .onSnapshot(snapshot => {
+                        const comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        callback(comments);
+                    });
             }
         };
 
@@ -1841,6 +2074,8 @@
         let posts = [];
         let liveRooms = [];
         let stories = [];
+        let unsubscribePosts = null;
+        let unsubscribeRooms = null;
 
         // Initialize the app
         function init() {
@@ -1873,7 +2108,8 @@
                     
                     // Show app content
                     loginContainer.style.display = 'none';
-                    appContent.style.display = 'block';
+                    appContent.style.display = 'flex';
+                    document.getElementById("app-container").style.display = 'flex';
                 } else {
                     console.log("No authenticated user");
                     currentUser = null;
@@ -1881,6 +2117,10 @@
                     // Show login screen
                     loginContainer.style.display = 'flex';
                     appContent.style.display = 'none';
+                    
+                    // Unsubscribe from real-time updates
+                    if (unsubscribePosts) unsubscribePosts();
+                    if (unsubscribeRooms) unsubscribeRooms();
                 }
             });
         }
@@ -1889,26 +2129,45 @@
             usernameDisplay.textContent = userData.name;
             userAvatar.src = userData.avatar;
             userCoins.textContent = userData.coins;
+            
+            // Save to localStorage
+            localStorage.setItem('userProfile', JSON.stringify(userData));
         }
 
         function loadAppData() {
+            // Load user profile from localStorage if available
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                currentUserData = JSON.parse(savedProfile);
+                updateUserProfile(currentUserData);
+            }
+            
             loadStories();
-            loadLiveRooms();
-            loadCommunityFeed();
+            setupRealTimeUpdates();
+        }
+
+        function setupRealTimeUpdates() {
+            // Set up real-time listeners for posts and live rooms
+            unsubscribePosts = firestoreService.listenForPosts(posts => {
+                renderCommunityFeed(posts);
+            });
+            
+            unsubscribeRooms = firestoreService.listenForLiveRooms(rooms => {
+                renderLiveRooms(rooms);
+            });
         }
 
         async function loadStories() {
-            // In a real app, this would fetch stories from Firestore
-            stories = [
-                { id: 1, username: "Emma", avatar: "https://randomuser.me/api/portraits/women/32.jpg", new: true },
-                { id: 2, username: "Michael", avatar: "https://randomuser.me/api/portraits/men/22.jpg", new: true },
-                { id: 3, username: "Sophia", avatar: "https://randomuser.me/api/portraits/women/12.jpg", new: false },
-                { id: 4, username: "Daniel", avatar: "https://randomuser.me/api/portraits/men/42.jpg", new: false },
-                { id: 5, username: "Olivia", avatar: "https://randomuser.me/api/portraits/women/44.jpg", new: true },
-                { id: 6, username: "James", avatar: "https://randomuser.me/api/portraits/men/15.jpg", new: false },
-                { id: 7, username: "Ava", avatar: "https://randomuser.me/api/portraits/women/67.jpg", new: false },
-            ];
-            renderStories();
+            try {
+                stories = await firestoreService.getStories();
+                renderStories();
+                
+                // Save to localStorage
+                localStorage.setItem('stories', JSON.stringify(stories));
+            } catch (error) {
+                console.error("Error loading stories:", error);
+                showToast("Failed to load stories");
+            }
         }
 
         function renderStories() {
@@ -1937,66 +2196,34 @@
             });
         }
 
-        async function loadLiveRooms() {
-            // In a real app, this would fetch live rooms from Firestore
-            liveRooms = [
-                { 
-                    id: 1, 
-                    title: "Morning Coffee Chat", 
-                    host: "Alex Johnson", 
-                    hostAvatar: "https://randomuser.me/api/portraits/men/41.jpg", 
-                    members: 12,
-                    type: "podcast",
-                    cover: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                },
-                { 
-                    id: 2, 
-                    title: "Tech Talk Live", 
-                    host: "Sarah Williams", 
-                    hostAvatar: "https://randomuser.me/api/portraits/women/68.jpg", 
-                    members: 24,
-                    type: "stream",
-                    cover: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                },
-                { 
-                    id: 3, 
-                    title: "Music Jam Session", 
-                    host: "David Chen", 
-                    hostAvatar: "https://randomuser.me/api/portraits/men/29.jpg", 
-                    members: 8,
-                    type: "podcast",
-                    cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                },
-                { 
-                    id: 4, 
-                    title: "Fitness Motivation", 
-                    host: "Jessica Miller", 
-                    hostAvatar: "https://randomuser.me/api/portraits/women/44.jpg", 
-                    members: 15,
-                    type: "stream",
-                    cover: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                }
-            ];
-            renderLiveRooms();
-        }
-
-        function renderLiveRooms() {
+        function renderLiveRooms(rooms) {
             liveRoomsContainer.innerHTML = '';
             
-            liveRooms.forEach(room => {
+            if (rooms.length === 0) {
+                liveRoomsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video-slash"></i>
+                        <h3>No live rooms</h3>
+                        <p>Be the first to start a live session!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            rooms.forEach(room => {
                 liveRoomsContainer.innerHTML += `
                     <div class="live-room-card">
                         <div class="live-badge">
                             <i class="fas fa-circle"></i> LIVE
                         </div>
-                        <img src="${room.cover}" alt="${room.title}" class="live-room-image">
+                        <img src="${room.cover || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${room.title}" class="live-room-image">
                         <div class="live-room-info">
                             <h3 class="live-room-title">${room.title}</h3>
                             <div class="live-room-members">
                                 <img src="${room.hostAvatar}" alt="${room.host}">
                                 <span>${room.host} • ${room.members} participants</span>
                             </div>
-                            <button class="join-room-btn">
+                            <button class="join-room-btn" data-id="${room.id}">
                                 <i class="fas fa-${room.type === 'podcast' ? 'headphones' : 'video'}"></i> 
                                 Join ${room.type === 'podcast' ? 'Podcast' : 'Stream'}
                             </button>
@@ -2004,50 +2231,17 @@
                     </div>
                 `;
             });
+            
+            // Add event listeners to join buttons
+            document.querySelectorAll('.join-room-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const roomId = btn.dataset.id;
+                    joinRoom(roomId);
+                });
+            });
         }
 
-        async function loadCommunityFeed() {
-            // Simulate loading delay
-            setTimeout(() => {
-                // In a real app, this would fetch posts from Firestore
-                posts = [
-                    {
-                        id: 1,
-                        userName: "Michael Chen",
-                        userAvatar: "https://randomuser.me/api/portraits/men/22.jpg",
-                        content: "Just had an amazing conversation with @SarahW on CallConnect! The audio quality is crystal clear 👌",
-                        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                        timestamp: new Date(Date.now() - 3600000),
-                        likes: 24,
-                        comments: 8
-                    },
-                    {
-                        id: 2,
-                        userName: "Emma Rodriguez",
-                        userAvatar: "https://randomuser.me/api/portraits/women/32.jpg",
-                        content: "Hosted my first live podcast on CallConnect today! Thanks to everyone who joined the discussion about future tech trends 🚀",
-                        image: "",
-                        timestamp: new Date(Date.now() - 7200000),
-                        likes: 42,
-                        comments: 12,
-                        role: "ceo"
-                    },
-                    {
-                        id: 3,
-                        userName: "Alex Johnson",
-                        userAvatar: "https://randomuser.me/api/portraits/men/41.jpg",
-                        content: "The video call feature works flawlessly even on my average internet connection. Great job CallConnect team!",
-                        image: "https://images.unsplash.com/photo-1463171379579-3fdfb86d6285?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                        timestamp: new Date(Date.now() - 10800000),
-                        likes: 31,
-                        comments: 5
-                    }
-                ];
-                renderCommunityFeed();
-            }, 1500);
-        }
-
-        function renderCommunityFeed() {
+        function renderCommunityFeed(posts) {
             loadingActivities.style.display = 'none';
             feedContainer.innerHTML = '';
             
@@ -2066,6 +2260,9 @@
                 const postElement = createPostElement(post);
                 feedContainer.appendChild(postElement);
             });
+            
+            // Save to localStorage
+            localStorage.setItem('posts', JSON.stringify(posts));
         }
 
         function createPostElement(post) {
@@ -2074,10 +2271,9 @@
             postElement.dataset.id = post.id;
             
             let roleBadge = '';
-            if (post.role === 'ceo') roleBadge = '<span class="ceo-badge">CEO</span>';
-            else if (post.role === 'admin') roleBadge = '<span class="admin-badge">ADMIN</span>';
+            if (post.userId === currentUser.uid) roleBadge = '<span class="admin-badge">YOU</span>';
             
-            const formattedTime = formatDate(post.timestamp);
+            const formattedTime = formatDate(post.createdAt?.toDate() || new Date());
             
             postElement.innerHTML = `
                 <div class="feed-header">
@@ -2093,16 +2289,25 @@
                 </div>
                 <div class="feed-actions">
                     <div class="feed-action like-btn" data-id="${post.id}">
-                        <i class="far fa-heart"></i>
-                        <span>${post.likes} likes</span>
+                        <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
+                        <span>${post.likes || 0} likes</span>
                     </div>
-                    <div class="feed-action comment-btn" data-id="${post.id}">
+                    <div class="feed-action comment-toggle-btn" data-id="${post.id}">
                         <i class="far fa-comment"></i>
-                        <span>${post.comments} comments</span>
+                        <span>${post.comments || 0} comments</span>
                     </div>
                     <div class="feed-action">
                         <i class="far fa-share-square"></i>
                         <span>Share</span>
+                    </div>
+                </div>
+                <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                    <div class="comments-container" id="comments-container-${post.id}">
+                        <!-- Comments will be loaded here -->
+                    </div>
+                    <div class="add-comment">
+                        <input type="text" class="comment-input" id="comment-input-${post.id}" placeholder="Write a comment...">
+                        <button class="post-comment-btn" data-postid="${post.id}">Post</button>
                     </div>
                 </div>
             `;
@@ -2110,6 +2315,22 @@
             // Add event listener for like button
             postElement.querySelector('.like-btn').addEventListener('click', () => {
                 handleLikePost(post.id);
+            });
+            
+            // Add event listener for comment toggle
+            postElement.querySelector('.comment-toggle-btn').addEventListener('click', () => {
+                toggleComments(post.id);
+            });
+            
+            // Add event listener for comment submission
+            postElement.querySelector('.post-comment-btn').addEventListener('click', () => {
+                const commentInput = document.getElementById(`comment-input-${post.id}`);
+                const commentText = commentInput.value.trim();
+                
+                if (commentText) {
+                    addComment(post.id, commentText);
+                    commentInput.value = '';
+                }
             });
             
             return postElement;
@@ -2132,6 +2353,85 @@
                 hour: '2-digit',
                 minute: '2-digit'
             });
+        }
+
+        async function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            const commentsContainer = document.getElementById(`comments-container-${postId}`);
+            
+            if (commentsSection.style.display === 'none') {
+                // Load comments if not already loaded
+                if (commentsContainer.innerHTML === '') {
+                    try {
+                        const comments = await firestoreService.getComments(postId);
+                        renderComments(postId, comments);
+                    } catch (error) {
+                        console.error("Error loading comments:", error);
+                        commentsContainer.innerHTML = '<p>Failed to load comments</p>';
+                    }
+                }
+                commentsSection.style.display = 'block';
+            } else {
+                commentsSection.style.display = 'none';
+            }
+        }
+
+        function renderComments(postId, comments) {
+            const commentsContainer = document.getElementById(`comments-container-${postId}`);
+            commentsContainer.innerHTML = '';
+            
+            if (comments.length === 0) {
+                commentsContainer.innerHTML = '<p class="text-muted">No comments yet</p>';
+                return;
+            }
+            
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment';
+                commentElement.innerHTML = `
+                    <img src="${comment.userAvatar}" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-user">${comment.userName}</span>
+                            <span class="comment-time">${formatDate(comment.createdAt?.toDate() || new Date())}</span>
+                        </div>
+                        <div class="comment-text">${comment.text}</div>
+                        <div class="comment-actions">
+                            <span class="comment-action like-comment-btn" data-id="${comment.id}">
+                                <i class="${comment.liked ? 'fas' : 'far'} fa-thumbs-up"></i>
+                                <span class="like-count">${comment.likes || 0}</span>
+                            </span>
+                        </div>
+                    </div>
+                `;
+                commentsContainer.appendChild(commentElement);
+            });
+        }
+
+        async function addComment(postId, text) {
+            if (!currentUser || !text) return;
+            
+            try {
+                const commentData = {
+                    userId: currentUser.uid,
+                    userName: currentUserData.name,
+                    userAvatar: currentUserData.avatar,
+                    text: text
+                };
+                
+                await firestoreService.addComment(postId, commentData);
+                
+                // Update comment count
+                const postRef = firestoreService.db.collection('posts').doc(postId);
+                await postRef.update({
+                    comments: firebase.firestore.FieldValue.increment(1)
+                });
+                
+                showToast("Comment added successfully!");
+            } catch (error) {
+                console.error("Error adding comment:", error);
+                showToast("Failed to add comment");
+            }
         }
 
         // Event handlers
@@ -2213,6 +2513,9 @@
             const newCoins = currentUserData.coins + 50;
             userCoins.textContent = newCoins;
             showToast('50 coins added to your account!');
+            
+            // Update in Firestore
+            firestoreService.updateUserCoins(currentUser.uid, 50);
         }
 
         function showCreatePostModal() {
@@ -2290,39 +2593,33 @@
                 userId: currentUser.uid,
                 userName: currentUserData.name,
                 userAvatar: currentUserData.avatar,
-                content: text,
-                likes: 0,
-                comments: 0
+                content: text
             };
             
             try {
-                // In a real app, this would upload to Firebase
                 if (imageFile) {
-                    // Simulate image upload
-                    postData.image = URL.createObjectURL(imageFile);
+                    // In a real app, upload to Firebase Storage
+                    const imageUrl = URL.createObjectURL(imageFile);
+                    postData.image = imageUrl;
                 }
                 
-                // Add new post to the beginning
-                posts.unshift({
-                    ...postData,
-                    id: Date.now(),
-                    timestamp: new Date()
-                });
+                await firestoreService.createPost(postData);
                 
                 showToast('Post created successfully!');
                 closePostModal();
-                renderCommunityFeed();
             } catch (error) {
+                console.error("Error creating post:", error);
                 showToast(`Error creating post: ${error.message}`);
             }
         }
 
-        function handleLikePost(postId) {
-            const post = posts.find(p => p.id === postId);
-            if (post) {
-                post.likes++;
-                renderCommunityFeed();
-                showToast('Post liked!');
+        async function handleLikePost(postId) {
+            try {
+                const liked = await firestoreService.likePost(postId, currentUser.uid);
+                showToast(liked ? 'Post liked!' : 'Post unliked');
+            } catch (error) {
+                console.error("Error liking post:", error);
+                showToast("Failed to like post");
             }
         }
 
@@ -2330,7 +2627,7 @@
             scheduleOptions.style.display = scheduleRadio.checked ? 'block' : 'none';
         }
 
-        function startLiveSession() {
+        async function startLiveSession() {
             const title = document.getElementById('live-title').value;
             if (!title) {
                 showToast('Please enter a title for your live session');
@@ -2346,28 +2643,28 @@
                 return;
             }
             
-            // Create live room object
-            const newRoom = {
-                title: title,
-                host: usernameDisplay.textContent,
-                hostAvatar: userAvatar.src,
-                sessionType: sessionType,
-                startTime: startTime === 'now' ? new Date() : new Date(dateTime),
-                status: 'live',
-                members: 1
-            };
-            
-            // Add to rooms
-            liveRooms.unshift({
-                ...newRoom,
-                id: Date.now(),
-                cover: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-                members: 1
-            });
-            
-            showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
-            closeGoLiveModal();
-            renderLiveRooms();
+            try {
+                const roomData = {
+                    title: title,
+                    host: currentUserData.name,
+                    hostAvatar: currentUserData.avatar,
+                    type: sessionType,
+                    startTime: startTime === 'now' ? new Date() : new Date(dateTime)
+                };
+                
+                await firestoreService.createLiveRoom(roomData);
+                
+                showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
+                closeGoLiveModal();
+            } catch (error) {
+                console.error("Error creating live room:", error);
+                showToast("Failed to start live session");
+            }
+        }
+
+        function joinRoom(roomId) {
+            showToast(`Joining room ${roomId}...`);
+            // In a real app, this would navigate to the live room
         }
 
         function setActiveNav(e) {
@@ -2379,7 +2676,6 @@
             });
             this.classList.add('active');
             
-            // In a real app, this would load the appropriate page
             showToast(`Navigating to ${page} page...`);
         }
 

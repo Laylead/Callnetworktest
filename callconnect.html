@@ -1191,21 +1191,6 @@
             font-weight: 600;
         }
         
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 71, 87, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 0.5rem;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
         .empty-state {
             text-align: center;
             padding: 3rem 1.5rem;
@@ -1365,48 +1350,6 @@
             display: none;
         }
         
-        /* Loading overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        
-        .loading-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        
-        .loading-content {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: var(--radius-md);
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            max-width: 90%;
-            width: 320px;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 71, 87, 0.3);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1.5rem;
-        }
-        
         /* Comments Section */
         .comments-section {
             padding: 1rem;
@@ -1532,6 +1475,10 @@
             font-weight: 600;
         }
         
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         @media (min-width: 768px) {
             .header { padding: 0.75rem 2rem; }
             .main-content { padding: 2rem; }
@@ -1598,15 +1545,6 @@
 </head>
 <body>
     <div class="app-container" id="app-container">
-        <!-- Loading overlay -->
-        <div class="loading-overlay" id="loading-overlay">
-            <div class="loading-content">
-                <div class="loading-spinner"></div>
-                <h3 id="loading-text">Loading CallConnect</h3>
-                <p id="loading-subtext">Please wait while we prepare your experience</p>
-            </div>
-        </div>
-        
         <!-- Login/Signup screen -->
         <div class="login-container" id="login-container">
             <div class="auth-card">
@@ -2217,9 +2155,6 @@
         const storiesContainer = document.getElementById('stories-container');
         const liveRoomsContainer = document.getElementById('live-rooms');
         const feedContainer = document.getElementById('feed-container');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const loadingText = document.getElementById('loading-text');
-        const loadingSubtext = document.getElementById('loading-subtext');
         const showSignupLink = document.getElementById('show-signup');
         const showLoginLink = document.getElementById('show-login');
         const loginFormDiv = document.getElementById('login-form');
@@ -2242,17 +2177,7 @@
         let liveRooms = [];
         let stories = [];
 
-        // Helper functions for loading overlay
-        function showLoadingOverlay(text = "Loading", subtext = "Please wait...") {
-            loadingText.textContent = text;
-            loadingSubtext.textContent = subtext;
-            loadingOverlay.classList.add('active');
-        }
-        
-        function hideLoadingOverlay() {
-            loadingOverlay.classList.remove('active');
-        }
-        
+        // Helper function for toast notifications
         function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'toast';
@@ -2282,9 +2207,6 @@
                     console.log("User authenticated:", user.email);
                     currentUser = user;
                     
-                    // Show loading overlay for app initialization
-                    showLoadingOverlay("Preparing CallConnect", "Setting up your experience...");
-                    
                     // Get user profile
                     currentUserData = await firestoreService.getUserProfile(user.uid);
                     if (!currentUserData) {
@@ -2301,11 +2223,6 @@
                     updateUserProfile(currentUserData);
                     await loadAppData();
                     
-                    // Hide loading overlay after app is ready
-                    setTimeout(() => {
-                        hideLoadingOverlay();
-                    }, 1000);
-                    
                     // Show app content
                     loginContainer.style.display = 'none';
                     appContent.style.display = 'flex';
@@ -2316,9 +2233,6 @@
                     // Show login screen
                     loginContainer.style.display = 'flex';
                     appContent.style.display = 'none';
-                    
-                    // Hide loading overlay if shown
-                    hideLoadingOverlay();
                 }
             });
         }
@@ -2525,16 +2439,12 @@
                 loginBtn.classList.add('loading');
                 loginBtn.disabled = true;
                 
-                // Show loading overlay
-                showLoadingOverlay("Authenticating", "Verifying your credentials...");
-                
                 await authService.loginUser(email, password);
                 showToast('Login successful!');
             } catch (error) {
                 // Reset login button
                 loginBtn.classList.remove('loading');
                 loginBtn.disabled = false;
-                hideLoadingOverlay();
                 
                 showToast(`Login failed: ${error.message}`);
             }
@@ -2562,16 +2472,12 @@
                 signupBtn.classList.add('loading');
                 signupBtn.disabled = true;
                 
-                // Show loading overlay
-                showLoadingOverlay("Creating Account", "Setting up your new profile...");
-                
                 await authService.registerUser(email, password, name);
                 showToast('Account created successfully!');
             } catch (error) {
                 // Reset signup button
                 signupBtn.classList.remove('loading');
                 signupBtn.disabled = false;
-                hideLoadingOverlay();
                 
                 showToast(`Signup failed: ${error.message}`);
             }

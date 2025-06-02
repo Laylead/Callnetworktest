@@ -2439,13 +2439,21 @@
                 loginBtn.classList.add('loading');
                 loginBtn.disabled = true;
                 
+                // Authenticate user
                 await authService.loginUser(email, password);
+                
+                // Reset login button
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+                
+                // Show success toast
                 showToast('Login successful!');
             } catch (error) {
                 // Reset login button
                 loginBtn.classList.remove('loading');
                 loginBtn.disabled = false;
                 
+                // Show error toast
                 showToast(`Login failed: ${error.message}`);
             }
         }
@@ -2472,13 +2480,21 @@
                 signupBtn.classList.add('loading');
                 signupBtn.disabled = true;
                 
+                // Create user account
                 await authService.registerUser(email, password, name);
+                
+                // Reset signup button
+                signupBtn.classList.remove('loading');
+                signupBtn.disabled = false;
+                
+                // Show success toast
                 showToast('Account created successfully!');
             } catch (error) {
                 // Reset signup button
                 signupBtn.classList.remove('loading');
                 signupBtn.disabled = false;
                 
+                // Show error toast
                 showToast(`Signup failed: ${error.message}`);
             }
         }

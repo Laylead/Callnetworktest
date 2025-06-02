@@ -6,12 +6,18 @@
     <title>CallConnect - Social Audio & Video</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    
+    <!-- External configuration -->
+    <script src="config.js"></script>
+    
     <style>
+        /* All CSS styles remain the same as before */
         * {
             margin: 0;
             padding: 0;
@@ -1341,7 +1347,39 @@
             display: none;
         }
         
-        /* Comments Section */
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .loading-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 71, 87, 0.3);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        /* Comments Section - Facebook Style */
         .comments-section {
             padding: 1rem;
             border-top: 1px solid var(--border-color);
@@ -1357,7 +1395,7 @@
         
         .comment {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             padding: 0.75rem 0;
             border-bottom: 1px solid var(--border-color);
         }
@@ -1367,8 +1405,8 @@
         }
         
         .comment-avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
             flex-shrink: 0;
@@ -1388,6 +1426,7 @@
         .comment-user {
             font-weight: 600;
             margin-right: 0.5rem;
+            color: var(--primary);
         }
         
         .comment-time {
@@ -1398,22 +1437,49 @@
         .comment-text {
             font-size: 0.9rem;
             line-height: 1.4;
+            margin-bottom: 0.25rem;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .comment-action {
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 0.25rem;
+        }
+        
+        .comment-action:hover {
+            color: var(--primary);
         }
         
         .add-comment {
             display: flex;
             gap: 0.5rem;
             align-items: center;
+            margin-top: 0.5rem;
         }
         
         .comment-input {
             flex: 1;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border-color);
             border-radius: var(--radius-full);
             background-color: var(--input-bg);
             color: var(--text-color);
             font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .comment-input:focus {
+            border-color: var(--primary);
         }
         
         .post-comment-btn {
@@ -1433,25 +1499,9 @@
             transform: translateY(-2px);
         }
         
-        .comment-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
-        }
-        
-        .comment-action {
-            color: var(--text-light);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .comment-action:hover {
-            color: var(--primary);
-        }
-        
         .like-count {
             margin-left: 0.25rem;
+            font-weight: 600;
         }
         
         @media (min-width: 768px) {
@@ -1520,6 +1570,15 @@
 </head>
 <body>
     <div class="app-container" id="app-container">
+        <!-- Loading overlay -->
+        <div class="loading-overlay" id="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h3>Loading CallConnect</h3>
+                <p>Please wait while we prepare your experience</p>
+            </div>
+        </div>
+        
         <!-- Login/Signup screen -->
         <div class="login-container" id="login-container">
             <div class="auth-card">
@@ -1598,7 +1657,23 @@
                             <h3>Notifications</h3>
                             <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
                         </div>
-                        <div id="notifications-list"></div>
+                        <div id="notifications-list">
+                            <!-- Notifications will be loaded here -->
+                            <div class="notification-item">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="notification-avatar">
+                                <div class="notification-content">
+                                    <div class="notification-text">Sarah liked your post</div>
+                                    <div class="notification-time">5 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" class="notification-avatar">
+                                <div class="notification-content">
+                                    <div class="notification-text">Mike commented on your live session</div>
+                                    <div class="notification-time">1 hour ago</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1832,17 +1907,7 @@
     </div>
 
     <script>
-        // Firebase configuration - replace with your config.js file
-        const firebaseConfig = {
-            apiKey: "AIzaSyDxM7K0P5m3vVzQ4X7b3J4Z4jK1l2m3n4o",
-            authDomain: "callconnect-app.firebaseapp.com",
-            projectId: "callconnect-app",
-            storageBucket: "callconnect-app.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
-        };
-        
-        // Initialize Firebase
+        // Initialize Firebase with config from external file
         firebase.initializeApp(firebaseConfig);
         
         // Service implementations
@@ -2063,6 +2128,7 @@
         const cancelLiveBtn = document.getElementById('cancel-live-btn');
         const loginFormDiv = document.getElementById('login-form');
         const signupFormDiv = document.getElementById('signup-form');
+        const loadingOverlay = document.getElementById('loading-overlay');
         
         // Global variables
         let currentUser = null;
@@ -2090,6 +2156,9 @@
                     console.log("User authenticated:", user.email);
                     currentUser = user;
                     
+                    // Show loading overlay
+                    loadingOverlay.style.display = 'flex';
+                    
                     // Get user profile
                     currentUserData = await firestoreService.getUserProfile(user.uid);
                     if (!currentUserData) {
@@ -2104,7 +2173,12 @@
                     }
                     
                     updateUserProfile(currentUserData);
-                    loadAppData();
+                    await loadAppData();
+                    
+                    // Hide loading overlay
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 1000);
                     
                     // Show app content
                     loginContainer.style.display = 'none';
@@ -2134,7 +2208,7 @@
             localStorage.setItem('userProfile', JSON.stringify(userData));
         }
 
-        function loadAppData() {
+        async function loadAppData() {
             // Load user profile from localStorage if available
             const savedProfile = localStorage.getItem('userProfile');
             if (savedProfile) {
@@ -2142,7 +2216,7 @@
                 updateUserProfile(currentUserData);
             }
             
-            loadStories();
+            await loadStories();
             setupRealTimeUpdates();
         }
 
@@ -2401,6 +2475,10 @@
                                 <i class="${comment.liked ? 'fas' : 'far'} fa-thumbs-up"></i>
                                 <span class="like-count">${comment.likes || 0}</span>
                             </span>
+                            <span class="comment-action reply-comment-btn" data-id="${comment.id}">
+                                <i class="fas fa-reply"></i>
+                                <span>Reply</span>
+                            </span>
                         </div>
                     </div>
                 `;
@@ -2491,7 +2569,7 @@
         function toggleTheme() {
             const isDark = document.body.getAttribute('data-theme') === 'dark';
             document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            themeToggle.innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
             localStorage.setItem('theme', isDark ? 'light' : 'dark');
         }
 

@@ -17,7 +17,6 @@
     <script src="config.js"></script>
     
     <style>
-        /* All CSS styles remain the same as before */
         * {
             margin: 0;
             padding: 0;
@@ -224,7 +223,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
+            padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
         
@@ -1308,6 +1307,25 @@
             transition: var(--transition);
             font-size: 1.1rem;
             box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+            position: relative;
+        }
+        
+        .auth-btn.loading {
+            color: transparent !important;
+        }
+        
+        .auth-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
         }
         
         .auth-btn:hover {
@@ -1359,6 +1377,14 @@
             justify-content: center;
             align-items: center;
             z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
         }
         
         .loading-content {
@@ -1367,6 +1393,8 @@
             border-radius: var(--radius-md);
             text-align: center;
             box-shadow: var(--shadow-lg);
+            max-width: 90%;
+            width: 320px;
         }
         
         .loading-spinner {
@@ -1379,7 +1407,7 @@
             margin: 0 auto 1.5rem;
         }
         
-        /* Comments Section - Facebook Style */
+        /* Comments Section */
         .comments-section {
             padding: 1rem;
             border-top: 1px solid var(--border-color);
@@ -1571,11 +1599,11 @@
 <body>
     <div class="app-container" id="app-container">
         <!-- Loading overlay -->
-        <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-overlay" id="loading-overlay">
             <div class="loading-content">
                 <div class="loading-spinner"></div>
-                <h3>Loading CallConnect</h3>
-                <p>Please wait while we prepare your experience</p>
+                <h3 id="loading-text">Loading CallConnect</h3>
+                <p id="loading-subtext">Please wait while we prepare your experience</p>
             </div>
         </div>
         
@@ -1740,7 +1768,30 @@
                 
                 <div class="page active" id="home-page">
                     <div class="stories-container" id="stories-container">
-                        <!-- Stories will be dynamically loaded here -->
+                        <div class="story new">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Your story">
+                            </div>
+                            <div class="story-username">Your Story</div>
+                        </div>
+                        <div class="story">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah">
+                            </div>
+                            <div class="story-username">Sarah</div>
+                        </div>
+                        <div class="story">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Mike">
+                            </div>
+                            <div class="story-username">Mike</div>
+                        </div>
+                        <div class="story">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma">
+                            </div>
+                            <div class="story-username">Emma</div>
+                        </div>
                     </div>
                     
                     <div class="section-header">
@@ -1750,7 +1801,38 @@
                         </a>
                     </div>
                     <div class="live-rooms" id="live-rooms">
-                        <!-- Live rooms will be dynamically loaded here -->
+                        <div class="live-room-card">
+                            <div class="live-badge">
+                                <i class="fas fa-circle"></i> LIVE
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Music Jam Session" class="live-room-image">
+                            <div class="live-room-info">
+                                <h3 class="live-room-title">Music Jam Session</h3>
+                                <div class="live-room-members">
+                                    <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Alex">
+                                    <span>Alex • 12 participants</span>
+                                </div>
+                                <button class="join-room-btn" data-id="room1">
+                                    <i class="fas fa-headphones"></i> Join Podcast
+                                </button>
+                            </div>
+                        </div>
+                        <div class="live-room-card">
+                            <div class="live-badge">
+                                <i class="fas fa-circle"></i> LIVE
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Tech Talk" class="live-room-image">
+                            <div class="live-room-info">
+                                <h3 class="live-room-title">Tech Talk: Future of Web Development</h3>
+                                <div class="live-room-members">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah">
+                                    <span>Sarah • 8 participants</span>
+                                </div>
+                                <button class="join-room-btn" data-id="room2">
+                                    <i class="fas fa-video"></i> Join Stream
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="section-header">
@@ -1760,10 +1842,58 @@
                         </div>
                     </div>
                     <div class="feed-container" id="feed-container">
-                        <div id="loading-activities">
-                            <p style="text-align: center; padding: 3rem;">
-                                <span class="loading"></span> Loading community activities...
-                            </p>
+                        <div class="feed-card">
+                            <div class="feed-header">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="feed-user-avatar">
+                                <div class="feed-user-info">
+                                    <h4>John Doe <span class="admin-badge">YOU</span></h4>
+                                    <p><i class="fas fa-clock"></i> Just now</p>
+                                </div>
+                            </div>
+                            <div class="feed-content">
+                                <div class="feed-text">Just joined CallConnect! Excited to connect with everyone through audio and video calls. What features are you most excited about? 😊</div>
+                            </div>
+                            <div class="feed-actions">
+                                <div class="feed-action like-btn">
+                                    <i class="far fa-heart"></i>
+                                    <span>3 likes</span>
+                                </div>
+                                <div class="feed-action comment-toggle-btn">
+                                    <i class="far fa-comment"></i>
+                                    <span>1 comment</span>
+                                </div>
+                                <div class="feed-action">
+                                    <i class="far fa-share-square"></i>
+                                    <span>Share</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="feed-card">
+                            <div class="feed-header">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="feed-user-avatar">
+                                <div class="feed-user-info">
+                                    <h4>Sarah Johnson</h4>
+                                    <p><i class="fas fa-clock"></i> 2 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="feed-content">
+                                <div class="feed-text">Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic. 🎧</div>
+                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="feed-image">
+                            </div>
+                            <div class="feed-actions">
+                                <div class="feed-action like-btn">
+                                    <i class="fas fa-heart" style="color: var(--primary)"></i>
+                                    <span>12 likes</span>
+                                </div>
+                                <div class="feed-action comment-toggle-btn">
+                                    <i class="far fa-comment"></i>
+                                    <span>5 comments</span>
+                                </div>
+                                <div class="feed-action">
+                                    <i class="far fa-share-square"></i>
+                                    <span>Share</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2045,36 +2175,6 @@
                     .orderBy('createdAt', 'asc')
                     .get();
                 return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            },
-            
-            // Real-time listeners
-            listenForPosts: function(callback) {
-                return this.db.collection('posts')
-                    .orderBy('createdAt', 'desc')
-                    .limit(20)
-                    .onSnapshot(snapshot => {
-                        const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        callback(posts);
-                    });
-            },
-            
-            listenForLiveRooms: function(callback) {
-                return this.db.collection('liveRooms')
-                    .where('status', '==', 'live')
-                    .onSnapshot(snapshot => {
-                        const rooms = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        callback(rooms);
-                    });
-            },
-            
-            listenForComments: function(postId, callback) {
-                return this.db.collection('posts').doc(postId)
-                    .collection('comments')
-                    .orderBy('createdAt', 'asc')
-                    .onSnapshot(snapshot => {
-                        const comments = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        callback(comments);
-                    });
             }
         };
 
@@ -2086,8 +2186,6 @@
         const signupForm = document.getElementById('signup-form-element');
         const loginBtn = document.getElementById('login-btn');
         const signupBtn = document.getElementById('signup-btn');
-        const showSignupLink = document.getElementById('show-signup');
-        const showLoginLink = document.getElementById('show-login');
         const logoutBtn = document.getElementById('logout-btn');
         const menuToggle = document.getElementById('menu-toggle');
         const sidebar = document.getElementById('sidebar');
@@ -2119,16 +2217,19 @@
         const storiesContainer = document.getElementById('stories-container');
         const liveRoomsContainer = document.getElementById('live-rooms');
         const feedContainer = document.getElementById('feed-container');
-        const loadingActivities = document.getElementById('loading-activities');
-        const navItems = document.querySelectorAll('.nav-item');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const loadingSubtext = document.getElementById('loading-subtext');
+        const showSignupLink = document.getElementById('show-signup');
+        const showLoginLink = document.getElementById('show-login');
+        const loginFormDiv = document.getElementById('login-form');
+        const signupFormDiv = document.getElementById('signup-form');
         const scheduleOptions = document.getElementById('schedule-options');
         const startNowRadio = document.getElementById('start-now');
         const scheduleRadio = document.getElementById('schedule');
         const startLiveBtn = document.getElementById('start-live-btn');
         const cancelLiveBtn = document.getElementById('cancel-live-btn');
-        const loginFormDiv = document.getElementById('login-form');
-        const signupFormDiv = document.getElementById('signup-form');
-        const loadingOverlay = document.getElementById('loading-overlay');
+        const navItems = document.querySelectorAll('.nav-item');
         
         // Global variables
         let currentUser = null;
@@ -2140,13 +2241,38 @@
         let posts = [];
         let liveRooms = [];
         let stories = [];
-        let unsubscribePosts = null;
-        let unsubscribeRooms = null;
+
+        // Helper functions for loading overlay
+        function showLoadingOverlay(text = "Loading", subtext = "Please wait...") {
+            loadingText.textContent = text;
+            loadingSubtext.textContent = subtext;
+            loadingOverlay.classList.add('active');
+        }
+        
+        function hideLoadingOverlay() {
+            loadingOverlay.classList.remove('active');
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
 
         // Initialize the app
         function init() {
             setupEventListeners();
             checkAuthState();
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
 
         // Check authentication state
@@ -2156,8 +2282,8 @@
                     console.log("User authenticated:", user.email);
                     currentUser = user;
                     
-                    // Show loading overlay
-                    loadingOverlay.style.display = 'flex';
+                    // Show loading overlay for app initialization
+                    showLoadingOverlay("Preparing CallConnect", "Setting up your experience...");
                     
                     // Get user profile
                     currentUserData = await firestoreService.getUserProfile(user.uid);
@@ -2175,15 +2301,14 @@
                     updateUserProfile(currentUserData);
                     await loadAppData();
                     
-                    // Hide loading overlay
+                    // Hide loading overlay after app is ready
                     setTimeout(() => {
-                        loadingOverlay.style.display = 'none';
+                        hideLoadingOverlay();
                     }, 1000);
                     
                     // Show app content
                     loginContainer.style.display = 'none';
                     appContent.style.display = 'flex';
-                    document.getElementById("app-container").style.display = 'flex';
                 } else {
                     console.log("No authenticated user");
                     currentUser = null;
@@ -2192,9 +2317,8 @@
                     loginContainer.style.display = 'flex';
                     appContent.style.display = 'none';
                     
-                    // Unsubscribe from real-time updates
-                    if (unsubscribePosts) unsubscribePosts();
-                    if (unsubscribeRooms) unsubscribeRooms();
+                    // Hide loading overlay if shown
+                    hideLoadingOverlay();
                 }
             });
         }
@@ -2203,44 +2327,34 @@
             usernameDisplay.textContent = userData.name;
             userAvatar.src = userData.avatar;
             userCoins.textContent = userData.coins;
-            
-            // Save to localStorage
-            localStorage.setItem('userProfile', JSON.stringify(userData));
         }
 
         async function loadAppData() {
-            // Load user profile from localStorage if available
-            const savedProfile = localStorage.getItem('userProfile');
-            if (savedProfile) {
-                currentUserData = JSON.parse(savedProfile);
-                updateUserProfile(currentUserData);
-            }
-            
-            await loadStories();
-            setupRealTimeUpdates();
-        }
-
-        function setupRealTimeUpdates() {
-            // Set up real-time listeners for posts and live rooms
-            unsubscribePosts = firestoreService.listenForPosts(posts => {
-                renderCommunityFeed(posts);
-            });
-            
-            unsubscribeRooms = firestoreService.listenForLiveRooms(rooms => {
-                renderLiveRooms(rooms);
-            });
-        }
-
-        async function loadStories() {
+            // Load stories
             try {
                 stories = await firestoreService.getStories();
                 renderStories();
-                
-                // Save to localStorage
-                localStorage.setItem('stories', JSON.stringify(stories));
             } catch (error) {
                 console.error("Error loading stories:", error);
                 showToast("Failed to load stories");
+            }
+            
+            // Load live rooms
+            try {
+                liveRooms = await firestoreService.getLiveRooms();
+                renderLiveRooms(liveRooms);
+            } catch (error) {
+                console.error("Error loading live rooms:", error);
+                showToast("Failed to load live rooms");
+            }
+            
+            // Load posts
+            try {
+                posts = await firestoreService.getPosts();
+                renderCommunityFeed(posts);
+            } catch (error) {
+                console.error("Error loading posts:", error);
+                showToast("Failed to load community feed");
             }
         }
 
@@ -2316,7 +2430,6 @@
         }
 
         function renderCommunityFeed(posts) {
-            loadingActivities.style.display = 'none';
             feedContainer.innerHTML = '';
             
             if (posts.length === 0) {
@@ -2334,9 +2447,6 @@
                 const postElement = createPostElement(post);
                 feedContainer.appendChild(postElement);
             });
-            
-            // Save to localStorage
-            localStorage.setItem('posts', JSON.stringify(posts));
         }
 
         function createPostElement(post) {
@@ -2363,7 +2473,7 @@
                 </div>
                 <div class="feed-actions">
                     <div class="feed-action like-btn" data-id="${post.id}">
-                        <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
+                        <i class="far fa-heart"></i>
                         <span>${post.likes || 0} likes</span>
                     </div>
                     <div class="feed-action comment-toggle-btn" data-id="${post.id}">
@@ -2375,37 +2485,7 @@
                         <span>Share</span>
                     </div>
                 </div>
-                <div class="comments-section" id="comments-${post.id}" style="display: none;">
-                    <div class="comments-container" id="comments-container-${post.id}">
-                        <!-- Comments will be loaded here -->
-                    </div>
-                    <div class="add-comment">
-                        <input type="text" class="comment-input" id="comment-input-${post.id}" placeholder="Write a comment...">
-                        <button class="post-comment-btn" data-postid="${post.id}">Post</button>
-                    </div>
-                </div>
             `;
-            
-            // Add event listener for like button
-            postElement.querySelector('.like-btn').addEventListener('click', () => {
-                handleLikePost(post.id);
-            });
-            
-            // Add event listener for comment toggle
-            postElement.querySelector('.comment-toggle-btn').addEventListener('click', () => {
-                toggleComments(post.id);
-            });
-            
-            // Add event listener for comment submission
-            postElement.querySelector('.post-comment-btn').addEventListener('click', () => {
-                const commentInput = document.getElementById(`comment-input-${post.id}`);
-                const commentText = commentInput.value.trim();
-                
-                if (commentText) {
-                    addComment(post.id, commentText);
-                    commentInput.value = '';
-                }
-            });
             
             return postElement;
         }
@@ -2428,90 +2508,7 @@
                 minute: '2-digit'
             });
         }
-
-        async function toggleComments(postId) {
-            const commentsSection = document.getElementById(`comments-${postId}`);
-            const commentsContainer = document.getElementById(`comments-container-${postId}`);
-            
-            if (commentsSection.style.display === 'none') {
-                // Load comments if not already loaded
-                if (commentsContainer.innerHTML === '') {
-                    try {
-                        const comments = await firestoreService.getComments(postId);
-                        renderComments(postId, comments);
-                    } catch (error) {
-                        console.error("Error loading comments:", error);
-                        commentsContainer.innerHTML = '<p>Failed to load comments</p>';
-                    }
-                }
-                commentsSection.style.display = 'block';
-            } else {
-                commentsSection.style.display = 'none';
-            }
-        }
-
-        function renderComments(postId, comments) {
-            const commentsContainer = document.getElementById(`comments-container-${postId}`);
-            commentsContainer.innerHTML = '';
-            
-            if (comments.length === 0) {
-                commentsContainer.innerHTML = '<p class="text-muted">No comments yet</p>';
-                return;
-            }
-            
-            comments.forEach(comment => {
-                const commentElement = document.createElement('div');
-                commentElement.className = 'comment';
-                commentElement.innerHTML = `
-                    <img src="${comment.userAvatar}" class="comment-avatar">
-                    <div class="comment-content">
-                        <div class="comment-header">
-                            <span class="comment-user">${comment.userName}</span>
-                            <span class="comment-time">${formatDate(comment.createdAt?.toDate() || new Date())}</span>
-                        </div>
-                        <div class="comment-text">${comment.text}</div>
-                        <div class="comment-actions">
-                            <span class="comment-action like-comment-btn" data-id="${comment.id}">
-                                <i class="${comment.liked ? 'fas' : 'far'} fa-thumbs-up"></i>
-                                <span class="like-count">${comment.likes || 0}</span>
-                            </span>
-                            <span class="comment-action reply-comment-btn" data-id="${comment.id}">
-                                <i class="fas fa-reply"></i>
-                                <span>Reply</span>
-                            </span>
-                        </div>
-                    </div>
-                `;
-                commentsContainer.appendChild(commentElement);
-            });
-        }
-
-        async function addComment(postId, text) {
-            if (!currentUser || !text) return;
-            
-            try {
-                const commentData = {
-                    userId: currentUser.uid,
-                    userName: currentUserData.name,
-                    userAvatar: currentUserData.avatar,
-                    text: text
-                };
-                
-                await firestoreService.addComment(postId, commentData);
-                
-                // Update comment count
-                const postRef = firestoreService.db.collection('posts').doc(postId);
-                await postRef.update({
-                    comments: firebase.firestore.FieldValue.increment(1)
-                });
-                
-                showToast("Comment added successfully!");
-            } catch (error) {
-                console.error("Error adding comment:", error);
-                showToast("Failed to add comment");
-            }
-        }
-
+        
         // Event handlers
         async function handleLogin(e) {
             e.preventDefault();
@@ -2524,9 +2521,21 @@
             }
             
             try {
+                // Show loading state on login button
+                loginBtn.classList.add('loading');
+                loginBtn.disabled = true;
+                
+                // Show loading overlay
+                showLoadingOverlay("Authenticating", "Verifying your credentials...");
+                
                 await authService.loginUser(email, password);
                 showToast('Login successful!');
             } catch (error) {
+                // Reset login button
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+                hideLoadingOverlay();
+                
                 showToast(`Login failed: ${error.message}`);
             }
         }
@@ -2549,9 +2558,21 @@
             }
             
             try {
+                // Show loading state on signup button
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+                
+                // Show loading overlay
+                showLoadingOverlay("Creating Account", "Setting up your new profile...");
+                
                 await authService.registerUser(email, password, name);
                 showToast('Account created successfully!');
             } catch (error) {
+                // Reset signup button
+                signupBtn.classList.remove('loading');
+                signupBtn.disabled = false;
+                hideLoadingOverlay();
+                
                 showToast(`Signup failed: ${error.message}`);
             }
         }
@@ -2691,16 +2712,6 @@
             }
         }
 
-        async function handleLikePost(postId) {
-            try {
-                const liked = await firestoreService.likePost(postId, currentUser.uid);
-                showToast(liked ? 'Post liked!' : 'Post unliked');
-            } catch (error) {
-                console.error("Error liking post:", error);
-                showToast("Failed to like post");
-            }
-        }
-
         function toggleScheduleOptions() {
             scheduleOptions.style.display = scheduleRadio.checked ? 'block' : 'none';
         }
@@ -2773,17 +2784,6 @@
             }
         }
 
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
         function toggleAuthForm() {
             loginFormDiv.classList.toggle('hidden');
             signupFormDiv.classList.toggle('hidden');
@@ -2847,11 +2847,6 @@
             
             // Close modals when clicking outside
             document.addEventListener('click', closeModals);
-            
-            // Load saved theme
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.body.setAttribute('data-theme', savedTheme);
-            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
 
         // Initialize the app when DOM is loaded

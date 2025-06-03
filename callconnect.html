@@ -2221,7 +2221,12 @@
                     }
                     
                     updateUserProfile(currentUserData);
-                    await loadAppData();
+                    
+                    try {
+                        await loadAppData();
+                    } catch (error) {
+                        console.error("Error loading app data:", error);
+                    }
                     
                     // Show app content
                     loginContainer.style.display = 'none';

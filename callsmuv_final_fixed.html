@@ -1,0 +1,3131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CallConnect - Social Audio & Video</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js">
+// Signup form logic
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+  const confirmPassword = document.getElementById('signup-confirm-password').value;
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+  signupBtn.classList.add('loading');
+  try {
+    const cred = await authService.registerUser(email, password, name);
+    await firestoreService.createUserProfile(cred.user.uid, {
+      name,
+      email,
+      coins: 250
+    });
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    signupBtn.classList.remove('loading');
+  }
+});
+
+// Login form logic
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  loginBtn.classList.add('loading');
+  try {
+    await authService.loginUser(email, password);
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    loginBtn.classList.remove('loading');
+  }
+});
+
+// Logout
+logoutBtn.addEventListener('click', async () => {
+  await authService.logoutUser();
+});
+
+// Toggle forms
+showSignupLink.addEventListener('click', () => {
+  loginFormDiv.classList.add('hidden');
+  signupFormDiv.classList.remove('hidden');
+});
+showLoginLink.addEventListener('click', () => {
+  signupFormDiv.classList.add('hidden');
+  loginFormDiv.classList.remove('hidden');
+});
+
+</script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js">
+// Signup form logic
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+  const confirmPassword = document.getElementById('signup-confirm-password').value;
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+  signupBtn.classList.add('loading');
+  try {
+    const cred = await authService.registerUser(email, password, name);
+    await firestoreService.createUserProfile(cred.user.uid, {
+      name,
+      email,
+      coins: 250
+    });
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    signupBtn.classList.remove('loading');
+  }
+});
+
+// Login form logic
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  loginBtn.classList.add('loading');
+  try {
+    await authService.loginUser(email, password);
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    loginBtn.classList.remove('loading');
+  }
+});
+
+// Logout
+logoutBtn.addEventListener('click', async () => {
+  await authService.logoutUser();
+});
+
+// Toggle forms
+showSignupLink.addEventListener('click', () => {
+  loginFormDiv.classList.add('hidden');
+  signupFormDiv.classList.remove('hidden');
+});
+showLoginLink.addEventListener('click', () => {
+  signupFormDiv.classList.add('hidden');
+  loginFormDiv.classList.remove('hidden');
+});
+
+</script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js">
+// Signup form logic
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+  const confirmPassword = document.getElementById('signup-confirm-password').value;
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+  signupBtn.classList.add('loading');
+  try {
+    const cred = await authService.registerUser(email, password, name);
+    await firestoreService.createUserProfile(cred.user.uid, {
+      name,
+      email,
+      coins: 250
+    });
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    signupBtn.classList.remove('loading');
+  }
+});
+
+// Login form logic
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  loginBtn.classList.add('loading');
+  try {
+    await authService.loginUser(email, password);
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    loginBtn.classList.remove('loading');
+  }
+});
+
+// Logout
+logoutBtn.addEventListener('click', async () => {
+  await authService.logoutUser();
+});
+
+// Toggle forms
+showSignupLink.addEventListener('click', () => {
+  loginFormDiv.classList.add('hidden');
+  signupFormDiv.classList.remove('hidden');
+});
+showLoginLink.addEventListener('click', () => {
+  signupFormDiv.classList.add('hidden');
+  loginFormDiv.classList.remove('hidden');
+});
+
+</script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js">
+// Signup form logic
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+  const confirmPassword = document.getElementById('signup-confirm-password').value;
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+  signupBtn.classList.add('loading');
+  try {
+    const cred = await authService.registerUser(email, password, name);
+    await firestoreService.createUserProfile(cred.user.uid, {
+      name,
+      email,
+      coins: 250
+    });
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    signupBtn.classList.remove('loading');
+  }
+});
+
+// Login form logic
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  loginBtn.classList.add('loading');
+  try {
+    await authService.loginUser(email, password);
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    loginBtn.classList.remove('loading');
+  }
+});
+
+// Logout
+logoutBtn.addEventListener('click', async () => {
+  await authService.logoutUser();
+});
+
+// Toggle forms
+showSignupLink.addEventListener('click', () => {
+  loginFormDiv.classList.add('hidden');
+  signupFormDiv.classList.remove('hidden');
+});
+showLoginLink.addEventListener('click', () => {
+  signupFormDiv.classList.add('hidden');
+  loginFormDiv.classList.remove('hidden');
+});
+
+</script>
+    
+    <!-- External configuration -->
+    <script src="config.js">
+// Signup form logic
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+  const confirmPassword = document.getElementById('signup-confirm-password').value;
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+  signupBtn.classList.add('loading');
+  try {
+    const cred = await authService.registerUser(email, password, name);
+    await firestoreService.createUserProfile(cred.user.uid, {
+      name,
+      email,
+      coins: 250
+    });
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    signupBtn.classList.remove('loading');
+  }
+});
+
+// Login form logic
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  loginBtn.classList.add('loading');
+  try {
+    await authService.loginUser(email, password);
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    loginBtn.classList.remove('loading');
+  }
+});
+
+// Logout
+logoutBtn.addEventListener('click', async () => {
+  await authService.logoutUser();
+});
+
+// Toggle forms
+showSignupLink.addEventListener('click', () => {
+  loginFormDiv.classList.add('hidden');
+  signupFormDiv.classList.remove('hidden');
+});
+showLoginLink.addEventListener('click', () => {
+  signupFormDiv.classList.add('hidden');
+  loginFormDiv.classList.remove('hidden');
+});
+
+</script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        :root {
+            --primary: #ff4757;
+            --primary-light: #ff6b81;
+            --primary-dark: #e84118;
+            --secondary: #57606f;
+            --secondary-light: #a4b0be;
+            --light: #f1f2f6;
+            --dark: #2f3542;
+            --dark-light: #57606f;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --info: #1e90ff;
+            --purple: #7e57c2;
+            
+            --bg-color: #f8f9fa;
+            --text-color: #2f3542;
+            --text-light: #57606f;
+            --card-bg: white;
+            --sidebar-bg: white;
+            --nav-bg: white;
+            --input-bg: white;
+            --border-color: #e0e5eb;
+            
+            --story-border: linear-gradient(45deg, #ff4757, #ffa502, #2ed573, #1e90ff);
+            
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --shadow-xl: 0 12px 32px rgba(0,0,0,0.15);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 999px;
+            
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --sidebar-width: 280px;
+            
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+            --gradient-purple: linear-gradient(135deg, var(--purple), #9c27b0);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #f1f2f6;
+            --text-light: #a4b0be;
+            --card-bg: #1e1e1e;
+            --sidebar-bg: #1a1a1a;
+            --nav-bg: #1a1a1a;
+            --input-bg: #2d2d2d;
+            --border-color: #333333;
+            
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.25);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.3);
+            --shadow-xl: 0 12px 32px rgba(0,0,0,0.35);
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 { 
+            font-weight: 700; 
+            line-height: 1.25; 
+        }
+        
+        .text-sm { font-size: 0.875rem; }
+        .text-muted { color: var(--text-light); }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 70px;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        [data-theme="dark"] .header {
+            background-color: rgba(30, 30, 30, 0.85);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .header-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+        }
+        
+        .notification-btn, .message-btn {
+            position: relative;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            transition: var(--transition);
+            background-color: var(--input-bg);
+        }
+        
+        .notification-btn:hover, .message-btn:hover { 
+            background-color: rgba(255, 71, 87, 0.1); 
+            transform: translateY(-2px);
+        }
+        
+        .notification-badge, .message-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background-color: var(--primary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border: 2px solid var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--sidebar-bg);
+            height: calc(100vh - 70px);
+            position: fixed;
+            top: 70px;
+            left: 0;
+            overflow-y: auto;
+            z-index: 90;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .sidebar.active { transform: translateX(0); }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            transition: var(--transition);
+            background-color: var(--input-bg);
+        }
+        
+        .theme-toggle:hover { 
+            background-color: rgba(255, 71, 87, 0.1); 
+            transform: rotate(15deg);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+            background-color: var(--input-bg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .user-profile:hover { 
+            background-color: rgba(255, 71, 87, 0.1); 
+            transform: translateY(-3px);
+        }
+        
+        .user-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .user-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .user-info h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 700;
+        }
+        
+        .user-info p {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .coins { 
+            color: var(--warning); 
+            margin-left: 0.25rem; 
+            font-weight: 700; 
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .top-up-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .top-up-btn:hover { 
+            opacity: 0.9; 
+            transform: translateY(-2px);
+        }
+        
+        .menu-section { 
+            margin-bottom: 1.5rem; 
+            padding: 0.5rem 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.875rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-color);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .menu-item i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255, 71, 87, 0.1);
+            color: var(--primary);
+        }
+        
+        .menu-item:hover i {
+            transform: translateX(3px);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(255, 71, 87, 0.15);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.875rem;
+            width: 100%;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .logout-btn:hover { 
+            background-color: rgba(255, 71, 87, 0.1); 
+            transform: translateY(-2px);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+            margin-top: 70px;
+            margin-bottom: 80px;
+            transition: margin-left 0.3s;
+            max-width: 100%;
+            overflow-x: hidden;
+            padding-bottom: 120px;
+        }
+        
+        .sidebar.active + .main-content { margin-left: var(--sidebar-width); }
+        
+        .page { display: none; animation: fadeIn 0.4s ease; padding-bottom: 80px; min-height: calc(100vh - 150px); }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page.active { display: block; }
+        
+        .menu-toggle {
+            display: none;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            font-size: 0.9375rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .menu-toggle:hover { 
+            opacity: 0.9; 
+            transform: translateY(-2px);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section-title { 
+            font-size: 1.5rem; 
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .view-all {
+            color: var(--primary);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .view-all:hover { 
+            text-decoration: underline; 
+            gap: 0.5rem;
+        }
+        
+        .stories-container {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .stories-container::-webkit-scrollbar { display: none; }
+        
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            cursor: pointer;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .story.new::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 12px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            border: 2px solid var(--card-bg);
+            z-index: 2;
+        }
+        
+        .story-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            padding: 3px;
+            background: var(--story-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .story-avatar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--story-border);
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+        
+        .story-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--card-bg);
+        }
+        
+        .story-username {
+            font-size: 0.8125rem;
+            text-align: center;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .feed-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        .feed-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .feed-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feed-header {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            position: relative;
+        }
+        
+        .feed-user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            margin-right: 1rem;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.1);
+        }
+        
+        .feed-user-info h4 { 
+            font-size: 1.0625rem; 
+            margin-bottom: 0.125rem; 
+            font-weight: 700; 
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feed-user-info p { 
+            font-size: 0.875rem; 
+            color: var(--text-light); 
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .feed-content { padding: 0 1.25rem 1.25rem; }
+        .feed-text { 
+            margin-bottom: 1rem; 
+            font-size: 1rem; 
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        
+        .feed-image { 
+            width: 100%; 
+            border-radius: var(--radius-md); 
+            margin-bottom: 1rem; 
+            max-height: 500px; 
+            object-fit: cover;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .feed-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .feed-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .feed-action:hover {
+            color: var(--primary);
+            background-color: rgba(255, 71, 87, 0.1);
+        }
+        
+        .feed-action.active { 
+            color: var(--primary); 
+        }
+        
+        .feed-action i {
+            transition: var(--transition);
+        }
+        
+        .feed-action:hover i {
+            transform: scale(1.1);
+        }
+        
+        .live-rooms {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .live-room-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .live-room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .live-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            z-index: 2;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .live-badge::before {
+            content: "";
+            display: block;
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .live-room-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .live-room-card:hover .live-room-image {
+            transform: scale(1.05);
+        }
+        
+        .live-room-info { padding: 1.25rem; }
+        .live-room-title { 
+            font-size: 1.0625rem; 
+            margin-bottom: 0.75rem; 
+            font-weight: 700; 
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .live-room-members {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .live-room-members img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            border: 2px solid var(--primary);
+        }
+        
+        .join-room-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.875rem;
+            width: 100%;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            transition: var(--transition);
+            border-radius: var(--radius-sm);
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .join-room-btn:hover { 
+            opacity: 0.9; 
+            transform: translateY(-2px);
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0;
+            box-shadow: var(--shadow-sm);
+            z-index: 99;
+            border-top: 1px solid var(--border-color);
+            height: 70px;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+        
+        [data-theme="dark"] .bottom-nav {
+            background-color: rgba(30, 30, 30, 0.85);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.8125rem;
+            transition: var(--transition);
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            flex: 1;
+            max-width: 80px;
+        }
+        
+        .nav-item i {
+            font-size: 1.35rem;
+            margin-bottom: 0.25rem;
+            transition: var(--transition);
+            padding: 0.5rem;
+            border-radius: var(--radius-full);
+            background-color: var(--input-bg);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-item.active { 
+            color: var(--primary); 
+        }
+        
+        .nav-item.active i {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .nav-item:hover { 
+            color: var(--primary); 
+        }
+        
+        .nav-item:hover i {
+            transform: translateY(-5px);
+        }
+        
+        .floating-widget {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+        
+        .floating-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .post-floating-btn {
+            background: var(--gradient-primary);
+            color: white;
+            animation-delay: 0.2s;
+        }
+        
+        .live-floating-btn {
+            background: var(--gradient-purple);
+            color: white;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--dark);
+            color: white;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+            max-width: 90%;
+            text-align: center;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .toast i {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .notifications-dropdown {
+            position: absolute;
+            top: 70px;
+            right: 1.5rem;
+            width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            padding: 1.25rem;
+            z-index: 110;
+            display: none;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .notifications-dropdown.active { display: block; }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .notification-header h3 { font-size: 1.125rem; font-weight: 700; }
+        
+        .mark-all-read {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .mark-all-read:hover { text-decoration: underline; }
+        
+        .notification-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+        }
+        
+        .notification-item:hover { background-color: var(--input-bg); }
+        .notification-item:last-child { border-bottom: none; }
+        
+        .notification-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--primary);
+        }
+        
+        .notification-content { flex: 1; }
+        .notification-text { font-size: 0.9375rem; font-weight: 500; }
+        .notification-time { font-size: 0.8125rem; color: var(--text-light); margin-top: 0.5rem; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .modal-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 1.25rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .post-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            resize: vertical;
+            margin-bottom: 1.25rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        .file-preview {
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .recording-ui {
+            display: none;
+            margin-bottom: 1.25rem;
+            background-color: var(--input-bg);
+            padding: 1.25rem;
+            border-radius: var(--radius-sm);
+        }
+        
+        .recording-controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .timer {
+            margin-left: auto;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.125rem;
+        }
+        
+        .record-btn, .stop-btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+        
+        .record-btn {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .record-btn:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .stop-btn {
+            background-color: var(--secondary-light);
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.875rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+        
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            flex: 1;
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--input-bg);
+        }
+        
+        .ceo-badge {
+            background: var(--warning);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+        }
+        
+        .admin-badge {
+            background: var(--info);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-light);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .empty-state p {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background-color: var(--bg-color);
+        }
+        
+        .auth-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .auth-header {
+            margin-bottom: 2rem;
+        }
+        
+        .auth-logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .auth-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 1.5rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .auth-input {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            width: 100%;
+        }
+        
+        .auth-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+            position: relative;
+        }
+        
+        .auth-btn.loading {
+            color: transparent !important;
+        }
+        
+        .auth-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        .auth-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .auth-footer {
+            margin-top: 1.5rem;
+            color: var(--text-light);
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .auth-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .auth-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Comments Section */
+        .comments-section {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
+        
+        .comments-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .comment {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .comment:last-child {
+            border-bottom: none;
+        }
+        
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--primary);
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .comment-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        
+        .comment-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .comment-action {
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 0.25rem;
+        }
+        
+        .comment-action:hover {
+            color: var(--primary);
+        }
+        
+        .add-comment {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        
+        .comment-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .comment-input:focus {
+            border-color: var(--primary);
+        }
+        
+        .post-comment-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .post-comment-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .like-count {
+            margin-left: 0.25rem;
+            font-weight: 600;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (min-width: 768px) {
+            .header { padding: 0.75rem 2rem; }
+            .main-content { padding: 2rem; }
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar {
+                width: 280px;
+                height: 100vh;
+                top: 0;
+                padding-top: 80px;
+            }
+            
+            .menu-toggle { display: flex; }
+            .live-rooms { grid-template-columns: 1fr; }
+            .floating-widget {
+                bottom: 85px;
+                right: 15px;
+            }
+            
+            .floating-btn {
+                width: 54px;
+                height: 54px;
+                font-size: 1.3rem;
+            }
+            
+            .auth-card {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .sidebar { transform: translateX(0); }
+            .main-content { margin-left: var(--sidebar-width); }
+            .menu-toggle { display: none; }
+        }
+        
+        @media (max-width: 575px) {
+            .header { padding: 0.75rem 1rem; }
+            .logo { font-size: 1.25rem; }
+            .logo-icon { width: 36px; height: 36px; font-size: 1rem; }
+            .notification-btn, .message-btn { width: 40px; height: 40px; font-size: 1.1rem; }
+            .notification-badge, .message-badge { width: 18px; height: 18px; font-size: 0.65rem; }
+            .main-content { padding: 1.5rem 1rem; }
+            .section-title { font-size: 1.3rem; }
+            .view-all { font-size: 0.875rem; }
+            .story-avatar { width: 56px; height: 56px; }
+            .story-username { font-size: 0.75rem; }
+            .feed-card { border-radius: var(--radius-md); }
+            .feed-header { padding: 1rem; }
+            .feed-content { padding: 0 1rem 1rem; }
+            .feed-actions { padding: 0.5rem 1rem; }
+            .feed-action { padding: 0.375rem; font-size: 0.875rem; }
+            .live-room-image { height: 140px; }
+            .bottom-nav { padding: 0.75rem 0; height: 65px; }
+            .nav-item { font-size: 0.75rem; padding: 0.5rem 0.25rem; }
+            .nav-item i { 
+                font-size: 1.15rem; 
+                width: 40px;
+                height: 40px;
+            }
+        }
+    
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+</head>
+<body>
+    <div class="app-container" id="app-container">
+        <!-- Login/Signup screen -->
+        <div class="login-container" id="login-container">
+            <div class="auth-card">
+                <!-- Login Form -->
+                <div id="login-form">
+                    <div class="auth-header">
+                        <div class="auth-logo">
+                            <span class="auth-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </span>
+                            CallConnect
+                        </div>
+                        <h2>Welcome Back</h2>
+                        <p class="text-muted">Connect with friends through audio and video calls</p>
+                    </div>
+                    
+                    <form class="auth-form" id="login-form-element">
+                        <input type="email" id="login-email" class="auth-input" placeholder="Email" required>
+                        <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
+                        <button class="auth-btn" id="login-btn">Login</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+                    </div>
+                </div>
+                
+                <!-- Signup Form -->
+                <div id="signup-form" class="hidden">
+                    <div class="auth-header">
+                        <div class="auth-logo">
+                            <span class="auth-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </span>
+                            CallConnect
+                        </div>
+                        <h2>Create Account</h2>
+                        <p class="text-muted">Join our community of audio and video enthusiasts</p>
+                    </div>
+                    
+                    <form class="auth-form" id="signup-form-element">
+                        <input type="text" id="signup-name" class="auth-input" placeholder="Full Name" required>
+                        <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
+                        <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
+                        <input type="password" id="signup-confirm-password" class="auth-input" placeholder="Confirm Password" required>
+                        <button class="auth-btn" id="signup-btn">Create Account</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main app content (initially hidden) -->
+        <div id="app-content" style="display:none">
+            <div class="header">
+                <div class="logo">
+                    <span class="logo-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </span>
+                    CallConnect
+                </div>
+                <div class="header-actions">
+                    <button class="message-btn" id="message-btn">
+                        <i class="fas fa-envelope"></i>
+                        <span class="message-badge">2</span>
+                    </button>
+                    <button class="notification-btn" id="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="notifications-dropdown" id="notifications-dropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                        </div>
+                        <div id="notifications-list">
+                            <!-- Notifications will be loaded here -->
+                            <div class="notification-item">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="notification-avatar">
+                                <div class="notification-content">
+                                    <div class="notification-text">Sarah liked your post</div>
+                                    <div class="notification-time">5 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" class="notification-avatar">
+                                <div class="notification-content">
+                                    <div class="notification-text">Mike commented on your live session</div>
+                                    <div class="notification-time">1 hour ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Menu</h3>
+                    <button class="theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                
+                <div class="user-profile" id="user-profile">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar" id="user-avatar">
+                    <div class="user-info">
+                        <h3 id="username-display">John Doe</h3>
+                        <p>Balance: <span class="coins" id="user-coins">250 <i class="fas fa-coins"></i></span></p>
+                        <button class="top-up-btn" id="top-up-btn">
+                            <i class="fas fa-plus"></i> Top Up
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Shop</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-wallet"></i>
+                        <span>Wallet</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Fun</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-users"></i>
+                        <span>Friends</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-video"></i>
+                        <span>Live Sessions</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                </div>
+                
+                <button class="logout-btn" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+            
+            <div class="main-content">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i> Menu
+                </button>
+                
+                <div class="page active" id="home-page">
+                    <div class="stories-container" id="stories-container">
+                        <div class="story new">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Your story">
+                            </div>
+                            <div class="story-username">Your Story</div>
+                        </div>
+                        <div class="story">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah">
+                            </div>
+                            <div class="story-username">Sarah</div>
+                        </div>
+                        <div class="story">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Mike">
+                            </div>
+                            <div class="story-username">Mike</div>
+                        </div>
+                        <div class="story">
+                            <div class="story-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma">
+                            </div>
+                            <div class="story-username">Emma</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2 class="section-title">Live Rooms</h2>
+                        <a href="#" class="view-all">
+                            View all <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="live-rooms" id="live-rooms">
+                        <div class="live-room-card">
+                            <div class="live-badge">
+                                <i class="fas fa-circle"></i> LIVE
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Music Jam Session" class="live-room-image">
+                            <div class="live-room-info">
+                                <h3 class="live-room-title">Music Jam Session</h3>
+                                <div class="live-room-members">
+                                    <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Alex">
+                                    <span>Alex • 12 participants</span>
+                                </div>
+                                <button class="join-room-btn" data-id="room1">
+                                    <i class="fas fa-headphones"></i> Join Podcast
+                                </button>
+                            </div>
+                        </div>
+                        <div class="live-room-card">
+                            <div class="live-badge">
+                                <i class="fas fa-circle"></i> LIVE
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Tech Talk" class="live-room-image">
+                            <div class="live-room-info">
+                                <h3 class="live-room-title">Tech Talk: Future of Web Development</h3>
+                                <div class="live-room-members">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah">
+                                    <span>Sarah • 8 participants</span>
+                                </div>
+                                <button class="join-room-btn" data-id="room2">
+                                    <i class="fas fa-video"></i> Join Stream
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2 class="section-title">Community Feed</h2>
+                        <div class="view-all">
+                            See more <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    <div class="feed-container" id="feed-container">
+                        <div class="feed-card">
+                            <div class="feed-header">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="feed-user-avatar">
+                                <div class="feed-user-info">
+                                    <h4>John Doe <span class="admin-badge">YOU</span></h4>
+                                    <p><i class="fas fa-clock"></i> Just now</p>
+                                </div>
+                            </div>
+                            <div class="feed-content">
+                                <div class="feed-text">Just joined CallConnect! Excited to connect with everyone through audio and video calls. What features are you most excited about? 😊</div>
+                            </div>
+                            <div class="feed-actions">
+                                <div class="feed-action like-btn">
+                                    <i class="far fa-heart"></i>
+                                    <span>3 likes</span>
+                                </div>
+                                <div class="feed-action comment-toggle-btn">
+                                    <i class="far fa-comment"></i>
+                                    <span>1 comment</span>
+                                </div>
+                                <div class="feed-action">
+                                    <i class="far fa-share-square"></i>
+                                    <span>Share</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="feed-card">
+                            <div class="feed-header">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="feed-user-avatar">
+                                <div class="feed-user-info">
+                                    <h4>Sarah Johnson</h4>
+                                    <p><i class="fas fa-clock"></i> 2 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="feed-content">
+                                <div class="feed-text">Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic. 🎧</div>
+                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="feed-image">
+                            </div>
+                            <div class="feed-actions">
+                                <div class="feed-action like-btn">
+                                    <i class="fas fa-heart" style="color: var(--primary)"></i>
+                                    <span>12 likes</span>
+                                </div>
+                                <div class="feed-action comment-toggle-btn">
+                                    <i class="far fa-comment"></i>
+                                    <span>5 comments</span>
+                                </div>
+                                <div class="feed-action">
+                                    <i class="far fa-share-square"></i>
+                                    <span>Share</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-widget">
+                <button class="floating-btn live-floating-btn" id="go-live-btn">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="floating-btn post-floating-btn" id="create-post-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            
+            <div class="modal" id="create-post-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Create Post</h3>
+                        <button class="close-modal" id="close-post-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="post-textarea" id="post-text" placeholder="What's on your mind?"></textarea>
+                        
+                        <div class="file-preview" id="image-preview">
+                            <img class="preview-image" id="preview-image">
+                        </div>
+                        
+                        <div class="recording-ui" id="recording-ui">
+                            <div class="recording-controls">
+                                <button class="record-btn" id="record-btn">
+                                    <i class="fas fa-microphone"></i> Record
+                                </button>
+                                <button class="stop-btn" id="stop-btn" disabled>
+                                    <i class="fas fa-stop"></i> Stop
+                                </button>
+                                <div class="timer" id="timer">0:00</div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-outline" id="add-image-btn">
+                                <i class="fas fa-image"></i> Add Image
+                            </button>
+                            <button class="btn btn-outline" id="add-voice-btn">
+                                <i class="fas fa-microphone"></i> Add Voice
+                            </button>
+                        </div>
+                        
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        
+                        <button class="btn btn-primary" id="submit-post-btn" style="margin-top: 1rem;">Post</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="go-live-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Go Live</h3>
+                        <button class="close-modal" id="close-live-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="go-live-form">
+                            <div class="form-group">
+                                <label class="form-label">Live Session Title</label>
+                                <input type="text" class="form-control" id="live-title" placeholder="Enter session title" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Session Type</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="podcast" name="session-type" value="podcast" checked>
+                                        <label for="podcast">Podcast (Audio Only)</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="stream" name="session-type" value="stream">
+                                        <label for="stream">Live Stream (Video)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">When do you want to start?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="start-now" name="start-time" value="now" checked>
+                                        <label for="start-now">Start Now</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="schedule" name="start-time" value="schedule">
+                                        <label for="schedule">Schedule for Later</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="schedule-options" id="schedule-options" style="display:none;">
+                                <div class="form-group">
+                                    <label class="form-label">Date & Time</label>
+                                    <input type="datetime-local" class="form-control" id="live-date">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Cover Image (Optional)</label>
+                                <input type="file" class="form-control" id="cover-image" accept="image/*">
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-primary" id="start-live-btn">Start Live Session</button>
+                                <button type="button" class="btn btn-outline" id="cancel-live-btn">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="#" class="nav-item active" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item" data-page="shop">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Shop</span>
+                </a>
+                <a href="#" class="nav-item" data-page="wallet">
+                    <i class="fas fa-wallet"></i>
+                    <span>Wallet</span>
+                </a>
+                <a href="#" class="nav-item" data-page="fun">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Fun</span>
+                </a>
+                <a href="#" class="nav-item" data-page="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Firebase with config from external file
+        firebase.initializeApp(firebaseConfig);
+        
+        // Service implementations
+        const authService = {
+            auth: firebase.auth(),
+            
+            registerUser: function(email, password, name) {
+                return this.auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Update user profile with display name
+                        return userCredential.user.updateProfile({
+                            displayName: name
+                        }).then(() => userCredential);
+                    });
+            },
+            
+            loginUser: function(email, password) {
+                return this.auth.signInWithEmailAndPassword(email, password);
+            },
+            
+            logoutUser: function() {
+                return this.auth.signOut();
+            },
+            
+            onAuthStateChanged: function(callback) {
+                return this.auth.onAuthStateChanged(callback);
+            }
+        };
+
+        const firestoreService = {
+            db: firebase.firestore(),
+            
+            createUserProfile: async function(userId, userData) {
+                const userRef = this.db.collection('users').doc(userId);
+                await userRef.set({
+                    ...userData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                return userRef.get();
+            },
+            
+            getUserProfile: async function(userId) {
+                const userRef = this.db.collection('users').doc(userId);
+                const docSnap = await userRef.get();
+                return docSnap.exists() ? docSnap.data() : null;
+            },
+            
+            updateUserCoins: async function(userId, amount) {
+                const userRef = this.db.collection('users').doc(userId);
+                await userRef.update({
+                    coins: firebase.firestore.FieldValue.increment(amount)
+                });
+                return userRef.get();
+            },
+            
+            createPost: async function(postData) {
+                return this.db.collection('posts').add({
+                    ...postData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: 0,
+                    comments: 0
+                });
+            },
+            
+            createLiveRoom: async function(roomData) {
+                return this.db.collection('liveRooms').add({
+                    ...roomData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    members: 1,
+                    status: 'live'
+                });
+            },
+            
+            addComment: async function(postId, commentData) {
+                return this.db.collection('posts').doc(postId).collection('comments').add({
+                    ...commentData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: 0
+                });
+            },
+            
+            likePost: async function(postId, userId) {
+                const postRef = this.db.collection('posts').doc(postId);
+                const likeRef = postRef.collection('likes').doc(userId);
+                
+                const exists = (await likeRef.get()).exists;
+                if (exists) {
+                    await likeRef.delete();
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(-1)
+                    });
+                    return false;
+                } else {
+                    await likeRef.set({
+                        userId: userId,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                    return true;
+                }
+            },
+            
+            getPosts: async function() {
+                const snapshot = await this.db.collection('posts')
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getLiveRooms: async function() {
+                const snapshot = await this.db.collection('liveRooms')
+                    .where('status', '==', 'live')
+                    .orderBy('createdAt', 'desc')
+                    .limit(10)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getStories: async function() {
+                const snapshot = await this.db.collection('stories')
+                    .where('expiresAt', '>', new Date())
+                    .orderBy('expiresAt', 'asc')
+                    .limit(10)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getComments: async function(postId) {
+                const snapshot = await this.db.collection('posts').doc(postId)
+                    .collection('comments')
+                    .orderBy('createdAt', 'asc')
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            }
+        };
+
+        // DOM elements
+        const appContainer = document.getElementById('app-container');
+const appContent = document.getElementById('app-content');
+        const loginContainer = document.getElementById('login-container');
+        const appContent = document.getElementById('app-content');
+        const loginForm = document.getElementById('login-form-element');
+        const signupForm = document.getElementById('signup-form-element');
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const themeToggle = document.getElementById('theme-toggle');
+        const notificationBtn = document.getElementById('notification-btn');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        const markAllReadBtn = document.getElementById('mark-all-read');
+        const topUpBtn = document.getElementById('top-up-btn');
+        const createPostBtn = document.getElementById('create-post-btn');
+        const createPostModal = document.getElementById('create-post-modal');
+        const closePostModalBtn = document.getElementById('close-post-modal');
+        const goLiveBtn = document.getElementById('go-live-btn');
+        const goLiveModal = document.getElementById('go-live-modal');
+        const closeLiveModalBtn = document.getElementById('close-live-modal');
+        const postText = document.getElementById('post-text');
+        const addImageBtn = document.getElementById('add-image-btn');
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreview = document.getElementById('preview-image');
+        const imagePreviewContainer = document.getElementById('image-preview');
+        const addVoiceBtn = document.getElementById('add-voice-btn');
+        const recordingUI = document.getElementById('recording-ui');
+        const recordBtn = document.getElementById('record-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const timer = document.getElementById('timer');
+        const submitPostBtn = document.getElementById('submit-post-btn');
+        const usernameDisplay = document.getElementById('username-display');
+        const userAvatar = document.getElementById('user-avatar');
+        const userCoins = document.getElementById('user-coins');
+        const storiesContainer = document.getElementById('stories-container');
+        const liveRoomsContainer = document.getElementById('live-rooms');
+        const feedContainer = document.getElementById('feed-container');
+        const showSignupLink = document.getElementById('show-signup');
+        const showLoginLink = document.getElementById('show-login');
+        const loginFormDiv = document.getElementById('login-form');
+        const signupFormDiv = document.getElementById('signup-form');
+        const scheduleOptions = document.getElementById('schedule-options');
+        const startNowRadio = document.getElementById('start-now');
+        const scheduleRadio = document.getElementById('schedule');
+        const startLiveBtn = document.getElementById('start-live-btn');
+        const cancelLiveBtn = document.getElementById('cancel-live-btn');
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        // Global variables
+        let currentUser = null;
+        let currentUserData = null;
+        let recorder, audioChunks = [];
+        let audioData = "";
+        let recordingInterval;
+        let recordingSeconds = 0;
+        let posts = [];
+        let liveRooms = [];
+        let stories = [];
+
+        // Helper function for toast notifications
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Initialize the app
+        function init() {
+            setupEventListeners();
+            checkAuthState();
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+
+        // Check authentication state
+        function checkAuthState() {
+            authService.onAuthStateChanged(async (user) => {
+  if (user) {
+    loginContainer.style.display = 'none';
+    appContent.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    appContent.classList.add('fade-in');
+  } else {
+    loginContainer.style.display = 'flex';
+    appContent.style.display = 'none';
+  }
+};
+                        await firestoreService.createUserProfile(user.uid, currentUserData);
+                    }
+                    
+                    updateUserProfile(currentUserData);
+                    
+                    try {
+                        await loadAppData();
+                    } catch (error) {
+                        console.error("Error loading app data:", error);
+                    }
+                    
+                    // Show app content
+                    loginContainer.style.display = 'none';
+                    appContent.style.display = 'block';
+                } else {
+                    console.log("No authenticated user");
+                    currentUser = null;
+                    currentUserData = null;
+                    // Show login screen
+                    loginContainer.style.display = 'flex';
+                    appContent.style.display = 'none';
+                }
+            });
+        }
+
+        function updateUserProfile(userData) {
+            usernameDisplay.textContent = userData.name;
+            userAvatar.src = userData.avatar;
+            userCoins.textContent = userData.coins;
+        }
+
+        async function loadAppData() {
+            // Load stories
+            try {
+                stories = await firestoreService.getStories();
+                renderStories();
+            } catch (error) {
+                console.error("Error loading stories:", error);
+                showToast("Failed to load stories");
+            }
+            
+            // Load live rooms
+            try {
+                liveRooms = await firestoreService.getLiveRooms();
+                renderLiveRooms(liveRooms);
+            } catch (error) {
+                console.error("Error loading live rooms:", error);
+                showToast("Failed to load live rooms");
+            }
+            
+            // Load posts
+            try {
+                posts = await firestoreService.getPosts();
+                renderCommunityFeed(posts);
+            } catch (error) {
+                console.error("Error loading posts:", error);
+                showToast("Failed to load community feed");
+            }
+        }
+
+        function renderStories() {
+            storiesContainer.innerHTML = '';
+            
+            // Add user's own story
+            storiesContainer.innerHTML += `
+                <div class="story new">
+                    <div class="story-avatar">
+                        <img src="${userAvatar.src}" alt="Your story">
+                    </div>
+                    <div class="story-username">Your Story</div>
+                </div>
+            `;
+            
+            // Add other stories
+            stories.forEach(story => {
+                storiesContainer.innerHTML += `
+                    <div class="story ${story.new ? 'new' : ''}">
+                        <div class="story-avatar">
+                            <img src="${story.avatar}" alt="${story.username}">
+                        </div>
+                        <div class="story-username">${story.username}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderLiveRooms(rooms) {
+            liveRoomsContainer.innerHTML = '';
+            
+            if (rooms.length === 0) {
+                liveRoomsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video-slash"></i>
+                        <h3>No live rooms</h3>
+                        <p>Be the first to start a live session!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            rooms.forEach(room => {
+                liveRoomsContainer.innerHTML += `
+                    <div class="live-room-card">
+                        <div class="live-badge">
+                            <i class="fas fa-circle"></i> LIVE
+                        </div>
+                        <img src="${room.cover || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${room.title}" class="live-room-image">
+                        <div class="live-room-info">
+                            <h3 class="live-room-title">${room.title}</h3>
+                            <div class="live-room-members">
+                                <img src="${room.hostAvatar}" alt="${room.host}">
+                                <span>${room.host} • ${room.members} participants</span>
+                            </div>
+                            <button class="join-room-btn" data-id="${room.id}">
+                                <i class="fas fa-${room.type === 'podcast' ? 'headphones' : 'video'}"></i> 
+                                Join ${room.type === 'podcast' ? 'Podcast' : 'Stream'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Add event listeners to join buttons
+            document.querySelectorAll('.join-room-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const roomId = btn.dataset.id;
+                    joinRoom(roomId);
+                });
+            });
+        }
+
+        function renderCommunityFeed(posts) {
+            feedContainer.innerHTML = '';
+            
+            if (posts.length === 0) {
+                feedContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No posts yet</h3>
+                        <p>Follow more users or create your own post to start seeing content in your feed.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                feedContainer.appendChild(postElement);
+            });
+        }
+
+        function createPostElement(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'feed-card';
+            postElement.dataset.id = post.id;
+            
+            let roleBadge = '';
+            if (post.userId === currentUser.uid) roleBadge = '<span class="admin-badge">YOU</span>';
+            
+            const formattedTime = formatDate(post.createdAt?.toDate() || new Date());
+            
+            postElement.innerHTML = `
+                <div class="feed-header">
+                    <img src="${post.userAvatar}" class="feed-user-avatar">
+                    <div class="feed-user-info">
+                        <h4>${post.userName} ${roleBadge}</h4>
+                        <p><i class="fas fa-clock"></i> ${formattedTime}</p>
+                    </div>
+                </div>
+                <div class="feed-content">
+                    <div class="feed-text">${post.content}</div>
+                    ${post.image ? `<img src="${post.image}" class="feed-image">` : ''}
+                </div>
+                <div class="feed-actions">
+                    <div class="feed-action like-btn" data-id="${post.id}">
+                        <i class="far fa-heart"></i>
+                        <span>${post.likes || 0} likes</span>
+                    </div>
+                    <div class="feed-action comment-toggle-btn" data-id="${post.id}">
+                        <i class="far fa-comment"></i>
+                        <span>${post.comments || 0} comments</span>
+                    </div>
+                    <div class="feed-action">
+                        <i class="far fa-share-square"></i>
+                        <span>Share</span>
+                    </div>
+                </div>
+            `;
+            
+            return postElement;
+        }
+
+        function formatDate(date) {
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            
+            if (minutes < 1) return "Just now";
+            if (minutes < 60) return `${minutes} min ago`;
+            
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} hr ago`;
+            
+            return date.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // Event handlers
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                showToast('Please enter email and password');
+                return;
+            }
+            
+            try {
+                // Show loading state on login button
+                loginBtn.classList.add('loading');
+                loginBtn.disabled = true;
+                
+                // Authenticate user
+                await authService.loginUser(email, password);
+                
+                // Reset login button
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+                
+                // Show success toast
+                showToast('Login successful!');
+            } catch (error) {
+                // Reset login button
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+                
+                // Show error toast
+                showToast(`Login failed: ${error.message}`);
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            
+            if (!name || !email || !password || !confirmPassword) {
+                showToast('Please fill all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match');
+                return;
+            }
+            
+            try {
+                // Show loading state on signup button
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+                
+                // Create user account
+                await authService.registerUser(email, password, name);
+                
+                // Reset signup button
+                signupBtn.classList.remove('loading');
+                signupBtn.disabled = false;
+                
+                // Show success toast
+                showToast('Account created successfully!');
+            } catch (error) {
+                // Reset signup button
+                signupBtn.classList.remove('loading');
+                signupBtn.disabled = false;
+                
+                // Show error toast
+                showToast(`Signup failed: ${error.message}`);
+            }
+        }
+
+        function logout() {
+            authService.logoutUser()
+                .then(() => showToast('Logged out successfully'))
+                .catch(error => showToast(`Logout failed: ${error.message}`));
+        }
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        }
+
+        function toggleNotifications() {
+            notificationsDropdown.classList.toggle('active');
+        }
+
+        function markAllAsRead() {
+            document.querySelectorAll('.notification-badge, .message-badge').forEach(badge => {
+                badge.style.display = 'none';
+            });
+            notificationsDropdown.classList.remove('active');
+            showToast('All notifications marked as read');
+        }
+
+        function addCoins() {
+            if (!currentUserData) return;
+            
+            const newCoins = currentUserData.coins + 50;
+            userCoins.textContent = newCoins;
+            showToast('50 coins added to your account!');
+            
+            // Update in Firestore
+            firestoreService.updateUserCoins(currentUser.uid, 50);
+        }
+
+        function showCreatePostModal() {
+            createPostModal.style.display = 'flex';
+            postText.value = '';
+            imagePreviewContainer.style.display = 'none';
+            recordingUI.style.display = 'none';
+        }
+
+        function closePostModal() {
+            createPostModal.style.display = 'none';
+        }
+
+        function showGoLiveModal() {
+            goLiveModal.style.display = 'flex';
+            document.getElementById('live-title').value = '';
+            document.getElementById('podcast').checked = true;
+            document.getElementById('start-now').checked = true;
+            scheduleOptions.style.display = 'none';
+        }
+
+        function closeGoLiveModal() {
+            goLiveModal.style.display = 'none';
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+                imagePreviewContainer.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function showRecordingUI() {
+            recordingUI.style.display = 'block';
+        }
+
+        function startRecording() {
+            // In a real app, this would use the Web Audio API
+            recordBtn.disabled = true;
+            stopBtn.disabled = false;
+            recordingSeconds = 0;
+            
+            recordingInterval = setInterval(() => {
+                recordingSeconds++;
+                const minutes = Math.floor(recordingSeconds / 60);
+                const seconds = recordingSeconds % 60;
+                timer.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }, 1000);
+            
+            showToast('Recording started...');
+        }
+
+        function stopRecording() {
+            clearInterval(recordingInterval);
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+            showToast('Recording stopped');
+        }
+
+        async function submitPost() {
+            const text = postText.value.trim();
+            const imageFile = imageUpload.files[0];
+            
+            if (!text && !imageFile) {
+                showToast('Please add text or an image');
+                return;
+            }
+            
+            const postData = {
+                userId: currentUser.uid,
+                userName: currentUserData.name,
+                userAvatar: currentUserData.avatar,
+                content: text
+            };
+            
+            try {
+                if (imageFile) {
+                    // In a real app, upload to Firebase Storage
+                    const imageUrl = URL.createObjectURL(imageFile);
+                    postData.image = imageUrl;
+                }
+                
+                await firestoreService.createPost(postData);
+                
+                showToast('Post created successfully!');
+                closePostModal();
+            } catch (error) {
+                console.error("Error creating post:", error);
+                showToast(`Error creating post: ${error.message}`);
+            }
+        }
+
+        function toggleScheduleOptions() {
+            scheduleOptions.style.display = scheduleRadio.checked ? 'block' : 'none';
+        }
+
+        async function startLiveSession() {
+            const title = document.getElementById('live-title').value;
+            if (!title) {
+                showToast('Please enter a title for your live session');
+                return;
+            }
+            
+            const sessionType = document.querySelector('input[name="session-type"]:checked').value;
+            const startTime = document.querySelector('input[name="start-time"]:checked').value;
+            const dateTime = document.getElementById('live-date').value;
+            
+            if (startTime === 'schedule' && !dateTime) {
+                showToast('Please select a date and time');
+                return;
+            }
+            
+            try {
+                const roomData = {
+                    title: title,
+                    host: currentUserData.name,
+                    hostAvatar: currentUserData.avatar,
+                    type: sessionType,
+                    startTime: startTime === 'now' ? new Date() : new Date(dateTime)
+                };
+                
+                await firestoreService.createLiveRoom(roomData);
+                
+                showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
+                closeGoLiveModal();
+            } catch (error) {
+                console.error("Error creating live room:", error);
+                showToast("Failed to start live session");
+            }
+        }
+
+        function joinRoom(roomId) {
+            showToast(`Joining room ${roomId}...`);
+            // In a real app, this would navigate to the live room
+        }
+
+        function setActiveNav(e) {
+            e.preventDefault();
+            const page = this.dataset.page;
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            showToast(`Navigating to ${page} page...`);
+        }
+
+        function closeModals(e) {
+            // Close notifications dropdown if clicking outside
+            if (!notificationBtn.contains(e.target)) {
+                notificationsDropdown.classList.remove('active');
+            }
+            
+            // Close modals if clicking outside
+            if (createPostModal.style.display === 'flex' && !createPostModal.contains(e.target)) {
+                closePostModal();
+            }
+            
+            if (goLiveModal.style.display === 'flex' && !goLiveModal.contains(e.target)) {
+                closeGoLiveModal();
+            }
+        }
+
+        function toggleAuthForm() {
+            loginFormDiv.classList.toggle('hidden');
+            signupFormDiv.classList.toggle('hidden');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login
+            loginForm.addEventListener('submit', handleLogin);
+            loginBtn.addEventListener('click', handleLogin);
+            
+            // Signup
+            signupForm.addEventListener('submit', handleSignup);
+            signupBtn.addEventListener('click', handleSignup);
+            
+            // Toggle between login/signup
+            showSignupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForm();
+            });
+            
+            showLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForm();
+            });
+            
+            // Navigation
+            menuToggle.addEventListener('click', toggleSidebar);
+            logoutBtn.addEventListener('click', logout);
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Notifications
+            notificationBtn.addEventListener('click', toggleNotifications);
+            markAllReadBtn.addEventListener('click', markAllAsRead);
+            
+            // Content creation
+            topUpBtn.addEventListener('click', addCoins);
+            createPostBtn.addEventListener('click', showCreatePostModal);
+            closePostModalBtn.addEventListener('click', closePostModal);
+            goLiveBtn.addEventListener('click', showGoLiveModal);
+            closeLiveModalBtn.addEventListener('click', closeGoLiveModal);
+            cancelLiveBtn.addEventListener('click', closeGoLiveModal);
+            
+            // Post creation
+            addImageBtn.addEventListener('click', () => imageUpload.click());
+            imageUpload.addEventListener('change', handleImageUpload);
+            addVoiceBtn.addEventListener('click', showRecordingUI);
+            recordBtn.addEventListener('click', startRecording);
+            stopBtn.addEventListener('click', stopRecording);
+            submitPostBtn.addEventListener('click', submitPost);
+            
+            // Live session
+            startNowRadio.addEventListener('change', toggleScheduleOptions);
+            scheduleRadio.addEventListener('change', toggleScheduleOptions);
+            startLiveBtn.addEventListener('click', startLiveSession);
+            
+            // Bottom navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', setActiveNav);
+            });
+            
+            // Close modals when clicking outside
+            document.addEventListener('click', closeModals);
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    
+// Signup form logic
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+  const confirmPassword = document.getElementById('signup-confirm-password').value;
+  if (password !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+  signupBtn.classList.add('loading');
+  try {
+    const cred = await authService.registerUser(email, password, name);
+    await firestoreService.createUserProfile(cred.user.uid, {
+      name,
+      email,
+      coins: 250
+    });
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    signupBtn.classList.remove('loading');
+  }
+});
+
+// Login form logic
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  loginBtn.classList.add('loading');
+  try {
+    await authService.loginUser(email, password);
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    loginBtn.classList.remove('loading');
+  }
+});
+
+// Logout
+logoutBtn.addEventListener('click', async () => {
+  await authService.logoutUser();
+});
+
+// Toggle forms
+showSignupLink.addEventListener('click', () => {
+  loginFormDiv.classList.add('hidden');
+  signupFormDiv.classList.remove('hidden');
+});
+showLoginLink.addEventListener('click', () => {
+  signupFormDiv.classList.add('hidden');
+  loginFormDiv.classList.remove('hidden');
+});
+
+</script>
+</body>
+</html>

@@ -349,7 +349,7 @@
             width: 24px;
             text-align: center;
             font-size: 1.1rem;
-            transition: var(--transition;
+            transition: var(--transition);
         }
         
         .menu-item:hover {
@@ -1222,6 +1222,13 @@
             min-height: 100vh;
             padding: 2rem;
             background-color: var(--bg-color);
+            transition: opacity 0.3s ease;
+        }
+        
+        .login-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+            z-index: -1;
         }
         
         .auth-card {
@@ -2207,6 +2214,10 @@
                     console.log("User authenticated:", user.email);
                     currentUser = user;
                     
+                    // Immediately hide login and show app content
+                    loginContainer.classList.add('hidden');
+                    appContent.style.display = 'block';
+                    
                     // Get user profile
                     currentUserData = await firestoreService.getUserProfile(user.uid);
                     if (!currentUserData) {
@@ -2227,17 +2238,12 @@
                     } catch (error) {
                         console.error("Error loading app data:", error);
                     }
-                    
-                    // Show app content and hide login container
-                    loginContainer.style.display = 'none';
-                    appContent.style.display = 'block';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     console.log("No authenticated user");
                     currentUser = null;
                     currentUserData = null;
                     // Show login screen
-                    loginContainer.style.display = 'flex';
+                    loginContainer.classList.remove('hidden');
                     appContent.style.display = 'none';
                 }
             });
@@ -2507,7 +2513,11 @@
 
         function logout() {
             authService.logoutUser()
-                .then(() => showToast('Logged out successfully'))
+                .then(() => {
+                    showToast('Logged out successfully');
+                    loginContainer.classList.remove('hidden');
+                    appContent.style.display = 'none';
+                })
                 .catch(error => showToast(`Logout failed: ${error.message}`));
         }
 

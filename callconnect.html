@@ -349,7 +349,7 @@
             width: 24px;
             text-align: center;
             font-size: 1.1rem;
-            transition: var(--transition);
+            transition: var(--transition;
         }
         
         .menu-item:hover {
@@ -2228,9 +2228,10 @@
                         console.error("Error loading app data:", error);
                     }
                     
-                    // Show app content
+                    // Show app content and hide login container
                     loginContainer.style.display = 'none';
                     appContent.style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     console.log("No authenticated user");
                     currentUser = null;

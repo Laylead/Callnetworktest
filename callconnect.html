@@ -6,6 +6,13 @@
     <title>CallConnect - Social Audio & Video</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -1212,7 +1219,6 @@
             min-height: 100vh;
             padding: 2rem;
             background-color: var(--bg-color);
-            transition: opacity 0.3s ease;
         }
         
         .auth-card {
@@ -1437,7 +1443,7 @@
             color: var(--text-color);
             font-size: 0.9rem;
             outline: none;
-            transition: var(--transition;
+            transition: var(--transition);
         }
         
         .comment-input:focus {
@@ -1464,50 +1470,6 @@
         .like-count {
             margin-left: 0.25rem;
             font-weight: 600;
-        }
-        
-        /* Loading overlay styles */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-        }
-        
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s linear infinite;
-        }
-        
-        .loading-message {
-            color: white;
-            margin-top: 20px;
-            font-size: 1.2rem;
-            text-align: center;
-            max-width: 300px;
-        }
-        
-        /* Dashboard transition animation */
-        #app-content {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        
-        #app-content.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
         
         @keyframes spin {
@@ -1580,14 +1542,6 @@
 </head>
 <body>
     <div class="app-container" id="app-container">
-        <!-- Loading overlay -->
-        <div class="loading-overlay" id="loading-overlay" style="display: none;">
-            <div class="spinner-container">
-                <div class="spinner"></div>
-                <div class="loading-message" id="loading-message">Loading your dashboard...</div>
-            </div>
-        </div>
-
         <!-- Login/Signup screen -->
         <div class="login-container" id="login-container">
             <div class="auth-card">
@@ -1633,6 +1587,25 @@
                         <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
                         <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
                         <input type="password" id="signup-confirm-password" class="auth-input" placeholder="Confirm Password" required>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="male" name="gender" value="male" checked>
+                                    <label for="male">Male</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="female" name="gender" value="female">
+                                    <label for="female">Female</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="other" name="gender" value="other">
+                                    <label for="other">Prefer not to say</label>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <button class="auth-btn" id="signup-btn">Create Account</button>
                     </form>
                     
@@ -1643,7 +1616,7 @@
             </div>
         </div>
         
-        <!-- Main app content -->
+        <!-- Main app content (initially hidden) -->
         <div id="app-content" style="display:none">
             <div class="header">
                 <div class="logo">
@@ -1667,6 +1640,7 @@
                             <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
                         </div>
                         <div id="notifications-list">
+                            <!-- Notifications will be loaded here -->
                             <div class="notification-item">
                                 <img src="https://randomuser.me/api/portraits/women/32.jpg" class="notification-avatar">
                                 <div class="notification-content">
@@ -2019,12 +1993,12 @@
     <script>
         // Firebase configuration (replace with your actual config)
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyAPIKey1234567890",
+            apiKey: "AIzaSyC8d5gT2hTfKQdZ1zV7J0Xq7QZ9X3XxXxX",
             authDomain: "callconnect-demo.firebaseapp.com",
             projectId: "callconnect-demo",
             storageBucket: "callconnect-demo.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abc123def456"
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
         };
 
         // Initialize Firebase
@@ -2034,13 +2008,15 @@
         const authService = {
             auth: firebase.auth(),
             
-            registerUser: function(email, password, name) {
+            registerUser: function(email, password, name, gender) {
                 return this.auth.createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
                         // Update user profile with display name
                         return userCredential.user.updateProfile({
                             displayName: name
-                        }).then(() => userCredential);
+                        }).then(() => {
+                            return { userCredential, gender };
+                        });
                     });
             },
             
@@ -2057,12 +2033,121 @@
             }
         };
 
+        const firestoreService = {
+            db: firebase.firestore(),
+            
+            createUserProfile: async function(userId, userData) {
+                const userRef = this.db.collection('users').doc(userId);
+                await userRef.set({
+                    ...userData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                return userRef.get();
+            },
+            
+            getUserProfile: async function(userId) {
+                const userRef = this.db.collection('users').doc(userId);
+                const docSnap = await userRef.get();
+                return docSnap.exists() ? docSnap.data() : null;
+            },
+            
+            updateUserCoins: async function(userId, amount) {
+                const userRef = this.db.collection('users').doc(userId);
+                await userRef.update({
+                    coins: firebase.firestore.FieldValue.increment(amount)
+                });
+                return userRef.get();
+            },
+            
+            createPost: async function(postData) {
+                return this.db.collection('posts').add({
+                    ...postData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: 0,
+                    comments: 0
+                });
+            },
+            
+            createLiveRoom: async function(roomData) {
+                return this.db.collection('liveRooms').add({
+                    ...roomData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    members: 1,
+                    status: 'live'
+                });
+            },
+            
+            addComment: async function(postId, commentData) {
+                return this.db.collection('posts').doc(postId).collection('comments').add({
+                    ...commentData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: 0
+                });
+            },
+            
+            likePost: async function(postId, userId) {
+                const postRef = this.db.collection('posts').doc(postId);
+                const likeRef = postRef.collection('likes').doc(userId);
+                
+                const exists = (await likeRef.get()).exists;
+                if (exists) {
+                    await likeRef.delete();
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(-1)
+                    });
+                    return false;
+                } else {
+                    await likeRef.set({
+                        userId: userId,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    await postRef.update({
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                    return true;
+                }
+            },
+            
+            getPosts: async function() {
+                const snapshot = await this.db.collection('posts')
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getLiveRooms: async function() {
+                const snapshot = await this.db.collection('liveRooms')
+                    .where('status', '==', 'live')
+                    .orderBy('createdAt', 'desc')
+                    .limit(10)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getStories: async function() {
+                const snapshot = await this.db.collection('stories')
+                    .where('expiresAt', '>', new Date())
+                    .orderBy('expiresAt', 'asc')
+                    .limit(10)
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            },
+            
+            getComments: async function(postId) {
+                const snapshot = await this.db.collection('posts').doc(postId)
+                    .collection('comments')
+                    .orderBy('createdAt', 'asc')
+                    .get();
+                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            }
+        };
+
         // DOM elements
         const appContainer = document.getElementById('app-container');
         const loginContainer = document.getElementById('login-container');
         const appContent = document.getElementById('app-content');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const loadingMessage = document.getElementById('loading-message');
         const loginForm = document.getElementById('login-form-element');
         const signupForm = document.getElementById('signup-form-element');
         const loginBtn = document.getElementById('login-btn');
@@ -2132,17 +2217,6 @@
             }, 3000);
         }
 
-        // Show loading overlay
-        function showLoading(message = "Loading...") {
-            loadingMessage.textContent = message;
-            loadingOverlay.style.display = 'flex';
-        }
-
-        // Hide loading overlay
-        function hideLoading() {
-            loadingOverlay.style.display = 'none';
-        }
-
         // Initialize the app
         function init() {
             setupEventListeners();
@@ -2161,44 +2235,30 @@
                     console.log("User authenticated:", user.email);
                     currentUser = user;
                     
-                    // Immediately show dashboard
-                    loginContainer.style.display = 'none';
-                    appContent.style.display = 'block';
-                    
-                    // Show loading indicator
-                    showLoading("Preparing your dashboard...");
-                    
-                    try {
-                        // Simulate user profile loading
+                    // Get user profile
+                    currentUserData = await firestoreService.getUserProfile(user.uid);
+                    if (!currentUserData) {
+                        // Create new user profile
                         currentUserData = {
                             name: user.displayName || user.email.split('@')[0],
-                            avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-                            coins: 250,
+                            avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
+                            coins: 100,
                             following: []
                         };
-                        
-                        updateUserProfile(currentUserData);
-                        
-                        // Simulate data loading
-                        await new Promise(resolve => setTimeout(resolve, 1500));
-                        
-                        // Render UI
-                        renderStories();
-                        renderLiveRooms();
-                        renderCommunityFeed();
-                        
-                        // Add fade-in effect
-                        appContent.classList.add('visible');
-                        
+                        await firestoreService.createUserProfile(user.uid, currentUserData);
+                    }
+                    
+                    updateUserProfile(currentUserData);
+                    
+                    try {
+                        await loadAppData();
                     } catch (error) {
                         console.error("Error loading app data:", error);
-                        showToast("Failed to load your dashboard");
-                    } finally {
-                        // Hide loading indicator
-                        setTimeout(() => {
-                            hideLoading();
-                        }, 500);
                     }
+                    
+                    // Show app content
+                    loginContainer.style.display = 'none';
+                    appContent.style.display = 'block';
                 } else {
                     console.log("No authenticated user");
                     currentUser = null;
@@ -2206,7 +2266,6 @@
                     // Show login screen
                     loginContainer.style.display = 'flex';
                     appContent.style.display = 'none';
-                    appContent.classList.remove('visible');
                 }
             });
         }
@@ -2215,6 +2274,35 @@
             usernameDisplay.textContent = userData.name;
             userAvatar.src = userData.avatar;
             userCoins.textContent = userData.coins;
+        }
+
+        async function loadAppData() {
+            // Load stories
+            try {
+                stories = await firestoreService.getStories();
+                renderStories();
+            } catch (error) {
+                console.error("Error loading stories:", error);
+                showToast("Failed to load stories");
+            }
+            
+            // Load live rooms
+            try {
+                liveRooms = await firestoreService.getLiveRooms();
+                renderLiveRooms(liveRooms);
+            } catch (error) {
+                console.error("Error loading live rooms:", error);
+                showToast("Failed to load live rooms");
+            }
+            
+            // Load posts
+            try {
+                posts = await firestoreService.getPosts();
+                renderCommunityFeed(posts);
+            } catch (error) {
+                console.error("Error loading posts:", error);
+                showToast("Failed to load community feed");
+            }
         }
 
         function renderStories() {
@@ -2231,15 +2319,7 @@
             `;
             
             // Add other stories
-            const demoStories = [
-                { avatar: 'https://randomuser.me/api/portraits/women/44.jpg', username: 'Sarah', new: true },
-                { avatar: 'https://randomuser.me/api/portraits/men/22.jpg', username: 'Mike', new: false },
-                { avatar: 'https://randomuser.me/api/portraits/women/68.jpg', username: 'Emma', new: true },
-                { avatar: 'https://randomuser.me/api/portraits/men/41.jpg', username: 'David', new: false },
-                { avatar: 'https://randomuser.me/api/portraits/women/32.jpg', username: 'Lisa', new: true }
-            ];
-            
-            demoStories.forEach(story => {
+            stories.forEach(story => {
                 storiesContainer.innerHTML += `
                     <div class="story ${story.new ? 'new' : ''}">
                         <div class="story-avatar">
@@ -2251,46 +2331,27 @@
             });
         }
 
-        function renderLiveRooms() {
+        function renderLiveRooms(rooms) {
             liveRoomsContainer.innerHTML = '';
             
-            const demoRooms = [
-                {
-                    id: 'room1',
-                    title: 'Music Jam Session',
-                    cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                    host: 'Alex',
-                    hostAvatar: 'https://randomuser.me/api/portraits/men/22.jpg',
-                    members: 12,
-                    type: 'podcast'
-                },
-                {
-                    id: 'room2',
-                    title: 'Tech Talk: Future of Web Development',
-                    cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                    host: 'Sarah',
-                    hostAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-                    members: 8,
-                    type: 'stream'
-                },
-                {
-                    id: 'room3',
-                    title: 'Gaming Night - Fortnite Tournament',
-                    cover: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                    host: 'Mike',
-                    hostAvatar: 'https://randomuser.me/api/portraits/men/41.jpg',
-                    members: 15,
-                    type: 'stream'
-                }
-            ];
+            if (rooms.length === 0) {
+                liveRoomsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video-slash"></i>
+                        <h3>No live rooms</h3>
+                        <p>Be the first to start a live session!</p>
+                    </div>
+                `;
+                return;
+            }
             
-            demoRooms.forEach(room => {
+            rooms.forEach(room => {
                 liveRoomsContainer.innerHTML += `
                     <div class="live-room-card">
                         <div class="live-badge">
                             <i class="fas fa-circle"></i> LIVE
                         </div>
-                        <img src="${room.cover}" alt="${room.title}" class="live-room-image">
+                        <img src="${room.cover || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${room.title}" class="live-room-image">
                         <div class="live-room-info">
                             <h3 class="live-room-title">${room.title}</h3>
                             <div class="live-room-members">
@@ -2315,44 +2376,21 @@
             });
         }
 
-        function renderCommunityFeed() {
+        function renderCommunityFeed(posts) {
             feedContainer.innerHTML = '';
             
-            const demoPosts = [
-                {
-                    id: 'post1',
-                    userId: 'user1',
-                    userName: 'John Doe',
-                    userAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-                    content: 'Just joined CallConnect! Excited to connect with everyone through audio and video calls. What features are you most excited about? 😊',
-                    createdAt: new Date(),
-                    likes: 3,
-                    comments: 1
-                },
-                {
-                    id: 'post2',
-                    userId: 'user2',
-                    userName: 'Sarah Johnson',
-                    userAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-                    content: 'Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic. 🎧',
-                    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-                    likes: 12,
-                    comments: 5
-                },
-                {
-                    id: 'post3',
-                    userId: 'user3',
-                    userName: 'Mike Thompson',
-                    userAvatar: 'https://randomuser.me/api/portraits/men/22.jpg',
-                    content: 'Started a new podcast series on web development. Join my room every Tuesday at 8 PM!',
-                    createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
-                    likes: 8,
-                    comments: 3
-                }
-            ];
+            if (posts.length === 0) {
+                feedContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No posts yet</h3>
+                        <p>Follow more users or create your own post to start seeing content in your feed.</p>
+                    </div>
+                `;
+                return;
+            }
             
-            demoPosts.forEach(post => {
+            posts.forEach(post => {
                 const postElement = createPostElement(post);
                 feedContainer.appendChild(postElement);
             });
@@ -2364,9 +2402,9 @@
             postElement.dataset.id = post.id;
             
             let roleBadge = '';
-            if (post.userId === 'user1') roleBadge = '<span class="admin-badge">YOU</span>';
+            if (post.userId === currentUser.uid) roleBadge = '<span class="admin-badge">YOU</span>';
             
-            const formattedTime = formatDate(post.createdAt);
+            const formattedTime = formatDate(post.createdAt?.toDate() || new Date());
             
             postElement.innerHTML = `
                 <div class="feed-header">
@@ -2434,14 +2472,8 @@
                 loginBtn.classList.add('loading');
                 loginBtn.disabled = true;
                 
-                // Show global loading
-                showLoading("Signing in...");
-                
-                // Simulate authentication
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Hide loading
-                hideLoading();
+                // Authenticate user
+                await authService.loginUser(email, password);
                 
                 // Reset login button
                 loginBtn.classList.remove('loading');
@@ -2449,17 +2481,10 @@
                 
                 // Show success toast
                 showToast('Login successful!');
-                
-                // Trigger auth state change
-                checkAuthState();
-                
             } catch (error) {
                 // Reset login button
                 loginBtn.classList.remove('loading');
                 loginBtn.disabled = false;
-                
-                // Hide global loading
-                hideLoading();
                 
                 // Show error toast
                 showToast(`Login failed: ${error.message}`);
@@ -2472,6 +2497,7 @@
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             const confirmPassword = document.getElementById('signup-confirm-password').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
             
             if (!name || !email || !password || !confirmPassword) {
                 showToast('Please fill all fields');
@@ -2488,14 +2514,21 @@
                 signupBtn.classList.add('loading');
                 signupBtn.disabled = true;
                 
-                // Show global loading
-                showLoading("Creating your account...");
+                // Create user account
+                const { userCredential } = await authService.registerUser(email, password, name, gender);
                 
-                // Simulate account creation
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                // Create user profile in Firestore
+                const userProfileData = {
+                    name: name,
+                    email: email,
+                    gender: gender,
+                    avatar: gender === 'female' ? 
+                        'https://randomuser.me/api/portraits/women/32.jpg' : 
+                        'https://randomuser.me/api/portraits/men/32.jpg',
+                    coins: 100
+                };
                 
-                // Hide loading
-                hideLoading();
+                await firestoreService.createUserProfile(userCredential.user.uid, userProfileData);
                 
                 // Reset signup button
                 signupBtn.classList.remove('loading');
@@ -2503,17 +2536,10 @@
                 
                 // Show success toast
                 showToast('Account created successfully!');
-                
-                // Switch to login form
-                toggleAuthForm();
-                
             } catch (error) {
                 // Reset signup button
                 signupBtn.classList.remove('loading');
                 signupBtn.disabled = false;
-                
-                // Hide global loading
-                hideLoading();
                 
                 // Show error toast
                 showToast(`Signup failed: ${error.message}`);
@@ -2522,12 +2548,7 @@
 
         function logout() {
             authService.logoutUser()
-                .then(() => {
-                    showToast('Logged out successfully');
-                    loginContainer.style.display = 'flex';
-                    appContent.style.display = 'none';
-                    appContent.classList.remove('visible');
-                })
+                .then(() => showToast('Logged out successfully'))
                 .catch(error => showToast(`Logout failed: ${error.message}`));
         }
 
@@ -2560,6 +2581,9 @@
             const newCoins = currentUserData.coins + 50;
             userCoins.textContent = newCoins;
             showToast('50 coins added to your account!');
+            
+            // Update in Firestore
+            firestoreService.updateUserCoins(currentUser.uid, 50);
         }
 
         function showCreatePostModal() {
@@ -2633,8 +2657,28 @@
                 return;
             }
             
-            showToast('Post created successfully!');
-            closePostModal();
+            const postData = {
+                userId: currentUser.uid,
+                userName: currentUserData.name,
+                userAvatar: currentUserData.avatar,
+                content: text
+            };
+            
+            try {
+                if (imageFile) {
+                    // In a real app, upload to Firebase Storage
+                    const imageUrl = URL.createObjectURL(imageFile);
+                    postData.image = imageUrl;
+                }
+                
+                await firestoreService.createPost(postData);
+                
+                showToast('Post created successfully!');
+                closePostModal();
+            } catch (error) {
+                console.error("Error creating post:", error);
+                showToast(`Error creating post: ${error.message}`);
+            }
         }
 
         function toggleScheduleOptions() {
@@ -2657,12 +2701,28 @@
                 return;
             }
             
-            showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
-            closeGoLiveModal();
+            try {
+                const roomData = {
+                    title: title,
+                    host: currentUserData.name,
+                    hostAvatar: currentUserData.avatar,
+                    type: sessionType,
+                    startTime: startTime === 'now' ? new Date() : new Date(dateTime)
+                };
+                
+                await firestoreService.createLiveRoom(roomData);
+                
+                showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
+                closeGoLiveModal();
+            } catch (error) {
+                console.error("Error creating live room:", error);
+                showToast("Failed to start live session");
+            }
         }
 
         function joinRoom(roomId) {
             showToast(`Joining room ${roomId}...`);
+            // In a real app, this would navigate to the live room
         }
 
         function setActiveNav(e) {

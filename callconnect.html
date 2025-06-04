@@ -13,6 +13,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
     
+    <!-- External Firebase configuration -->
+    <script src="config.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -1991,17 +1994,7 @@
     </div>
 
     <script>
-        // Firebase configuration (replace with your actual config)
-        const firebaseConfig = {
-            apiKey: "AIzaSyC8d5gT2hTfKQdZ1zV7J0Xq7QZ9X3XxXxX",
-            authDomain: "callconnect-demo.firebaseapp.com",
-            projectId: "callconnect-demo",
-            storageBucket: "callconnect-demo.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
-        };
-
-        // Initialize Firebase
+        // Initialize Firebase with config from external file
         firebase.initializeApp(firebaseConfig);
         
         // Service implementations

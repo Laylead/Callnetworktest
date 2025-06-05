@@ -1150,6 +1150,7 @@
             flex: 1;
             text-align: center;
             font-size: 1rem;
+            position: relative;
         }
         
         .btn-primary {
@@ -1171,6 +1172,24 @@
         
         .btn-outline:hover {
             background-color: var(--input-bg);
+        }
+        
+        .btn.loading {
+            color: transparent !important;
+        }
+        
+        .btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
         }
         
         .ceo-badge {
@@ -1232,6 +1251,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            position: relative;
         }
         
         .auth-header {
@@ -1474,31 +1494,17 @@
             font-weight: 600;
         }
         
-        .spinner-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
+        .config-error {
+            background-color: var(--warning);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            margin-top: 1rem;
+            text-align: center;
         }
         
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top: 5px solid var(--primary);
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .config-error i {
+            margin-right: 0.5rem;
         }
         
         @media (min-width: 768px) {
@@ -1566,11 +1572,6 @@
     </style>
 </head>
 <body>
-    <!-- Authentication Spinner -->
-    <div class="spinner-container" id="auth-spinner">
-        <div class="spinner"></div>
-    </div>
-    
     <div class="app-container" id="app-container">
         <!-- Login/Signup screen -->
         <div class="login-container" id="login-container">
@@ -1623,6 +1624,12 @@
                     <div class="auth-footer">
                         <p>Already have an account? <a href="#" id="show-login">Login</a></p>
                     </div>
+                </div>
+                
+                <!-- Configuration error message -->
+                <div id="config-error" class="config-error hidden">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Firebase configuration not found. Please check your config.js file.
                 </div>
             </div>
         </div>
@@ -2001,18 +2008,29 @@
     </div>
 
     <script>
-        // Initialize Firebase using external config
-        if (window.firebaseConfig) {
-            firebase.initializeApp(window.firebaseConfig);
-        } else {
+        // Check for Firebase configuration
+        if (!window.firebaseConfig) {
             console.error('Firebase configuration not found!');
-            alert('Application configuration error. Please try again later.');
+            document.getElementById('config-error').classList.remove('hidden');
+        } else {
+            try {
+                firebase.initializeApp(window.firebaseConfig);
+            } catch (error) {
+                console.error('Firebase initialization failed:', error);
+                document.getElementById('config-error').classList.remove('hidden');
+                document.getElementById('config-error').textContent = 
+                    'Firebase initialization failed: ' + error.message;
+            }
         }
         
         const authService = {
-            auth: firebase.auth(),
+            auth: firebase.auth ? firebase.auth() : null,
             
             registerUser: function(email, password, name) {
+                if (!this.auth) {
+                    throw new Error("Firebase auth not initialized");
+                }
+                
                 return this.auth.createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
                         return userCredential.user.updateProfile({
@@ -2022,22 +2040,39 @@
             },
             
             loginUser: function(email, password) {
+                if (!this.auth) {
+                    throw new Error("Firebase auth not initialized");
+                }
+                
                 return this.auth.signInWithEmailAndPassword(email, password);
             },
             
             logoutUser: function() {
+                if (!this.auth) {
+                    throw new Error("Firebase auth not initialized");
+                }
+                
                 return this.auth.signOut();
             },
             
             onAuthStateChanged: function(callback) {
+                if (!this.auth) {
+                    console.error("Firebase auth not initialized");
+                    return;
+                }
+                
                 return this.auth.onAuthStateChanged(callback);
             }
         };
 
         const firestoreService = {
-            db: firebase.firestore(),
+            db: firebase.firestore ? firebase.firestore() : null,
             
             createUserProfile: async function(userId, userData) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 const userRef = this.db.collection('users').doc(userId);
                 await userRef.set({
                     ...userData,
@@ -2048,12 +2083,20 @@
             },
             
             getUserProfile: async function(userId) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 const userRef = this.db.collection('users').doc(userId);
                 const docSnap = await userRef.get();
                 return docSnap.exists() ? docSnap.data() : null;
             },
             
             updateUserCoins: async function(userId, amount) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 const userRef = this.db.collection('users').doc(userId);
                 await userRef.update({
                     coins: firebase.firestore.FieldValue.increment(amount)
@@ -2062,6 +2105,10 @@
             },
             
             createPost: async function(postData) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 return this.db.collection('posts').add({
                     ...postData,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2071,6 +2118,10 @@
             },
             
             createLiveRoom: async function(roomData) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 return this.db.collection('liveRooms').add({
                     ...roomData,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2128,7 +2179,7 @@
         const startLiveBtn = document.getElementById('start-live-btn');
         const cancelLiveBtn = document.getElementById('cancel-live-btn');
         const navItems = document.querySelectorAll('.nav-item');
-        const authSpinner = document.getElementById('auth-spinner');
+        const configError = document.getElementById('config-error');
         
         let currentUser = null;
         let currentUserData = null;
@@ -2152,8 +2203,6 @@
         }
         
         function updateUIForAuthState(user) {
-            authSpinner.style.display = 'none';
-            
             if (user) {
                 loginContainer.style.display = 'none';
                 appContent.style.display = 'flex';
@@ -2165,39 +2214,44 @@
 
         function init() {
             setupEventListeners();
-            checkAuthState();
             
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
             themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            
+            if (window.firebaseConfig) {
+                checkAuthState();
+            }
         }
 
         function checkAuthState() {
-            authSpinner.style.display = 'flex';
-            
             authService.onAuthStateChanged(async (user) => {
                 updateUIForAuthState(user);
                 
                 if (user) {
                     currentUser = user;
                     
-                    currentUserData = await firestoreService.getUserProfile(user.uid);
-                    if (!currentUserData) {
-                        currentUserData = {
-                            name: user.displayName || user.email.split('@')[0],
-                            avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
-                            coins: 100,
-                            following: []
-                        };
-                        await firestoreService.createUserProfile(user.uid, currentUserData);
-                    }
-                    
-                    updateUserProfile(currentUserData);
-                    
                     try {
-                        await loadAppData();
+                        currentUserData = await firestoreService.getUserProfile(user.uid);
+                        if (!currentUserData) {
+                            currentUserData = {
+                                name: user.displayName || user.email.split('@')[0],
+                                avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
+                                coins: 100,
+                                following: []
+                            };
+                            await firestoreService.createUserProfile(user.uid, currentUserData);
+                        }
+                        
+                        updateUserProfile(currentUserData);
+                        
+                        try {
+                            await loadAppData();
+                        } catch (error) {
+                            showToast("Error loading app data");
+                        }
                     } catch (error) {
-                        showToast("Error loading app data");
+                        showToast("Error loading user profile");
                     }
                 } else {
                     currentUser = null;
@@ -2386,12 +2440,15 @@
             }
             
             try {
-                authSpinner.style.display = 'flex';
+                // Set loading state on button
+                loginBtn.classList.add('loading');
+                
                 await authService.loginUser(email, password);
                 showToast('Login successful!');
             } catch (error) {
-                authSpinner.style.display = 'none';
                 showToast(`Login failed: ${error.message}`);
+            } finally {
+                loginBtn.classList.remove('loading');
             }
         }
 
@@ -2413,23 +2470,28 @@
             }
             
             try {
-                authSpinner.style.display = 'flex';
+                // Set loading state on button
+                signupBtn.classList.add('loading');
+                
                 await authService.registerUser(email, password, name);
                 showToast('Account created successfully!');
             } catch (error) {
-                authSpinner.style.display = 'none';
                 showToast(`Signup failed: ${error.message}`);
+            } finally {
+                signupBtn.classList.remove('loading');
             }
         }
 
         function logout() {
-            authSpinner.style.display = 'flex';
-            authService.logoutUser()
-                .then(() => showToast('Logged out successfully'))
-                .catch(error => {
-                    authSpinner.style.display = 'none';
-                    showToast(`Logout failed: ${error.message}`);
-                });
+            try {
+                authService.logoutUser()
+                    .then(() => showToast('Logged out successfully'))
+                    .catch(error => {
+                        showToast(`Logout failed: ${error.message}`);
+                    });
+            } catch (error) {
+                showToast(`Logout failed: ${error.message}`);
+            }
         }
 
         function toggleSidebar() {
@@ -2543,6 +2605,9 @@
             };
             
             try {
+                // Set loading state on button
+                submitPostBtn.classList.add('loading');
+                
                 if (imageFile) {
                     const imageUrl = URL.createObjectURL(imageFile);
                     postData.image = imageUrl;
@@ -2554,6 +2619,8 @@
                 closePostModal();
             } catch (error) {
                 showToast(`Error creating post: ${error.message}`);
+            } finally {
+                submitPostBtn.classList.remove('loading');
             }
         }
 
@@ -2578,6 +2645,9 @@
             }
             
             try {
+                // Set loading state on button
+                startLiveBtn.classList.add('loading');
+                
                 const roomData = {
                     title: title,
                     host: currentUserData.name,
@@ -2592,6 +2662,8 @@
                 closeGoLiveModal();
             } catch (error) {
                 showToast("Failed to start live session");
+            } finally {
+                startLiveBtn.classList.remove('loading');
             }
         }
 

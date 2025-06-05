@@ -13,6 +13,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
     
+    <!-- External Firebase Configuration -->
+    <script src="config.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -220,7 +223,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
+            padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border-color);
         }
         
@@ -886,30 +889,24 @@
             bottom: 90px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--gradient-primary);
+            background-color: var(--dark);
             color: white;
             padding: 14px 28px;
             border-radius: var(--radius-md);
             box-shadow: var(--shadow-xl);
             z-index: 1000;
-            animation: slideIn 0.3s ease;
+            animation: fadeIn 0.3s ease;
             max-width: 90%;
             text-align: center;
-            font-weight: 600;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
         
-        @keyframes slideIn {
-            from { 
-                opacity: 0; 
-                transform: translateX(-50%) translateY(20px);
-            }
-            to { 
-                opacity: 1; 
-                transform: translateX(-50%) translateY(0);
-            }
+        .toast i {
+            font-size: 1.2rem;
+            color: var(--primary);
         }
         
         .notifications-dropdown {
@@ -1298,18 +1295,22 @@
             position: relative;
         }
         
-        .spinner {
-            width: 24px;
-            height: 24px;
+        .auth-btn.loading {
+            color: transparent !important;
+        }
+        
+        .auth-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
         
         .auth-btn:hover {
@@ -1349,7 +1350,6 @@
             display: none;
         }
         
-        /* Comments Section */
         .comments-section {
             padding: 1rem;
             border-top: 1px solid var(--border-color);
@@ -1474,6 +1474,33 @@
             font-weight: 600;
         }
         
+        .spinner-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @media (min-width: 768px) {
             .header { padding: 0.75rem 2rem; }
             .main-content { padding: 2rem; }
@@ -1539,6 +1566,11 @@
     </style>
 </head>
 <body>
+    <!-- Authentication Spinner -->
+    <div class="spinner-container" id="auth-spinner">
+        <div class="spinner"></div>
+    </div>
+    
     <div class="app-container" id="app-container">
         <!-- Login/Signup screen -->
         <div class="login-container" id="login-container">
@@ -1585,25 +1617,6 @@
                         <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
                         <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
                         <input type="password" id="signup-confirm-password" class="auth-input" placeholder="Confirm Password" required>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Gender</label>
-                            <div class="radio-group">
-                                <div class="radio-option">
-                                    <input type="radio" id="male" name="gender" value="male" checked>
-                                    <label for="male">Male</label>
-                                </div>
-                                <div class="radio-option">
-                                    <input type="radio" id="female" name="gender" value="female">
-                                    <label for="female">Female</label>
-                                </div>
-                                <div class="radio-option">
-                                    <input type="radio" id="other" name="gender" value="other">
-                                    <label for="other">Prefer not to say</label>
-                                </div>
-                            </div>
-                        </div>
-                        
                         <button class="auth-btn" id="signup-btn">Create Account</button>
                     </form>
                     
@@ -1614,7 +1627,7 @@
             </div>
         </div>
         
-        <!-- Main app content (initially hidden) -->
+        <!-- Main app content -->
         <div id="app-content" style="display:none">
             <div class="header">
                 <div class="logo">
@@ -1988,40 +2001,28 @@
     </div>
 
     <script>
-        // Firebase configuration - replace with your actual config
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        // Initialize Firebase using external config
+        if (window.firebaseConfig) {
+            firebase.initializeApp(window.firebaseConfig);
+        } else {
+            console.error('Firebase configuration not found!');
+            alert('Application configuration error. Please try again later.');
+        }
         
-        // Service implementations
         const authService = {
             auth: firebase.auth(),
             
-            registerUser: function(email, password, name, gender) {
+            registerUser: function(email, password, name) {
                 return this.auth.createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
                         return userCredential.user.updateProfile({
                             displayName: name
-                        }).then(() => {
-                            return { userCredential, gender };
-                        });
+                        }).then(() => userCredential);
                     });
             },
             
             loginUser: function(email, password) {
-                return this.auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        // Force a token refresh to ensure fresh auth state
-                        return userCredential.user.getIdToken(true);
-                    });
+                return this.auth.signInWithEmailAndPassword(email, password);
             },
             
             logoutUser: function() {
@@ -2049,7 +2050,7 @@
             getUserProfile: async function(userId) {
                 const userRef = this.db.collection('users').doc(userId);
                 const docSnap = await userRef.get();
-                return docSnap.exists ? docSnap.data() : null;
+                return docSnap.exists() ? docSnap.data() : null;
             },
             
             updateUserCoins: async function(userId, amount) {
@@ -2076,75 +2077,9 @@
                     members: 1,
                     status: 'live'
                 });
-            },
-            
-            addComment: async function(postId, commentData) {
-                return this.db.collection('posts').doc(postId).collection('comments').add({
-                    ...commentData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: 0
-                });
-            },
-            
-            likePost: async function(postId, userId) {
-                const postRef = this.db.collection('posts').doc(postId);
-                const likeRef = postRef.collection('likes').doc(userId);
-                
-                const exists = (await likeRef.get()).exists;
-                if (exists) {
-                    await likeRef.delete();
-                    await postRef.update({
-                        likes: firebase.firestore.FieldValue.increment(-1)
-                    });
-                    return false;
-                } else {
-                    await likeRef.set({
-                        userId: userId,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    await postRef.update({
-                        likes: firebase.firestore.FieldValue.increment(1)
-                    });
-                    return true;
-                }
-            },
-            
-            getPosts: async function() {
-                const snapshot = await this.db.collection('posts')
-                    .orderBy('createdAt', 'desc')
-                    .limit(20)
-                    .get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            },
-            
-            getLiveRooms: async function() {
-                const snapshot = await this.db.collection('liveRooms')
-                    .where('status', '==', 'live')
-                    .orderBy('createdAt', 'desc')
-                    .limit(10)
-                    .get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            },
-            
-            getStories: async function() {
-                const snapshot = await this.db.collection('stories')
-                    .where('expiresAt', '>', new Date())
-                    .orderBy('expiresAt', 'asc')
-                    .limit(10)
-                    .get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            },
-            
-            getComments: async function(postId) {
-                const snapshot = await this.db.collection('posts').doc(postId)
-                    .collection('comments')
-                    .orderBy('createdAt', 'asc')
-                    .get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             }
         };
 
-        // DOM elements
         const appContainer = document.getElementById('app-container');
         const loginContainer = document.getElementById('login-container');
         const appContent = document.getElementById('app-content');
@@ -2193,8 +2128,8 @@
         const startLiveBtn = document.getElementById('start-live-btn');
         const cancelLiveBtn = document.getElementById('cancel-live-btn');
         const navItems = document.querySelectorAll('.nav-item');
+        const authSpinner = document.getElementById('auth-spinner');
         
-        // Global variables
         let currentUser = null;
         let currentUserData = null;
         let recorder, audioChunks = [];
@@ -2205,7 +2140,6 @@
         let liveRooms = [];
         let stories = [];
 
-        // Helper function for toast notifications
         function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'toast';
@@ -2213,13 +2147,22 @@
             document.body.appendChild(toast);
             
             setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(-50%) translateY(-20px)';
-                setTimeout(() => toast.remove(), 300);
+                toast.remove();
             }, 3000);
         }
+        
+        function updateUIForAuthState(user) {
+            authSpinner.style.display = 'none';
+            
+            if (user) {
+                loginContainer.style.display = 'none';
+                appContent.style.display = 'flex';
+            } else {
+                loginContainer.style.display = 'flex';
+                appContent.style.display = 'none';
+            }
+        }
 
-        // Initialize the app
         function init() {
             setupEventListeners();
             checkAuthState();
@@ -2229,44 +2172,36 @@
             themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
 
-        // Check authentication state
         function checkAuthState() {
-            console.log("Setting up auth state listener...");
+            authSpinner.style.display = 'flex';
+            
             authService.onAuthStateChanged(async (user) => {
-                console.log("Auth state changed:", user);
+                updateUIForAuthState(user);
+                
                 if (user) {
-                    console.log("User logged in:", user.uid);
                     currentUser = user;
                     
+                    currentUserData = await firestoreService.getUserProfile(user.uid);
+                    if (!currentUserData) {
+                        currentUserData = {
+                            name: user.displayName || user.email.split('@')[0],
+                            avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
+                            coins: 100,
+                            following: []
+                        };
+                        await firestoreService.createUserProfile(user.uid, currentUserData);
+                    }
+                    
+                    updateUserProfile(currentUserData);
+                    
                     try {
-                        currentUserData = await firestoreService.getUserProfile(user.uid);
-                        if (!currentUserData) {
-                            currentUserData = {
-                                name: user.displayName || user.email.split('@')[0],
-                                avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
-                                coins: 100,
-                                following: []
-                            };
-                            await firestoreService.createUserProfile(user.uid, currentUserData);
-                        }
-                        
-                        updateUserProfile(currentUserData);
                         await loadAppData();
-                        
-                        // Show the app content and hide login
-                        loginContainer.style.display = 'none';
-                        appContent.style.display = 'block';
-                        showToast(`Welcome back, ${currentUserData.name}!`);
                     } catch (error) {
-                        console.error("Error in auth state change:", error);
-                        showToast("Error loading user data");
+                        showToast("Error loading app data");
                     }
                 } else {
-                    console.log("No user logged in");
                     currentUser = null;
                     currentUserData = null;
-                    loginContainer.style.display = 'flex';
-                    appContent.style.display = 'none';
                 }
             });
         }
@@ -2279,69 +2214,16 @@
 
         async function loadAppData() {
             try {
-                stories = [
-                    { id: '1', username: 'Sarah', avatar: 'https://randomuser.me/api/portraits/women/44.jpg', new: true },
-                    { id: '2', username: 'Mike', avatar: 'https://randomuser.me/api/portraits/men/22.jpg', new: false },
-                    { id: '3', username: 'Emma', avatar: 'https://randomuser.me/api/portraits/women/68.jpg', new: true }
-                ];
+                stories = [];
                 renderStories();
-            } catch (error) {
-                showToast("Failed to load stories");
-            }
-            
-            try {
-                liveRooms = [
-                    { 
-                        id: 'room1', 
-                        title: 'Music Jam Session', 
-                        host: 'Alex', 
-                        hostAvatar: 'https://randomuser.me/api/portraits/men/22.jpg',
-                        type: 'podcast',
-                        members: 12,
-                        cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
-                    },
-                    { 
-                        id: 'room2', 
-                        title: 'Tech Talk: Future of Web Development', 
-                        host: 'Sarah', 
-                        hostAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-                        type: 'stream',
-                        members: 8,
-                        cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
-                    }
-                ];
+                
+                liveRooms = [];
                 renderLiveRooms(liveRooms);
-            } catch (error) {
-                showToast("Failed to load live rooms");
-            }
-            
-            try {
-                posts = [
-                    {
-                        id: 'post1',
-                        userId: 'user1',
-                        userName: 'John Doe',
-                        userAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-                        content: "Just joined CallConnect! Excited to connect with everyone through audio and video calls. What features are you most excited about? 😊",
-                        createdAt: new Date(),
-                        likes: 3,
-                        comments: 1
-                    },
-                    {
-                        id: 'post2',
-                        userId: 'user2',
-                        userName: 'Sarah Johnson',
-                        userAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-                        content: "Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic. 🎧",
-                        image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-                        likes: 12,
-                        comments: 5
-                    }
-                ];
+                
+                posts = [];
                 renderCommunityFeed(posts);
             } catch (error) {
-                showToast("Failed to load community feed");
+                showToast("Failed to load app data");
             }
         }
 
@@ -2359,7 +2241,7 @@
             
             stories.forEach(story => {
                 storiesContainer.innerHTML += `
-                    <div class="story ${story.new ? 'new' : ''}">
+                    <div class="story">
                         <div class="story-avatar">
                             <img src="${story.avatar}" alt="${story.username}">
                         </div>
@@ -2389,7 +2271,7 @@
                         <div class="live-badge">
                             <i class="fas fa-circle"></i> LIVE
                         </div>
-                        <img src="${room.cover}" alt="${room.title}" class="live-room-image">
+                        <img src="${room.cover || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${room.title}" class="live-room-image">
                         <div class="live-room-info">
                             <h3 class="live-room-title">${room.title}</h3>
                             <div class="live-room-members">
@@ -2439,9 +2321,9 @@
             postElement.dataset.id = post.id;
             
             let roleBadge = '';
-            if (post.userId === currentUser?.uid) roleBadge = '<span class="admin-badge">YOU</span>';
+            if (post.userId === currentUser.uid) roleBadge = '<span class="admin-badge">YOU</span>';
             
-            const formattedTime = formatDate(post.createdAt);
+            const formattedTime = formatDate(post.createdAt?.toDate() || new Date());
             
             postElement.innerHTML = `
                 <div class="feed-header">
@@ -2457,8 +2339,8 @@
                 </div>
                 <div class="feed-actions">
                     <div class="feed-action like-btn" data-id="${post.id}">
-                        <i class="${post.likes > 0 ? 'fas' : 'far'} fa-heart" style="${post.likes > 0 ? 'color: var(--primary)' : ''}"></i>
-                        <span>${post.likes || 0} likes</span>
+                        <i class="${post.liked ? 'fas' : 'far'} fa-heart" style="${post.liked ? 'color: var(--primary)' : ''}"></i>
+                        <span class="like-count">${post.likes || 0}</span> likes
                     </div>
                     <div class="feed-action comment-toggle-btn" data-id="${post.id}">
                         <i class="far fa-comment"></i>
@@ -2493,7 +2375,6 @@
             });
         }
         
-        // Event handlers
         async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -2505,32 +2386,12 @@
             }
             
             try {
-                loginBtn.innerHTML = '<div class="spinner"></div> Authenticating...';
-                loginBtn.disabled = true;
-                
+                authSpinner.style.display = 'flex';
                 await authService.loginUser(email, password);
-                
-                // Force UI update after successful login
-                await new Promise(resolve => setTimeout(resolve, 500));
-                loginContainer.style.display = 'none';
-                appContent.style.display = 'block';
-                
-                // Manually trigger the auth state change
-                const user = authService.auth.currentUser;
-                if (user) {
-                    currentUser = user;
-                    currentUserData = await firestoreService.getUserProfile(user.uid);
-                    updateUserProfile(currentUserData);
-                    await loadAppData();
-                    showToast(`Welcome back, ${currentUserData.name}!`);
-                }
-                
+                showToast('Login successful!');
             } catch (error) {
-                console.error("Login error:", error);
+                authSpinner.style.display = 'none';
                 showToast(`Login failed: ${error.message}`);
-            } finally {
-                loginBtn.innerHTML = 'Login';
-                loginBtn.disabled = false;
             }
         }
 
@@ -2540,7 +2401,6 @@
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             const confirmPassword = document.getElementById('signup-confirm-password').value;
-            const gender = document.querySelector('input[name="gender"]:checked').value;
             
             if (!name || !email || !password || !confirmPassword) {
                 showToast('Please fill all fields');
@@ -2553,41 +2413,23 @@
             }
             
             try {
-                signupBtn.innerHTML = '<div class="spinner"></div> Creating account...';
-                signupBtn.disabled = true;
-                
-                const { userCredential } = await authService.registerUser(email, password, name, gender);
-                
-                const userProfileData = {
-                    name: name,
-                    email: email,
-                    gender: gender,
-                    avatar: gender === 'female' ? 
-                        'https://randomuser.me/api/portraits/women/32.jpg' : 
-                        'https://randomuser.me/api/portraits/men/32.jpg',
-                    coins: 100
-                };
-                
-                await firestoreService.createUserProfile(userCredential.user.uid, userProfileData);
-                
-                // Automatically log in after signup
-                await authService.loginUser(email, password);
-                
-                signupBtn.innerHTML = 'Create Account';
-                signupBtn.disabled = false;
-                
-                showToast('Account created successfully! Redirecting...');
+                authSpinner.style.display = 'flex';
+                await authService.registerUser(email, password, name);
+                showToast('Account created successfully!');
             } catch (error) {
-                signupBtn.innerHTML = 'Create Account';
-                signupBtn.disabled = false;
+                authSpinner.style.display = 'none';
                 showToast(`Signup failed: ${error.message}`);
             }
         }
 
         function logout() {
+            authSpinner.style.display = 'flex';
             authService.logoutUser()
                 .then(() => showToast('Logged out successfully'))
-                .catch(error => showToast(`Logout failed: ${error.message}`));
+                .catch(error => {
+                    authSpinner.style.display = 'none';
+                    showToast(`Logout failed: ${error.message}`);
+                });
         }
 
         function toggleSidebar() {
@@ -2788,10 +2630,8 @@
             signupFormDiv.classList.toggle('hidden');
         }
 
-        // Setup event listeners
         function setupEventListeners() {
             loginForm.addEventListener('submit', handleLogin);
-            
             signupForm.addEventListener('submit', handleSignup);
             
             showSignupLink.addEventListener('click', (e) => {
@@ -2836,7 +2676,6 @@
             document.addEventListener('click', closeModals);
         }
 
-        // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>

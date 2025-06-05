@@ -1,5 +1,5 @@
 // config.js
-const firebaseConfig = {
+window.firebaseConfig = {
     apiKey: "AIzaSyBlh428ba5aSFt6x2pPkVjeEk5D6AbIU7Y",
     authDomain: "kheemz-fb9b6.firebaseapp.com",
     databaseURL: "https://kheemz-fb9b6-default-rtdb.firebaseio.com",

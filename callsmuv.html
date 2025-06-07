@@ -647,6 +647,10 @@
             color: var(--primary); 
         }
         
+        .feed-action.liked i {
+            color: var(--primary);
+        }
+        
         .feed-action i {
             transition: var(--transition);
         }
@@ -1150,7 +1154,6 @@
             flex: 1;
             text-align: center;
             font-size: 1rem;
-            position: relative;
         }
         
         .btn-primary {
@@ -1174,24 +1177,6 @@
             background-color: var(--input-bg);
         }
         
-        .btn.loading {
-            color: transparent !important;
-        }
-        
-        .btn.loading::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            margin: -10px 0 0 -10px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-        }
-        
         .ceo-badge {
             background: var(--warning);
             color: white;
@@ -1208,6 +1193,21 @@
             padding: 0.15rem 0.5rem;
             border-radius: var(--radius-sm);
             font-weight: 600;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 71, 87, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         .empty-state {
@@ -1233,6 +1233,7 @@
             margin: 0 auto;
         }
         
+        /* Login/Signup styles */
         .login-container {
             display: flex;
             flex-direction: column;
@@ -1315,29 +1316,6 @@
             position: relative;
         }
         
-        .auth-btn.loading {
-            color: transparent !important;
-        }
-        
-        .auth-btn.loading::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            margin: -10px 0 0 -10px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-        }
-        
-        .auth-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
         .auth-footer {
             margin-top: 1.5rem;
             color: var(--text-light);
@@ -1349,149 +1327,8 @@
             text-decoration: none;
         }
         
-        .auth-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .auth-toggle-btn {
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-            padding: 0.5rem;
-            font-size: 1rem;
-        }
-        
         .hidden {
             display: none;
-        }
-        
-        .comments-section {
-            padding: 1rem;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--input-bg);
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
-        }
-        
-        .comments-container {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 1rem;
-        }
-        
-        .comment {
-            display: flex;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .comment:last-child {
-            border-bottom: none;
-        }
-        
-        .comment-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-            border: 2px solid var(--primary);
-        }
-        
-        .comment-content {
-            flex: 1;
-        }
-        
-        .comment-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.25rem;
-        }
-        
-        .comment-user {
-            font-weight: 600;
-            margin-right: 0.5rem;
-            color: var(--primary);
-        }
-        
-        .comment-time {
-            font-size: 0.75rem;
-            color: var(--text-light);
-        }
-        
-        .comment-text {
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin-bottom: 0.25rem;
-        }
-        
-        .comment-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 0.25rem;
-            font-size: 0.8rem;
-        }
-        
-        .comment-action {
-            color: var(--text-light);
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-            padding: 0.25rem;
-        }
-        
-        .comment-action:hover {
-            color: var(--primary);
-        }
-        
-        .add-comment {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-        
-        .comment-input {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-full);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 0.9rem;
-            outline: none;
-            transition: var(--transition);
-        }
-        
-        .comment-input:focus {
-            border-color: var(--primary);
-        }
-        
-        .post-comment-btn {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.25rem;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.9rem;
-        }
-        
-        .post-comment-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .like-count {
-            margin-left: 0.25rem;
-            font-weight: 600;
         }
         
         .config-error {
@@ -1503,8 +1340,291 @@
             text-align: center;
         }
         
-        .config-error i {
-            margin-right: 0.5rem;
+        /* New styles for dashboard features */
+        .voice-note-player {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: var(--input-bg);
+            border-radius: var(--radius-sm);
+        }
+        
+        .wave-container {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 40px;
+            flex: 1;
+        }
+        
+        .wave-bar {
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+            height: 20px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 30px; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 40px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 30px; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 20px; }
+        .wave-bar:nth-child(6) { animation-delay: 0.5s; height: 30px; }
+        .wave-bar:nth-child(7) { animation-delay: 0.6s; height: 40px; }
+        .wave-bar:nth-child(8) { animation-delay: 0.7s; height: 30px; }
+        .wave-bar:nth-child(9) { animation-delay: 0.8s; height: 20px; }
+        
+        @keyframes wave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+        
+        .voice-duration {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .reels-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 400;
+            display: none;
+            overflow: hidden;
+        }
+        
+        .reel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .reel-video {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: cover;
+        }
+        
+        .reel-overlay {
+            position: absolute;
+            bottom: 2rem;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .reel-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .reel-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+        
+        .reel-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .reel-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            gap: 0.5rem;
+        }
+        
+        .reel-action i {
+            font-size: 1.5rem;
+        }
+        
+        .reel-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .reel-more-btn {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .reel-more-menu {
+            position: absolute;
+            top: 4rem;
+            left: 1rem;
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            min-width: 200px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .reel-more-option {
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .reel-more-option:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .stories-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 400;
+            display: none;
+            overflow: hidden;
+        }
+        
+        .story-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .story-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .story-nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        .story-nav-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 2rem;
+            cursor: pointer;
+            height: 100%;
+            width: 30%;
+            transition: var(--transition);
+        }
+        
+        .story-nav-btn:hover {
+            color: white;
+        }
+        
+        .story-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .story-progress {
+            position: absolute;
+            top: 1rem;
+            left: 0;
+            width: 100%;
+            padding: 0 1rem;
+            display: flex;
+            gap: 0.25rem;
+            z-index: 10;
+        }
+        
+        .story-progress-bar {
+            flex: 1;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .story-progress-fill {
+            height: 100%;
+            width: 0;
+            background-color: white;
+            transition: width 0.1s linear;
+        }
+        
+        .floating-mic {
+            position: fixed;
+            bottom: 160px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 500;
+            opacity: 0.7;
+            transition: var(--transition);
+            display: none;
+        }
+        
+        .floating-mic.active {
+            background-color: var(--primary);
+            color: white;
+            opacity: 1;
         }
         
         .filter-dropdown {
@@ -1564,51 +1684,6 @@
             font-weight: 600;
         }
         
-        .voice-note-player {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-            padding: 0.75rem;
-            background-color: var(--input-bg);
-            border-radius: var(--radius-sm);
-        }
-        
-        .wave-container {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            height: 40px;
-            flex: 1;
-        }
-        
-        .wave-bar {
-            width: 4px;
-            background-color: var(--primary);
-            border-radius: 2px;
-            height: 20px;
-            animation: wave 1.2s infinite ease-in-out;
-        }
-        
-        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 30px; }
-        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 40px; }
-        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 30px; }
-        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 20px; }
-        .wave-bar:nth-child(6) { animation-delay: 0.5s; height: 30px; }
-        .wave-bar:nth-child(7) { animation-delay: 0.6s; height: 40px; }
-        .wave-bar:nth-child(8) { animation-delay: 0.7s; height: 30px; }
-        .wave-bar:nth-child(9) { animation-delay: 0.8s; height: 20px; }
-        
-        @keyframes wave {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.5); }
-        }
-        
-        .voice-duration {
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        
         .reel-card {
             position: relative;
             border-radius: var(--radius-md);
@@ -1647,33 +1722,173 @@
             gap: 0.25rem;
         }
         
-        .floating-mic {
+        .topup-modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 400px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .token-input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+        }
+        
+        .buy-token-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .buy-token-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .watch-together-modal {
             position: fixed;
-            bottom: 160px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 500;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .watch-together-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .friends-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        
+        .friend-item:last-child {
+            border-bottom: none;
+        }
+        
+        .friend-avatar {
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.7);
+            object-fit: cover;
+            margin-right: 1rem;
+            border: 2px solid var(--primary);
+        }
+        
+        .friend-info {
+            flex: 1;
+        }
+        
+        .friend-status {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .status-online {
+            width: 10px;
+            height: 10px;
+            background-color: var(--success);
+            border-radius: 50%;
+        }
+        
+        .friend-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
             cursor: pointer;
-            z-index: 500;
-            opacity: 0.7;
-            transition: var(--transition);
-            display: none;
         }
         
-        .floating-mic.active {
+        .friend-checkbox.checked {
             background-color: var(--primary);
             color: white;
-            opacity: 1;
         }
         
-        .floating-mic:hover {
-            opacity: 1;
+        .watch-together-actions {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .reel-card .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+        
+        .reel-card .reel-stats {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 2;
+        }
+        
+        .reel-card .reel-user {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .reel-card .reel-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
         }
         
         @media (min-width: 768px) {
@@ -1803,7 +2018,7 @@
             </div>
         </div>
         
-        <!-- Main app content - Using the dashboard from earlier code -->
+        <!-- Main app content - Using the enhanced dashboard -->
         <div id="app-content" style="display:none">
             <div class="header">
                 <div class="logo">
@@ -2677,8 +2892,8 @@
                 </div>
                 <div class="feed-actions">
                     <div class="feed-action like-btn" data-id="${post.id}">
-                        <i class="${post.liked ? 'fas' : 'far'} fa-heart" style="${post.liked ? 'color: var(--primary)' : ''}"></i>
-                        <span class="like-count">${post.likes || 0}</span> likes
+                        <i class="far fa-heart"></i>
+                        <span>${post.likes || 0} likes</span>
                     </div>
                     <div class="feed-action comment-toggle-btn" data-id="${post.id}">
                         <i class="far fa-comment"></i>

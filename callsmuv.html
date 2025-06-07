@@ -13,7 +13,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
     
-    <!-- External configuration -->
+    <!-- External Firebase Configuration -->
     <script src="config.js"></script>
     
     <style>
@@ -223,7 +223,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
+            padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border-color);
         }
         
@@ -1150,6 +1150,7 @@
             flex: 1;
             text-align: center;
             font-size: 1rem;
+            position: relative;
         }
         
         .btn-primary {
@@ -1171,6 +1172,24 @@
         
         .btn-outline:hover {
             background-color: var(--input-bg);
+        }
+        
+        .btn.loading {
+            color: transparent !important;
+        }
+        
+        .btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
         }
         
         .ceo-badge {
@@ -1232,6 +1251,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            position: relative;
         }
         
         .auth-header {
@@ -1350,7 +1370,6 @@
             display: none;
         }
         
-        /* Comments Section */
         .comments-section {
             padding: 1rem;
             border-top: 1px solid var(--border-color);
@@ -1475,8 +1494,186 @@
             font-weight: 600;
         }
         
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .config-error {
+            background-color: var(--warning);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .config-error i {
+            margin-right: 0.5rem;
+        }
+        
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .filter-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+        }
+        
+        .filter-btn:hover {
+            background-color: rgba(255, 71, 87, 0.1);
+        }
+        
+        .filter-options {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
+            padding: 0.75rem;
+            min-width: 180px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .filter-options.active {
+            display: block;
+        }
+        
+        .filter-option {
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .filter-option:hover {
+            background-color: var(--input-bg);
+            color: var(--primary);
+        }
+        
+        .filter-option.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .voice-note-player {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: var(--input-bg);
+            border-radius: var(--radius-sm);
+        }
+        
+        .wave-container {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 40px;
+            flex: 1;
+        }
+        
+        .wave-bar {
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+            height: 20px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 30px; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 40px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 30px; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 20px; }
+        .wave-bar:nth-child(6) { animation-delay: 0.5s; height: 30px; }
+        .wave-bar:nth-child(7) { animation-delay: 0.6s; height: 40px; }
+        .wave-bar:nth-child(8) { animation-delay: 0.7s; height: 30px; }
+        .wave-bar:nth-child(9) { animation-delay: 0.8s; height: 20px; }
+        
+        @keyframes wave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+        
+        .voice-duration {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .reel-card {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            aspect-ratio: 9/16;
+            background-color: var(--dark);
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+        
+        .reel-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .reel-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+        }
+        
+        .reel-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .reel-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .floating-mic {
+            position: fixed;
+            bottom: 160px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 500;
+            opacity: 0.7;
+            transition: var(--transition);
+            display: none;
+        }
+        
+        .floating-mic.active {
+            background-color: var(--primary);
+            color: white;
+            opacity: 1;
+        }
+        
+        .floating-mic:hover {
+            opacity: 1;
         }
         
         @media (min-width: 768px) {
@@ -1597,10 +1794,16 @@
                         <p>Already have an account? <a href="#" id="show-login">Login</a></p>
                     </div>
                 </div>
+                
+                <!-- Configuration error message -->
+                <div id="config-error" class="config-error hidden">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Firebase configuration not found. Please check your config.js file.
+                </div>
             </div>
         </div>
         
-        <!-- Main app content (initially hidden) -->
+        <!-- Main app content - Using the dashboard from earlier code -->
         <div id="app-content" style="display:none">
             <div class="header">
                 <div class="logo">
@@ -1623,23 +1826,7 @@
                             <h3>Notifications</h3>
                             <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
                         </div>
-                        <div id="notifications-list">
-                            <!-- Notifications will be loaded here -->
-                            <div class="notification-item">
-                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="notification-avatar">
-                                <div class="notification-content">
-                                    <div class="notification-text">Sarah liked your post</div>
-                                    <div class="notification-time">5 minutes ago</div>
-                                </div>
-                            </div>
-                            <div class="notification-item">
-                                <img src="https://randomuser.me/api/portraits/men/22.jpg" class="notification-avatar">
-                                <div class="notification-content">
-                                    <div class="notification-text">Mike commented on your live session</div>
-                                    <div class="notification-time">1 hour ago</div>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="notifications-list"></div>
                     </div>
                 </div>
             </div>
@@ -1653,7 +1840,7 @@
                 </div>
                 
                 <div class="user-profile" id="user-profile">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar" id="user-avatar">
+                    <img id="user-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar">
                     <div class="user-info">
                         <h3 id="username-display">John Doe</h3>
                         <p>Balance: <span class="coins" id="user-coins">250 <i class="fas fa-coins"></i></span></p>
@@ -1706,29 +1893,13 @@
                 
                 <div class="page active" id="home-page">
                     <div class="stories-container" id="stories-container">
-                        <div class="story new">
+                        <div class="story new" id="add-story">
                             <div class="story-avatar">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Your story">
+                                <div style="width: 100%; height: 100%; background: #e0e5eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-plus" style="font-size: 1.5rem; color: var(--text-color);"></i>
+                                </div>
                             </div>
-                            <div class="story-username">Your Story</div>
-                        </div>
-                        <div class="story">
-                            <div class="story-avatar">
-                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah">
-                            </div>
-                            <div class="story-username">Sarah</div>
-                        </div>
-                        <div class="story">
-                            <div class="story-avatar">
-                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Mike">
-                            </div>
-                            <div class="story-username">Mike</div>
-                        </div>
-                        <div class="story">
-                            <div class="story-avatar">
-                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma">
-                            </div>
-                            <div class="story-username">Emma</div>
+                            <div class="story-username">Add Story</div>
                         </div>
                     </div>
                     
@@ -1738,100 +1909,27 @@
                             View all <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
-                    <div class="live-rooms" id="live-rooms">
-                        <div class="live-room-card">
-                            <div class="live-badge">
-                                <i class="fas fa-circle"></i> LIVE
-                            </div>
-                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Music Jam Session" class="live-room-image">
-                            <div class="live-room-info">
-                                <h3 class="live-room-title">Music Jam Session</h3>
-                                <div class="live-room-members">
-                                    <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Alex">
-                                    <span>Alex • 12 participants</span>
-                                </div>
-                                <button class="join-room-btn" data-id="room1">
-                                    <i class="fas fa-headphones"></i> Join Podcast
-                                </button>
-                            </div>
-                        </div>
-                        <div class="live-room-card">
-                            <div class="live-badge">
-                                <i class="fas fa-circle"></i> LIVE
-                            </div>
-                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Tech Talk" class="live-room-image">
-                            <div class="live-room-info">
-                                <h3 class="live-room-title">Tech Talk: Future of Web Development</h3>
-                                <div class="live-room-members">
-                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah">
-                                    <span>Sarah • 8 participants</span>
-                                </div>
-                                <button class="join-room-btn" data-id="room2">
-                                    <i class="fas fa-video"></i> Join Stream
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="live-rooms" id="live-rooms"></div>
                     
                     <div class="section-header">
                         <h2 class="section-title">Community Feed</h2>
-                        <div class="view-all">
-                            See more <i class="fas fa-arrow-right"></i>
+                        <div class="filter-dropdown">
+                            <button class="filter-btn" id="filter-btn">
+                                Show all <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="filter-options" id="filter-options">
+                                <div class="filter-option active" data-filter="all">Show All</div>
+                                <div class="filter-option" data-filter="my-posts">My Posts</div>
+                                <div class="filter-option" data-filter="popular">Popular</div>
+                                <div class="filter-option" data-filter="recent">Recent</div>
+                            </div>
                         </div>
                     </div>
                     <div class="feed-container" id="feed-container">
-                        <div class="feed-card">
-                            <div class="feed-header">
-                                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="feed-user-avatar">
-                                <div class="feed-user-info">
-                                    <h4>John Doe <span class="admin-badge">YOU</span></h4>
-                                    <p><i class="fas fa-clock"></i> Just now</p>
-                                </div>
-                            </div>
-                            <div class="feed-content">
-                                <div class="feed-text">Just joined CallConnect! Excited to connect with everyone through audio and video calls. What features are you most excited about? 😊</div>
-                            </div>
-                            <div class="feed-actions">
-                                <div class="feed-action like-btn">
-                                    <i class="far fa-heart"></i>
-                                    <span>3 likes</span>
-                                </div>
-                                <div class="feed-action comment-toggle-btn">
-                                    <i class="far fa-comment"></i>
-                                    <span>1 comment</span>
-                                </div>
-                                <div class="feed-action">
-                                    <i class="far fa-share-square"></i>
-                                    <span>Share</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="feed-card">
-                            <div class="feed-header">
-                                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="feed-user-avatar">
-                                <div class="feed-user-info">
-                                    <h4>Sarah Johnson</h4>
-                                    <p><i class="fas fa-clock"></i> 2 hours ago</p>
-                                </div>
-                            </div>
-                            <div class="feed-content">
-                                <div class="feed-text">Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic. 🎧</div>
-                                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="feed-image">
-                            </div>
-                            <div class="feed-actions">
-                                <div class="feed-action like-btn">
-                                    <i class="fas fa-heart" style="color: var(--primary)"></i>
-                                    <span>12 likes</span>
-                                </div>
-                                <div class="feed-action comment-toggle-btn">
-                                    <i class="far fa-comment"></i>
-                                    <span>5 comments</span>
-                                </div>
-                                <div class="feed-action">
-                                    <i class="far fa-share-square"></i>
-                                    <span>Share</span>
-                                </div>
-                            </div>
+                        <div id="loading-activities">
+                            <p style="text-align: center; padding: 3rem;">
+                                <span class="loading"></span> Loading community activities...
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1844,6 +1942,10 @@
                 <button class="floating-btn post-floating-btn" id="create-post-btn">
                     <i class="fas fa-plus"></i>
                 </button>
+            </div>
+            
+            <div class="floating-mic" id="floating-mic">
+                <i class="fas fa-microphone"></i>
             </div>
             
             <div class="modal" id="create-post-modal">
@@ -1871,18 +1973,18 @@
                             </div>
                         </div>
                         
-                        <div class="action-buttons">
-                            <button class="btn btn-outline" id="add-image-btn">
-                                <i class="fas fa-image"></i> Add Image
+                        <div class="post-actions">
+                            <button class="action-btn" id="add-image-btn">
+                                <i class="fas fa-image"></i> Photo
                             </button>
-                            <button class="btn btn-outline" id="add-voice-btn">
-                                <i class="fas fa-microphone"></i> Add Voice
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                            
+                            <button class="action-btn" id="add-voice-btn">
+                                <i class="fas fa-microphone"></i> Voice Note
                             </button>
                         </div>
                         
-                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                        
-                        <button class="btn btn-primary" id="submit-post-btn" style="margin-top: 1rem;">Post</button>
+                        <button class="btn btn-primary" id="submit-post-btn">Post</button>
                     </div>
                 </div>
             </div>
@@ -1928,7 +2030,7 @@
                                 </div>
                             </div>
                             
-                            <div class="schedule-options" id="schedule-options" style="display:none;">
+                            <div class="schedule-options" id="schedule-options">
                                 <div class="form-group">
                                     <label class="form-label">Date & Time</label>
                                     <input type="datetime-local" class="form-control" id="live-date">
@@ -1949,24 +2051,169 @@
                 </div>
             </div>
 
+            <div class="comments-modal" id="comments-modal">
+                <div class="comments-header">
+                    <h3>Comments</h3>
+                    <button class="close-comments" id="close-comments">&times;</button>
+                </div>
+                <div class="comments-container" id="comments-container"></div>
+            </div>
+
+            <div class="reels-viewer" id="reels-viewer">
+                <div class="reel-container">
+                    <button class="reel-close" id="reel-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="reel-more-btn" id="reel-more-btn">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <div class="reel-more-menu" id="reel-more-menu">
+                        <div class="reel-more-option" id="watch-with-friend">
+                            <i class="fas fa-user-friends"></i> Watch with a friend
+                        </div>
+                        <div class="reel-more-option">
+                            <i class="fas fa-bookmark"></i> Save
+                        </div>
+                        <div class="reel-more-option">
+                            <i class="fas fa-flag"></i> Report
+                        </div>
+                    </div>
+                    <video class="reel-video" id="reel-video" controls></video>
+                    <div class="reel-overlay">
+                        <div class="reel-user">
+                            <img src="" class="reel-avatar" id="reel-user-avatar">
+                            <div>
+                                <div class="reel-user-name" id="reel-user-name"></div>
+                                <div class="reel-caption" id="reel-caption"></div>
+                            </div>
+                        </div>
+                        <div class="reel-actions">
+                            <div class="reel-action">
+                                <i class="fas fa-heart"></i>
+                                <span id="reel-likes">0</span>
+                            </div>
+                            <div class="reel-action">
+                                <i class="fas fa-comment"></i>
+                                <span id="reel-comments">0</span>
+                            </div>
+                            <div class="reel-action">
+                                <i class="fas fa-share"></i>
+                                <span>Share</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stories-viewer" id="stories-viewer">
+                <div class="story-container">
+                    <button class="story-close" id="story-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="story-progress" id="story-progress"></div>
+                    <img class="story-image" id="story-image" src="">
+                    <div class="story-nav">
+                        <button class="story-nav-btn" id="prev-story"></button>
+                        <button class="story-nav-btn" id="next-story"></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal" id="topup-modal">
+                <div class="modal-content topup-modal-content">
+                    <div class="modal-header">
+                        <h3>Top Up Tokens</h3>
+                        <button class="close-modal" id="close-topup-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-label">Enter Token Code</label>
+                            <input type="text" class="token-input" id="token-input" placeholder="XXXX-XXXX-XXXX">
+                        </div>
+                        <button class="buy-token-btn" id="buy-token-btn">
+                            <i class="fas fa-shopping-cart"></i> Buy Tokens
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="watch-together-modal" id="watch-together-modal">
+                <div class="watch-together-content">
+                    <div class="modal-header">
+                        <h3>Watch Together</h3>
+                        <button class="close-modal" id="close-watch-together">&times;</button>
+                    </div>
+                    <div class="friends-list" id="friends-list">
+                        <div class="friend-item">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="friend-avatar">
+                            <div class="friend-info">
+                                <h4>Sarah Miller</h4>
+                                <div class="friend-status">
+                                    <span class="status-online"></span>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                            <div class="friend-checkbox" id="friend1"></div>
+                        </div>
+                        <div class="friend-item">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" class="friend-avatar">
+                            <div class="friend-info">
+                                <h4>Alex Johnson</h4>
+                                <div class="friend-status">
+                                    <span class="status-online"></span>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                            <div class="friend-checkbox" id="friend2"></div>
+                        </div>
+                        <div class="friend-item">
+                            <img src="https://randomuser.me/api/portraits/men/22.jpg" class="friend-avatar">
+                            <div class="friend-info">
+                                <h4>David Wilson</h4>
+                                <div class="friend-status">
+                                    <span class="status-online"></span>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                            <div class="friend-checkbox" id="friend3"></div>
+                        </div>
+                        <div class="friend-item">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="friend-avatar">
+                            <div class="friend-info">
+                                <h4>Emma Watson</h4>
+                                <div class="friend-status">
+                                    <span class="status-online"></span>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                            <div class="friend-checkbox" id="friend4"></div>
+                        </div>
+                    </div>
+                    <div class="watch-together-actions">
+                        <button class="btn btn-outline" id="cancel-watch">Cancel</button>
+                        <button class="btn btn-primary" id="start-watch">Start Watching</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="bottom-nav">
-                <a href="#" class="nav-item active" data-page="home">
+                <a href="home.html" class="nav-item active" data-page="home">
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
-                <a href="#" class="nav-item" data-page="shop">
+                <a href="shop.html" class="nav-item" data-page="shop">
                     <i class="fas fa-shopping-bag"></i>
                     <span>Shop</span>
                 </a>
-                <a href="#" class="nav-item" data-page="wallet">
+                <a href="wallet.html" class="nav-item" data-page="wallet">
                     <i class="fas fa-wallet"></i>
                     <span>Wallet</span>
                 </a>
-                <a href="#" class="nav-item" data-page="fun">
+                <a href="fun.html" class="nav-item" data-page="fun">
                     <i class="fas fa-gamepad"></i>
                     <span>Fun</span>
                 </a>
-                <a href="#" class="nav-item" data-page="profile">
+                <a href="profile.html" class="nav-item" data-page="profile">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
                 </a>
@@ -1975,17 +2222,31 @@
     </div>
 
     <script>
-        // Initialize Firebase with config from external file
-        firebase.initializeApp(firebaseConfig);
+        // Check for Firebase configuration
+        if (!window.firebaseConfig) {
+            console.error('Firebase configuration not found!');
+            document.getElementById('config-error').classList.remove('hidden');
+        } else {
+            try {
+                firebase.initializeApp(window.firebaseConfig);
+            } catch (error) {
+                console.error('Firebase initialization failed:', error);
+                document.getElementById('config-error').classList.remove('hidden');
+                document.getElementById('config-error').textContent = 
+                    'Firebase initialization failed: ' + error.message;
+            }
+        }
         
-        // Service implementations
         const authService = {
-            auth: firebase.auth(),
+            auth: firebase.auth ? firebase.auth() : null,
             
             registerUser: function(email, password, name) {
+                if (!this.auth) {
+                    throw new Error("Firebase auth not initialized");
+                }
+                
                 return this.auth.createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
-                        // Update user profile with display name
                         return userCredential.user.updateProfile({
                             displayName: name
                         }).then(() => userCredential);
@@ -1993,22 +2254,39 @@
             },
             
             loginUser: function(email, password) {
+                if (!this.auth) {
+                    throw new Error("Firebase auth not initialized");
+                }
+                
                 return this.auth.signInWithEmailAndPassword(email, password);
             },
             
             logoutUser: function() {
+                if (!this.auth) {
+                    throw new Error("Firebase auth not initialized");
+                }
+                
                 return this.auth.signOut();
             },
             
             onAuthStateChanged: function(callback) {
+                if (!this.auth) {
+                    console.error("Firebase auth not initialized");
+                    return;
+                }
+                
                 return this.auth.onAuthStateChanged(callback);
             }
         };
 
         const firestoreService = {
-            db: firebase.firestore(),
+            db: firebase.firestore ? firebase.firestore() : null,
             
             createUserProfile: async function(userId, userData) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 const userRef = this.db.collection('users').doc(userId);
                 await userRef.set({
                     ...userData,
@@ -2019,12 +2297,20 @@
             },
             
             getUserProfile: async function(userId) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 const userRef = this.db.collection('users').doc(userId);
                 const docSnap = await userRef.get();
                 return docSnap.exists() ? docSnap.data() : null;
             },
             
             updateUserCoins: async function(userId, amount) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 const userRef = this.db.collection('users').doc(userId);
                 await userRef.update({
                     coins: firebase.firestore.FieldValue.increment(amount)
@@ -2033,6 +2319,10 @@
             },
             
             createPost: async function(postData) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 return this.db.collection('posts').add({
                     ...postData,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2042,6 +2332,10 @@
             },
             
             createLiveRoom: async function(roomData) {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 return this.db.collection('liveRooms').add({
                     ...roomData,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2050,73 +2344,34 @@
                 });
             },
             
-            addComment: async function(postId, commentData) {
-                return this.db.collection('posts').doc(postId).collection('comments').add({
-                    ...commentData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: 0
-                });
-            },
-            
-            likePost: async function(postId, userId) {
-                const postRef = this.db.collection('posts').doc(postId);
-                const likeRef = postRef.collection('likes').doc(userId);
-                
-                const exists = (await likeRef.get()).exists;
-                if (exists) {
-                    await likeRef.delete();
-                    await postRef.update({
-                        likes: firebase.firestore.FieldValue.increment(-1)
-                    });
-                    return false;
-                } else {
-                    await likeRef.set({
-                        userId: userId,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    await postRef.update({
-                        likes: firebase.firestore.FieldValue.increment(1)
-                    });
-                    return true;
-                }
-            },
-            
-            getPosts: async function() {
-                const snapshot = await this.db.collection('posts')
-                    .orderBy('createdAt', 'desc')
-                    .limit(20)
-                    .get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            },
-            
             getLiveRooms: async function() {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
                 const snapshot = await this.db.collection('liveRooms')
                     .where('status', '==', 'live')
                     .orderBy('createdAt', 'desc')
                     .limit(10)
                     .get();
+                    
                 return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             },
             
-            getStories: async function() {
-                const snapshot = await this.db.collection('stories')
-                    .where('expiresAt', '>', new Date())
-                    .orderBy('expiresAt', 'asc')
-                    .limit(10)
+            getPosts: async function() {
+                if (!this.db) {
+                    throw new Error("Firestore not initialized");
+                }
+                
+                const snapshot = await this.db.collection('posts')
+                    .orderBy('createdAt', 'desc')
+                    .limit(20)
                     .get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            },
-            
-            getComments: async function(postId) {
-                const snapshot = await this.db.collection('posts').doc(postId)
-                    .collection('comments')
-                    .orderBy('createdAt', 'asc')
-                    .get();
+                    
                 return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             }
         };
 
-        // DOM elements
         const appContainer = document.getElementById('app-container');
         const loginContainer = document.getElementById('login-container');
         const appContent = document.getElementById('app-content');
@@ -2165,8 +2420,13 @@
         const startLiveBtn = document.getElementById('start-live-btn');
         const cancelLiveBtn = document.getElementById('cancel-live-btn');
         const navItems = document.querySelectorAll('.nav-item');
+        const configError = document.getElementById('config-error');
+        const loadingActivities = document.getElementById('loading-activities');
+        const filterBtn = document.getElementById('filter-btn');
+        const filterOptions = document.getElementById('filter-options');
+        const addStory = document.getElementById('add-story');
+        const floatingMic = document.getElementById('floating-mic');
         
-        // Global variables
         let currentUser = null;
         let currentUserData = null;
         let recorder, audioChunks = [];
@@ -2176,8 +2436,8 @@
         let posts = [];
         let liveRooms = [];
         let stories = [];
+        let currentFilter = 'all';
 
-        // Helper function for toast notifications
         function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'toast';
@@ -2188,56 +2448,61 @@
                 toast.remove();
             }, 3000);
         }
+        
+        function updateUIForAuthState(user) {
+            if (user) {
+                loginContainer.style.display = 'none';
+                appContent.style.display = 'flex';
+            } else {
+                loginContainer.style.display = 'flex';
+                appContent.style.display = 'none';
+            }
+        }
 
-        // Initialize the app
         function init() {
             setupEventListeners();
-            checkAuthState();
             
-            // Load saved theme
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
             themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            
+            if (window.firebaseConfig) {
+                checkAuthState();
+            }
         }
 
-        // Check authentication state
         function checkAuthState() {
             authService.onAuthStateChanged(async (user) => {
+                updateUIForAuthState(user);
+                
                 if (user) {
-                    console.log("User authenticated:", user.email);
                     currentUser = user;
                     
-                    // Get user profile
-                    currentUserData = await firestoreService.getUserProfile(user.uid);
-                    if (!currentUserData) {
-                        // Create new user profile
-                        currentUserData = {
-                            name: user.displayName || user.email.split('@')[0],
-                            avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
-                            coins: 100,
-                            following: []
-                        };
-                        await firestoreService.createUserProfile(user.uid, currentUserData);
-                    }
-                    
-                    updateUserProfile(currentUserData);
-                    
                     try {
-                        await loadAppData();
+                        currentUserData = await firestoreService.getUserProfile(user.uid);
+                        if (!currentUserData) {
+                            currentUserData = {
+                                name: user.displayName || user.email.split('@')[0],
+                                avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
+                                coins: 100,
+                                following: []
+                            };
+                            await firestoreService.createUserProfile(user.uid, currentUserData);
+                        }
+                        
+                        updateUserProfile(currentUserData);
+                        
+                        try {
+                            await loadAppData();
+                        } catch (error) {
+                            showToast("Error loading app data");
+                        }
                     } catch (error) {
-                        console.error("Error loading app data:", error);
+                        showToast("Error loading user profile");
                     }
-                    
-                    // Show app content
-                    loginContainer.style.display = 'none';
-                    appContent.style.display = 'block';
                 } else {
-                    console.log("No authenticated user");
                     currentUser = null;
                     currentUserData = null;
-                    // Show login screen
-                    loginContainer.style.display = 'flex';
-                    appContent.style.display = 'none';
                 }
             });
         }
@@ -2249,57 +2514,63 @@
         }
 
         async function loadAppData() {
-            // Load stories
             try {
-                stories = await firestoreService.getStories();
+                // Load stories
+                stories = [];
                 renderStories();
-            } catch (error) {
-                console.error("Error loading stories:", error);
-                showToast("Failed to load stories");
-            }
-            
-            // Load live rooms
-            try {
+                
+                // Load live rooms
                 liveRooms = await firestoreService.getLiveRooms();
                 renderLiveRooms(liveRooms);
-            } catch (error) {
-                console.error("Error loading live rooms:", error);
-                showToast("Failed to load live rooms");
-            }
-            
-            // Load posts
-            try {
+                
+                // Load posts
                 posts = await firestoreService.getPosts();
                 renderCommunityFeed(posts);
             } catch (error) {
-                console.error("Error loading posts:", error);
-                showToast("Failed to load community feed");
+                showToast("Failed to load app data");
+            } finally {
+                if (loadingActivities) {
+                    loadingActivities.remove();
+                }
             }
         }
 
         function renderStories() {
             storiesContainer.innerHTML = '';
             
-            // Add user's own story
-            storiesContainer.innerHTML += `
-                <div class="story new">
-                    <div class="story-avatar">
-                        <img src="${userAvatar.src}" alt="Your story">
+            // Add "Add Story" button
+            const addStoryElement = document.createElement('div');
+            addStoryElement.className = 'story new';
+            addStoryElement.id = 'add-story';
+            addStoryElement.innerHTML = `
+                <div class="story-avatar">
+                    <div style="width: 100%; height: 100%; background: #e0e5eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-plus" style="font-size: 1.5rem; color: var(--text-color);"></i>
                     </div>
-                    <div class="story-username">Your Story</div>
                 </div>
+                <div class="story-username">Add Story</div>
             `;
+            addStoryElement.addEventListener('click', createStory);
+            storiesContainer.appendChild(addStoryElement);
             
-            // Add other stories
-            stories.forEach(story => {
-                storiesContainer.innerHTML += `
-                    <div class="story ${story.new ? 'new' : ''}">
-                        <div class="story-avatar">
-                            <img src="${story.avatar}" alt="${story.username}">
-                        </div>
-                        <div class="story-username">${story.username}</div>
+            // Add sample stories
+            const sampleStories = [
+                { id: 1, name: "Sarah", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+                { id: 2, name: "Mike", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
+                { id: 3, name: "Emma", avatar: "https://randomuser.me/api/portraits/women/68.jpg" },
+                { id: 4, name: "David", avatar: "https://randomuser.me/api/portraits/men/22.jpg" }
+            ];
+            
+            sampleStories.forEach(story => {
+                const storyElement = document.createElement('div');
+                storyElement.className = 'story';
+                storyElement.innerHTML = `
+                    <div class="story-avatar">
+                        <img src="${story.avatar}" alt="${story.name}">
                     </div>
+                    <div class="story-username">${story.name}</div>
                 `;
+                storiesContainer.appendChild(storyElement);
             });
         }
 
@@ -2318,28 +2589,28 @@
             }
             
             rooms.forEach(room => {
-                liveRoomsContainer.innerHTML += `
-                    <div class="live-room-card">
-                        <div class="live-badge">
-                            <i class="fas fa-circle"></i> LIVE
+                const roomElement = document.createElement('div');
+                roomElement.className = 'live-room-card';
+                roomElement.innerHTML = `
+                    <div class="live-badge">
+                        <i class="fas fa-circle"></i> LIVE
+                    </div>
+                    <img src="${room.coverImage || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${room.title}" class="live-room-image">
+                    <div class="live-room-info">
+                        <h3 class="live-room-title">${room.title}</h3>
+                        <div class="live-room-members">
+                            <img src="${room.hostAvatar}" alt="${room.host}">
+                            <span>${room.host} • ${room.members} participants</span>
                         </div>
-                        <img src="${room.cover || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${room.title}" class="live-room-image">
-                        <div class="live-room-info">
-                            <h3 class="live-room-title">${room.title}</h3>
-                            <div class="live-room-members">
-                                <img src="${room.hostAvatar}" alt="${room.host}">
-                                <span>${room.host} • ${room.members} participants</span>
-                            </div>
-                            <button class="join-room-btn" data-id="${room.id}">
-                                <i class="fas fa-${room.type === 'podcast' ? 'headphones' : 'video'}"></i> 
-                                Join ${room.type === 'podcast' ? 'Podcast' : 'Stream'}
-                            </button>
-                        </div>
+                        <button class="join-room-btn" data-id="${room.id}">
+                            <i class="fas fa-${room.type === 'podcast' ? 'headphones' : 'video'}"></i> 
+                            Join ${room.type === 'podcast' ? 'Podcast' : 'Stream'}
+                        </button>
                     </div>
                 `;
+                liveRoomsContainer.appendChild(roomElement);
             });
             
-            // Add event listeners to join buttons
             document.querySelectorAll('.join-room-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const roomId = btn.dataset.id;
@@ -2362,7 +2633,18 @@
                 return;
             }
             
-            posts.forEach(post => {
+            // Filter posts based on current filter
+            let filteredPosts = [...posts];
+            
+            if (currentFilter === 'my-posts') {
+                filteredPosts = filteredPosts.filter(post => post.userId === currentUser.uid);
+            } else if (currentFilter === 'popular') {
+                filteredPosts.sort((a, b) => b.likes - a.likes);
+            } else if (currentFilter === 'recent') {
+                filteredPosts.sort((a, b) => b.createdAt - a.createdAt);
+            }
+            
+            filteredPosts.forEach(post => {
                 const postElement = createPostElement(post);
                 feedContainer.appendChild(postElement);
             });
@@ -2373,17 +2655,20 @@
             postElement.className = 'feed-card';
             postElement.dataset.id = post.id;
             
-            let roleBadge = '';
-            if (post.userId === currentUser.uid) roleBadge = '<span class="admin-badge">YOU</span>';
+            // Format date
+            const postDate = post.createdAt.toDate();
+            const options = { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' };
+            const formattedDate = postDate.toLocaleDateString('en-US', options);
             
-            const formattedTime = formatDate(post.createdAt?.toDate() || new Date());
+            // Check if it's user's post
+            const isUsersPost = post.userId === currentUser.uid;
             
             postElement.innerHTML = `
                 <div class="feed-header">
                     <img src="${post.userAvatar}" class="feed-user-avatar">
                     <div class="feed-user-info">
-                        <h4>${post.userName} ${roleBadge}</h4>
-                        <p><i class="fas fa-clock"></i> ${formattedTime}</p>
+                        <h4>${post.userName} ${isUsersPost ? '<span class="admin-badge">YOU</span>' : ''}</h4>
+                        <p><i class="fas fa-clock"></i> ${formattedDate}</p>
                     </div>
                 </div>
                 <div class="feed-content">
@@ -2392,8 +2677,8 @@
                 </div>
                 <div class="feed-actions">
                     <div class="feed-action like-btn" data-id="${post.id}">
-                        <i class="far fa-heart"></i>
-                        <span>${post.likes || 0} likes</span>
+                        <i class="${post.liked ? 'fas' : 'far'} fa-heart" style="${post.liked ? 'color: var(--primary)' : ''}"></i>
+                        <span class="like-count">${post.likes || 0}</span> likes
                     </div>
                     <div class="feed-action comment-toggle-btn" data-id="${post.id}">
                         <i class="far fa-comment"></i>
@@ -2408,27 +2693,7 @@
             
             return postElement;
         }
-
-        function formatDate(date) {
-            const now = new Date();
-            const diff = now - date;
-            const minutes = Math.floor(diff / 60000);
-            
-            if (minutes < 1) return "Just now";
-            if (minutes < 60) return `${minutes} min ago`;
-            
-            const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `${hours} hr ago`;
-            
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
         
-        // Event handlers
         async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -2440,26 +2705,15 @@
             }
             
             try {
-                // Show loading state on login button
+                // Set loading state on button
                 loginBtn.classList.add('loading');
-                loginBtn.disabled = true;
                 
-                // Authenticate user
                 await authService.loginUser(email, password);
-                
-                // Reset login button
-                loginBtn.classList.remove('loading');
-                loginBtn.disabled = false;
-                
-                // Show success toast
                 showToast('Login successful!');
             } catch (error) {
-                // Reset login button
-                loginBtn.classList.remove('loading');
-                loginBtn.disabled = false;
-                
-                // Show error toast
                 showToast(`Login failed: ${error.message}`);
+            } finally {
+                loginBtn.classList.remove('loading');
             }
         }
 
@@ -2481,33 +2735,28 @@
             }
             
             try {
-                // Show loading state on signup button
+                // Set loading state on button
                 signupBtn.classList.add('loading');
-                signupBtn.disabled = true;
                 
-                // Create user account
                 await authService.registerUser(email, password, name);
-                
-                // Reset signup button
-                signupBtn.classList.remove('loading');
-                signupBtn.disabled = false;
-                
-                // Show success toast
                 showToast('Account created successfully!');
             } catch (error) {
-                // Reset signup button
-                signupBtn.classList.remove('loading');
-                signupBtn.disabled = false;
-                
-                // Show error toast
                 showToast(`Signup failed: ${error.message}`);
+            } finally {
+                signupBtn.classList.remove('loading');
             }
         }
 
         function logout() {
-            authService.logoutUser()
-                .then(() => showToast('Logged out successfully'))
-                .catch(error => showToast(`Logout failed: ${error.message}`));
+            try {
+                authService.logoutUser()
+                    .then(() => showToast('Logged out successfully'))
+                    .catch(error => {
+                        showToast(`Logout failed: ${error.message}`);
+                    });
+            } catch (error) {
+                showToast(`Logout failed: ${error.message}`);
+            }
         }
 
         function toggleSidebar() {
@@ -2540,7 +2789,6 @@
             userCoins.textContent = newCoins;
             showToast('50 coins added to your account!');
             
-            // Update in Firestore
             firestoreService.updateUserCoins(currentUser.uid, 50);
         }
 
@@ -2584,7 +2832,6 @@
         }
 
         function startRecording() {
-            // In a real app, this would use the Web Audio API
             recordBtn.disabled = true;
             stopBtn.disabled = false;
             recordingSeconds = 0;
@@ -2623,19 +2870,26 @@
             };
             
             try {
+                // Set loading state on button
+                submitPostBtn.classList.add('loading');
+                
                 if (imageFile) {
-                    // In a real app, upload to Firebase Storage
-                    const imageUrl = URL.createObjectURL(imageFile);
-                    postData.image = imageUrl;
+                    // In a real app, you would upload to Firebase Storage
+                    // For demo, we'll use a fake URL
+                    postData.image = URL.createObjectURL(imageFile);
                 }
                 
                 await firestoreService.createPost(postData);
                 
                 showToast('Post created successfully!');
                 closePostModal();
+                
+                // Refresh the feed
+                await loadAppData();
             } catch (error) {
-                console.error("Error creating post:", error);
                 showToast(`Error creating post: ${error.message}`);
+            } finally {
+                submitPostBtn.classList.remove('loading');
             }
         }
 
@@ -2660,6 +2914,9 @@
             }
             
             try {
+                // Set loading state on button
+                startLiveBtn.classList.add('loading');
+                
                 const roomData = {
                     title: title,
                     host: currentUserData.name,
@@ -2672,15 +2929,19 @@
                 
                 showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
                 closeGoLiveModal();
+                
+                // Refresh live rooms
+                await loadAppData();
             } catch (error) {
-                console.error("Error creating live room:", error);
                 showToast("Failed to start live session");
+            } finally {
+                startLiveBtn.classList.remove('loading');
             }
         }
 
         function joinRoom(roomId) {
             showToast(`Joining room ${roomId}...`);
-            // In a real app, this would navigate to the live room
+            // In a real app, you would redirect to the live room
         }
 
         function setActiveNav(e) {
@@ -2696,12 +2957,10 @@
         }
 
         function closeModals(e) {
-            // Close notifications dropdown if clicking outside
             if (!notificationBtn.contains(e.target)) {
                 notificationsDropdown.classList.remove('active');
             }
             
-            // Close modals if clicking outside
             if (createPostModal.style.display === 'flex' && !createPostModal.contains(e.target)) {
                 closePostModal();
             }
@@ -2715,18 +2974,28 @@
             loginFormDiv.classList.toggle('hidden');
             signupFormDiv.classList.toggle('hidden');
         }
-
-        // Setup event listeners
+        
+        function createStory() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*, video/*';
+            input.style.display = 'none';
+            document.body.appendChild(input);
+            
+            input.click();
+            
+            input.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    showToast('Story created successfully!');
+                }
+                input.remove();
+            });
+        }
+        
         function setupEventListeners() {
-            // Login
             loginForm.addEventListener('submit', handleLogin);
-            loginBtn.addEventListener('click', handleLogin);
-            
-            // Signup
             signupForm.addEventListener('submit', handleSignup);
-            signupBtn.addEventListener('click', handleSignup);
             
-            // Toggle between login/signup
             showSignupLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleAuthForm();
@@ -2737,16 +3006,13 @@
                 toggleAuthForm();
             });
             
-            // Navigation
             menuToggle.addEventListener('click', toggleSidebar);
             logoutBtn.addEventListener('click', logout);
             themeToggle.addEventListener('click', toggleTheme);
             
-            // Notifications
             notificationBtn.addEventListener('click', toggleNotifications);
             markAllReadBtn.addEventListener('click', markAllAsRead);
             
-            // Content creation
             topUpBtn.addEventListener('click', addCoins);
             createPostBtn.addEventListener('click', showCreatePostModal);
             closePostModalBtn.addEventListener('click', closePostModal);
@@ -2754,7 +3020,6 @@
             closeLiveModalBtn.addEventListener('click', closeGoLiveModal);
             cancelLiveBtn.addEventListener('click', closeGoLiveModal);
             
-            // Post creation
             addImageBtn.addEventListener('click', () => imageUpload.click());
             imageUpload.addEventListener('change', handleImageUpload);
             addVoiceBtn.addEventListener('click', showRecordingUI);
@@ -2762,21 +3027,38 @@
             stopBtn.addEventListener('click', stopRecording);
             submitPostBtn.addEventListener('click', submitPost);
             
-            // Live session
             startNowRadio.addEventListener('change', toggleScheduleOptions);
             scheduleRadio.addEventListener('change', toggleScheduleOptions);
             startLiveBtn.addEventListener('click', startLiveSession);
             
-            // Bottom navigation
             navItems.forEach(item => {
                 item.addEventListener('click', setActiveNav);
             });
             
-            // Close modals when clicking outside
             document.addEventListener('click', closeModals);
+            
+            // Add story event listener
+            addStory.addEventListener('click', createStory);
+            
+            // Filter event listeners
+            filterBtn.addEventListener('click', () => {
+                filterOptions.classList.toggle('active');
+            });
+            
+            document.querySelectorAll('.filter-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    currentFilter = option.dataset.filter;
+                    document.querySelectorAll('.filter-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    option.classList.add('active');
+                    filterBtn.innerHTML = `${option.textContent} <i class="fas fa-chevron-down"></i>`;
+                    filterOptions.classList.remove('active');
+                    renderCommunityFeed(posts);
+                });
+            });
         }
 
-        // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>

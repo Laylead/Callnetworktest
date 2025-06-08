@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CallConnect - Social Audio & Video</title>
+    <title>CallConnect - Enhanced Social Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -11,7 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
     
     <!-- External Firebase Configuration -->
     <script src="config.js"></script>
@@ -106,6 +105,148 @@
             flex-direction: column;
             min-height: 100vh;
             position: relative;
+        }
+        
+        /* Login Container */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background: var(--gradient-primary);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .auth-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            transition: var(--transition);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .auth-input {
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2);
+        }
+        
+        .auth-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
+        }
+        
+        .auth-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .auth-btn.loading {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9375rem;
+        }
+        
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .config-error {
+            background-color: #ffebee;
+            color: #b71c1c;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .hidden {
+            display: none !important;
         }
         
         .header {
@@ -1233,114 +1374,7 @@
             margin: 0 auto;
         }
         
-        /* Login/Signup styles */
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 2rem;
-            background-color: var(--bg-color);
-        }
-        
-        .auth-card {
-            background-color: var(--card-bg);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .auth-header {
-            margin-bottom: 2rem;
-        }
-        
-        .auth-logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-        
-        .auth-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background: var(--gradient-primary);
-            color: white;
-            border-radius: var(--radius-md);
-            font-size: 1.5rem;
-            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
-        }
-        
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-        
-        .auth-input {
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 1rem;
-            width: 100%;
-        }
-        
-        .auth-btn {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: var(--radius-sm);
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 1.1rem;
-            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
-            position: relative;
-        }
-        
-        .auth-footer {
-            margin-top: 1.5rem;
-            color: var(--text-light);
-        }
-        
-        .auth-footer a {
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .config-error {
-            background-color: var(--warning);
-            color: white;
-            padding: 1rem;
-            border-radius: var(--radius-sm);
-            margin-top: 1rem;
-            text-align: center;
-        }
-        
-        /* New styles for dashboard features */
+        /* New styles for added features */
         .voice-note-player {
             display: flex;
             align-items: center;
@@ -1384,6 +1418,120 @@
         .voice-duration {
             font-weight: 600;
             color: var(--text-color);
+        }
+        
+        .comments-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--card-bg);
+            z-index: 300;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .comments-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: var(--card-bg);
+            z-index: 10;
+        }
+        
+        .close-comments {
+            background: none;
+            border: none;
+            font-size: 1.75rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+        
+        .close-comments:hover {
+            color: var(--primary);
+        }
+        
+        .comments-container {
+            padding: 1.25rem;
+        }
+        
+        .comment {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+        }
+        
+        .comment-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        
+        .comment-content {
+            padding-left: 42px;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            padding-left: 42px;
+        }
+        
+        .comment-action {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        
+        .comment-action:hover {
+            color: var(--primary);
+        }
+        
+        .reply-input {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-left: 42px;
+        }
+        
+        .reply-input input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: var(--input-bg);
+        }
+        
+        .reply-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
         }
         
         .reels-viewer {
@@ -1602,6 +1750,38 @@
             transition: width 0.1s linear;
         }
         
+        .share-dropdown {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
+            padding: 0.75rem;
+            min-width: 200px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .share-dropdown.active {
+            display: block;
+        }
+        
+        .share-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .share-option:hover {
+            background-color: var(--input-bg);
+            color: var(--primary);
+        }
+        
         .floating-mic {
             position: fixed;
             bottom: 160px;
@@ -1624,6 +1804,10 @@
         .floating-mic.active {
             background-color: var(--primary);
             color: white;
+            opacity: 1;
+        }
+        
+        .floating-mic:hover {
             opacity: 1;
         }
         
@@ -1916,10 +2100,6 @@
                 height: 54px;
                 font-size: 1.3rem;
             }
-            
-            .auth-card {
-                padding: 1.5rem;
-            }
         }
         
         @media (min-width: 992px) {
@@ -1956,959 +2136,549 @@
     </style>
 </head>
 <body>
-    <div class="app-container" id="app-container">
-        <!-- Login/Signup screen -->
-        <div class="login-container" id="login-container">
-            <div class="auth-card">
-                <!-- Login Form -->
-                <div id="login-form">
-                    <div class="auth-header">
-                        <div class="auth-logo">
-                            <span class="auth-icon">
-                                <i class="fas fa-phone-alt"></i>
-                            </span>
-                            CallConnect
-                        </div>
-                        <h2>Welcome Back</h2>
-                        <p class="text-muted">Connect with friends through audio and video calls</p>
+    <!-- Login Container -->
+    <div class="login-container" id="login-container">
+        <div class="auth-card">
+            <div id="login-form">
+                <div class="auth-header">
+                    <div class="auth-logo">
+                        <span class="auth-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </span>
+                        CallConnect
                     </div>
-                    
-                    <form class="auth-form" id="login-form-element">
-                        <input type="email" id="login-email" class="auth-input" placeholder="Email" required>
-                        <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
-                        <button class="auth-btn" id="login-btn">Login</button>
-                    </form>
-                    
-                    <div class="auth-footer">
-                        <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
-                    </div>
+                    <h2>Welcome Back</h2>
+                    <p class="text-muted">Connect with friends through audio and video calls</p>
                 </div>
                 
-                <!-- Signup Form -->
-                <div id="signup-form" class="hidden">
-                    <div class="auth-header">
-                        <div class="auth-logo">
-                            <span class="auth-icon">
-                                <i class="fas fa-phone-alt"></i>
-                            </span>
-                            CallConnect
-                        </div>
-                        <h2>Create Account</h2>
-                        <p class="text-muted">Join our community of audio and video enthusiasts</p>
-                    </div>
-                    
-                    <form class="auth-form" id="signup-form-element">
-                        <input type="text" id="signup-name" class="auth-input" placeholder="Full Name" required>
-                        <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
-                        <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
-                        <input type="password" id="signup-confirm-password" class="auth-input" placeholder="Confirm Password" required>
-                        <button class="auth-btn" id="signup-btn">Create Account</button>
-                    </form>
-                    
-                    <div class="auth-footer">
-                        <p>Already have an account? <a href="#" id="show-login">Login</a></p>
-                    </div>
-                </div>
+                <form class="auth-form" id="login-form-element">
+                    <input type="email" id="login-email" class="auth-input" placeholder="Email" required>
+                    <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
+                    <button class="auth-btn" id="login-btn">Login</button>
+                </form>
                 
-                <!-- Configuration error message -->
-                <div id="config-error" class="config-error hidden">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Firebase configuration not found. Please check your config.js file.
-                </div>
-            </div>
-        </div>
-        
-        <!-- Main app content - Using the enhanced dashboard -->
-        <div id="app-content" style="display:none">
-            <div class="header">
-                <div class="logo">
-                    <span class="logo-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </span>
-                    CallConnect
-                </div>
-                <div class="header-actions">
-                    <button class="message-btn" id="message-btn">
-                        <i class="fas fa-envelope"></i>
-                        <span class="message-badge">2</span>
-                    </button>
-                    <button class="notification-btn" id="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <div class="notifications-dropdown" id="notifications-dropdown">
-                        <div class="notification-header">
-                            <h3>Notifications</h3>
-                            <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
-                        </div>
-                        <div id="notifications-list"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Menu</h3>
-                    <button class="theme-toggle" id="theme-toggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-                
-                <div class="user-profile" id="user-profile">
-                    <img id="user-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar">
-                    <div class="user-info">
-                        <h3 id="username-display">John Doe</h3>
-                        <p>Balance: <span class="coins" id="user-coins">250 <i class="fas fa-coins"></i></span></p>
-                        <button class="top-up-btn" id="top-up-btn">
-                            <i class="fas fa-plus"></i> Top Up
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="menu-section">
-                    <div class="menu-item active">
-                        <i class="fas fa-home"></i>
-                        <span>Home</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span>Shop</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-wallet"></i>
-                        <span>Wallet</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-gamepad"></i>
-                        <span>Fun</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-users"></i>
-                        <span>Friends</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-video"></i>
-                        <span>Live Sessions</span>
-                    </div>
-                    <div class="menu-item">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </div>
-                </div>
-                
-                <button class="logout-btn" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </div>
-            
-            <div class="main-content">
-                <button class="menu-toggle" id="menu-toggle">
-                    <i class="fas fa-bars"></i> Menu
-                </button>
-                
-                <div class="page active" id="home-page">
-                    <div class="stories-container" id="stories-container">
-                        <div class="story new" id="add-story">
-                            <div class="story-avatar">
-                                <div style="width: 100%; height: 100%; background: #e0e5eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-plus" style="font-size: 1.5rem; color: var(--text-color);"></i>
-                                </div>
-                            </div>
-                            <div class="story-username">Add Story</div>
-                        </div>
-                    </div>
-                    
-                    <div class="section-header">
-                        <h2 class="section-title">Live Rooms</h2>
-                        <a href="#" class="view-all">
-                            View all <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="live-rooms" id="live-rooms"></div>
-                    
-                    <div class="section-header">
-                        <h2 class="section-title">Community Feed</h2>
-                        <div class="filter-dropdown">
-                            <button class="filter-btn" id="filter-btn">
-                                Show all <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div class="filter-options" id="filter-options">
-                                <div class="filter-option active" data-filter="all">Show All</div>
-                                <div class="filter-option" data-filter="my-posts">My Posts</div>
-                                <div class="filter-option" data-filter="popular">Popular</div>
-                                <div class="filter-option" data-filter="recent">Recent</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="feed-container" id="feed-container">
-                        <div id="loading-activities">
-                            <p style="text-align: center; padding: 3rem;">
-                                <span class="loading"></span> Loading community activities...
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="floating-widget">
-                <button class="floating-btn live-floating-btn" id="go-live-btn">
-                    <i class="fas fa-video"></i>
-                </button>
-                <button class="floating-btn post-floating-btn" id="create-post-btn">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-            
-            <div class="floating-mic" id="floating-mic">
-                <i class="fas fa-microphone"></i>
-            </div>
-            
-            <div class="modal" id="create-post-modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>Create Post</h3>
-                        <button class="close-modal" id="close-post-modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <textarea class="post-textarea" id="post-text" placeholder="What's on your mind?"></textarea>
-                        
-                        <div class="file-preview" id="image-preview">
-                            <img class="preview-image" id="preview-image">
-                        </div>
-                        
-                        <div class="recording-ui" id="recording-ui">
-                            <div class="recording-controls">
-                                <button class="record-btn" id="record-btn">
-                                    <i class="fas fa-microphone"></i> Record
-                                </button>
-                                <button class="stop-btn" id="stop-btn" disabled>
-                                    <i class="fas fa-stop"></i> Stop
-                                </button>
-                                <div class="timer" id="timer">0:00</div>
-                            </div>
-                        </div>
-                        
-                        <div class="post-actions">
-                            <button class="action-btn" id="add-image-btn">
-                                <i class="fas fa-image"></i> Photo
-                            </button>
-                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                            
-                            <button class="action-btn" id="add-voice-btn">
-                                <i class="fas fa-microphone"></i> Voice Note
-                            </button>
-                        </div>
-                        
-                        <button class="btn btn-primary" id="submit-post-btn">Post</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal" id="go-live-modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>Go Live</h3>
-                        <button class="close-modal" id="close-live-modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="go-live-form">
-                            <div class="form-group">
-                                <label class="form-label">Live Session Title</label>
-                                <input type="text" class="form-control" id="live-title" placeholder="Enter session title" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">Session Type</label>
-                                <div class="radio-group">
-                                    <div class="radio-option">
-                                        <input type="radio" id="podcast" name="session-type" value="podcast" checked>
-                                        <label for="podcast">Podcast (Audio Only)</label>
-                                    </div>
-                                    <div class="radio-option">
-                                        <input type="radio" id="stream" name="session-type" value="stream">
-                                        <label for="stream">Live Stream (Video)</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">When do you want to start?</label>
-                                <div class="radio-group">
-                                    <div class="radio-option">
-                                        <input type="radio" id="start-now" name="start-time" value="now" checked>
-                                        <label for="start-now">Start Now</label>
-                                    </div>
-                                    <div class="radio-option">
-                                        <input type="radio" id="schedule" name="start-time" value="schedule">
-                                        <label for="schedule">Schedule for Later</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="schedule-options" id="schedule-options">
-                                <div class="form-group">
-                                    <label class="form-label">Date & Time</label>
-                                    <input type="datetime-local" class="form-control" id="live-date">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">Cover Image (Optional)</label>
-                                <input type="file" class="form-control" id="cover-image" accept="image/*">
-                            </div>
-                            
-                            <div class="action-buttons">
-                                <button type="button" class="btn btn-primary" id="start-live-btn">Start Live Session</button>
-                                <button type="button" class="btn btn-outline" id="cancel-live-btn">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="comments-modal" id="comments-modal">
-                <div class="comments-header">
-                    <h3>Comments</h3>
-                    <button class="close-comments" id="close-comments">&times;</button>
-                </div>
-                <div class="comments-container" id="comments-container"></div>
-            </div>
-
-            <div class="reels-viewer" id="reels-viewer">
-                <div class="reel-container">
-                    <button class="reel-close" id="reel-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <button class="reel-more-btn" id="reel-more-btn">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </button>
-                    <div class="reel-more-menu" id="reel-more-menu">
-                        <div class="reel-more-option" id="watch-with-friend">
-                            <i class="fas fa-user-friends"></i> Watch with a friend
-                        </div>
-                        <div class="reel-more-option">
-                            <i class="fas fa-bookmark"></i> Save
-                        </div>
-                        <div class="reel-more-option">
-                            <i class="fas fa-flag"></i> Report
-                        </div>
-                    </div>
-                    <video class="reel-video" id="reel-video" controls></video>
-                    <div class="reel-overlay">
-                        <div class="reel-user">
-                            <img src="" class="reel-avatar" id="reel-user-avatar">
-                            <div>
-                                <div class="reel-user-name" id="reel-user-name"></div>
-                                <div class="reel-caption" id="reel-caption"></div>
-                            </div>
-                        </div>
-                        <div class="reel-actions">
-                            <div class="reel-action">
-                                <i class="fas fa-heart"></i>
-                                <span id="reel-likes">0</span>
-                            </div>
-                            <div class="reel-action">
-                                <i class="fas fa-comment"></i>
-                                <span id="reel-comments">0</span>
-                            </div>
-                            <div class="reel-action">
-                                <i class="fas fa-share"></i>
-                                <span>Share</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stories-viewer" id="stories-viewer">
-                <div class="story-container">
-                    <button class="story-close" id="story-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="story-progress" id="story-progress"></div>
-                    <img class="story-image" id="story-image" src="">
-                    <div class="story-nav">
-                        <button class="story-nav-btn" id="prev-story"></button>
-                        <button class="story-nav-btn" id="next-story"></button>
-                    </div>
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
                 </div>
             </div>
             
-            <div class="modal" id="topup-modal">
-                <div class="modal-content topup-modal-content">
-                    <div class="modal-header">
-                        <h3>Top Up Tokens</h3>
-                        <button class="close-modal" id="close-topup-modal">&times;</button>
+            <div id="signup-form" class="hidden">
+                <div class="auth-header">
+                    <div class="auth-logo">
+                        <span class="auth-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </span>
+                        CallConnect
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="form-label">Enter Token Code</label>
-                            <input type="text" class="token-input" id="token-input" placeholder="XXXX-XXXX-XXXX">
-                        </div>
-                        <button class="buy-token-btn" id="buy-token-btn">
-                            <i class="fas fa-shopping-cart"></i> Buy Tokens
-                        </button>
-                    </div>
+                    <h2>Create Account</h2>
+                    <p class="text-muted">Join our community of audio and video enthusiasts</p>
+                </div>
+                
+                <form class="auth-form" id="signup-form-element">
+                    <input type="text" id="signup-name" class="auth-input" placeholder="Full Name" required>
+                    <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
+                    <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
+                    <input type="password" id="signup-confirm-password" class="auth-input" placeholder="Confirm Password" required>
+                    <button class="auth-btn" id="signup-btn">Create Account</button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
                 </div>
             </div>
-
-            <div class="watch-together-modal" id="watch-together-modal">
-                <div class="watch-together-content">
-                    <div class="modal-header">
-                        <h3>Watch Together</h3>
-                        <button class="close-modal" id="close-watch-together">&times;</button>
-                    </div>
-                    <div class="friends-list" id="friends-list">
-                        <div class="friend-item">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="friend-avatar">
-                            <div class="friend-info">
-                                <h4>Sarah Miller</h4>
-                                <div class="friend-status">
-                                    <span class="status-online"></span>
-                                    <span>Online</span>
-                                </div>
-                            </div>
-                            <div class="friend-checkbox" id="friend1"></div>
-                        </div>
-                        <div class="friend-item">
-                            <img src="https://randomuser.me/api/portraits/men/75.jpg" class="friend-avatar">
-                            <div class="friend-info">
-                                <h4>Alex Johnson</h4>
-                                <div class="friend-status">
-                                    <span class="status-online"></span>
-                                    <span>Online</span>
-                                </div>
-                            </div>
-                            <div class="friend-checkbox" id="friend2"></div>
-                        </div>
-                        <div class="friend-item">
-                            <img src="https://randomuser.me/api/portraits/men/22.jpg" class="friend-avatar">
-                            <div class="friend-info">
-                                <h4>David Wilson</h4>
-                                <div class="friend-status">
-                                    <span class="status-online"></span>
-                                    <span>Online</span>
-                                </div>
-                            </div>
-                            <div class="friend-checkbox" id="friend3"></div>
-                        </div>
-                        <div class="friend-item">
-                            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="friend-avatar">
-                            <div class="friend-info">
-                                <h4>Emma Watson</h4>
-                                <div class="friend-status">
-                                    <span class="status-online"></span>
-                                    <span>Online</span>
-                                </div>
-                            </div>
-                            <div class="friend-checkbox" id="friend4"></div>
-                        </div>
-                    </div>
-                    <div class="watch-together-actions">
-                        <button class="btn btn-outline" id="cancel-watch">Cancel</button>
-                        <button class="btn btn-primary" id="start-watch">Start Watching</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bottom-nav">
-                <a href="home.html" class="nav-item active" data-page="home">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </a>
-                <a href="shop.html" class="nav-item" data-page="shop">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Shop</span>
-                </a>
-                <a href="wallet.html" class="nav-item" data-page="wallet">
-                    <i class="fas fa-wallet"></i>
-                    <span>Wallet</span>
-                </a>
-                <a href="fun.html" class="nav-item" data-page="fun">
-                    <i class="fas fa-gamepad"></i>
-                    <span>Fun</span>
-                </a>
-                <a href="profile.html" class="nav-item" data-page="profile">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </a>
+            
+            <div id="config-error" class="config-error hidden">
+                <i class="fas fa-exclamation-triangle"></i>
+                Firebase configuration not found. Please check your config.js file.
             </div>
         </div>
     </div>
 
-    <script>
-        // Check for Firebase configuration
-        if (!window.firebaseConfig) {
-            console.error('Firebase configuration not found!');
-            document.getElementById('config-error').classList.remove('hidden');
-        } else {
-            try {
-                firebase.initializeApp(window.firebaseConfig);
-            } catch (error) {
-                console.error('Firebase initialization failed:', error);
-                document.getElementById('config-error').classList.remove('hidden');
-                document.getElementById('config-error').textContent = 
-                    'Firebase initialization failed: ' + error.message;
-            }
-        }
+    <!-- Dashboard Container -->
+    <div class="app-container" id="app-container" style="display:none;">
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </span>
+                CallConnect
+            </div>
+            <div class="header-actions">
+                <button class="message-btn" id="message-btn">
+                    <i class="fas fa-envelope"></i>
+                    <span class="message-badge">2</span>
+                </button>
+                <button class="notification-btn" id="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="notifications-dropdown" id="notifications-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div id="notifications-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="user-profile" id="user-profile">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar" id="user-avatar">
+                <div class="user-info">
+                    <h3 id="username-display">John Doe</h3>
+                    <p>Balance: <span class="coins" id="user-coins">250 <i class="fas fa-coins"></i></span></p>
+                    <button class="top-up-btn" id="top-up-btn">
+                        <i class="fas fa-plus"></i> Top Up
+                    </button>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Shop</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-wallet"></i>
+                    <span>Wallet</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Fun</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>Friends</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-video"></i>
+                    <span>Live Sessions</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+            
+            <button class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
         
-        const authService = {
-            auth: firebase.auth ? firebase.auth() : null,
+        <div class="main-content">
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i> Menu
+            </button>
             
-            registerUser: function(email, password, name) {
-                if (!this.auth) {
-                    throw new Error("Firebase auth not initialized");
-                }
+            <div class="page active" id="home-page">
+                <div class="stories-container" id="stories-container">
+                    <div class="story new" id="add-story">
+                        <div class="story-avatar">
+                            <div style="width: 100%; height: 100%; background: #e0e5eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-plus" style="font-size: 1.5rem; color: var(--text-color);"></i>
+                            </div>
+                        </div>
+                        <div class="story-username">Add Story</div>
+                    </div>
+                </div>
                 
-                return this.auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        return userCredential.user.updateProfile({
-                            displayName: name
-                        }).then(() => userCredential);
-                    });
-            },
-            
-            loginUser: function(email, password) {
-                if (!this.auth) {
-                    throw new Error("Firebase auth not initialized");
-                }
+                <div class="section-header">
+                    <h2 class="section-title">Live Rooms</h2>
+                    <a href="#" class="view-all">
+                        View all <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="live-rooms" id="live-rooms"></div>
                 
-                return this.auth.signInWithEmailAndPassword(email, password);
-            },
-            
-            logoutUser: function() {
-                if (!this.auth) {
-                    throw new Error("Firebase auth not initialized");
-                }
-                
-                return this.auth.signOut();
-            },
-            
-            onAuthStateChanged: function(callback) {
-                if (!this.auth) {
-                    console.error("Firebase auth not initialized");
-                    return;
-                }
-                
-                return this.auth.onAuthStateChanged(callback);
-            }
-        };
+                <div class="section-header">
+                    <h2 class="section-title">Community Feed</h2>
+                    <div class="filter-dropdown">
+                        <button class="filter-btn" id="filter-btn">
+                            Show all <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="filter-options" id="filter-options">
+                            <div class="filter-option active" data-filter="all">Show All</div>
+                            <div class="filter-option" data-filter="my-posts">My Posts</div>
+                            <div class="filter-option" data-filter="popular">Popular</div>
+                            <div class="filter-option" data-filter="recent">Recent</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feed-container" id="feed-container">
+                    <div id="loading-activities">
+                        <p style="text-align: center; padding: 3rem;">
+                            <span class="loading"></span> Loading community activities...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        const firestoreService = {
-            db: firebase.firestore ? firebase.firestore() : null,
-            
-            createUserProfile: async function(userId, userData) {
-                if (!this.db) {
-                    throw new Error("Firestore not initialized");
-                }
-                
-                const userRef = this.db.collection('users').doc(userId);
-                await userRef.set({
-                    ...userData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                return userRef.get();
-            },
-            
-            getUserProfile: async function(userId) {
-                if (!this.db) {
-                    throw new Error("Firestore not initialized");
-                }
-                
-                const userRef = this.db.collection('users').doc(userId);
-                const docSnap = await userRef.get();
-                return docSnap.exists() ? docSnap.data() : null;
-            },
-            
-            updateUserCoins: async function(userId, amount) {
-                if (!this.db) {
-                    throw new Error("Firestore not initialized");
-                }
-                
-                const userRef = this.db.collection('users').doc(userId);
-                await userRef.update({
-                    coins: firebase.firestore.FieldValue.increment(amount)
-                });
-                return userRef.get();
-            },
-            
-            createPost: async function(postData) {
-                if (!this.db) {
-                    throw new Error("Firestore not initialized");
-                }
-                
-                return this.db.collection('posts').add({
-                    ...postData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: 0,
-                    comments: 0
-                });
-            },
-            
-            createLiveRoom: async function(roomData) {
-                if (!this.db) {
-                    throw new Error("Firestore not initialized");
-                }
-                
-                return this.db.collection('liveRooms').add({
-                    ...roomData,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    members: 1,
-                    status: 'live'
-                });
-            },
-            
-            getLiveRooms: async function() {
-                if (!this.db) {
-                    throw new Error("Firestore not initialized");
-                }
-                
-                const snapshot = await this.db.collection('liveRooms')
-                    .where('status', '==', 'live')
-                    .orderBy('createdAt', 'desc')
-                    .limit(10)
-                    .get();
+        <div class="floating-widget">
+            <button class="floating-btn live-floating-btn" id="go-live-btn">
+                <i class="fas fa-video"></i>
+            </button>
+            <button class="floating-btn post-floating-btn" id="create-post-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        
+        <div class="floating-mic" id="floating-mic">
+            <i class="fas fa-microphone"></i>
+        </div>
+        
+        <div class="modal" id="create-post-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Create Post</h3>
+                    <button class="close-modal" id="close-post-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="post-textarea" id="post-text" placeholder="What's on your mind?"></textarea>
                     
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            },
-            
-            getPosts: async function() {
-                if (!this.db) {
-                    throw new Error("Firestore not initialized");
-                }
-                
-                const snapshot = await this.db.collection('posts')
-                    .orderBy('createdAt', 'desc')
-                    .limit(20)
-                    .get();
+                    <div class="file-preview" id="image-preview">
+                        <img class="preview-image" id="preview-image">
+                    </div>
                     
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            }
-        };
+                    <div class="recording-ui" id="recording-ui">
+                        <div class="recording-controls">
+                            <button class="record-btn" id="record-btn">
+                                <i class="fas fa-microphone"></i> Record
+                            </button>
+                            <button class="stop-btn" id="stop-btn" disabled>
+                                <i class="fas fa-stop"></i> Stop
+                            </button>
+                            <div class="timer" id="timer">0:00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="action-btn" id="add-image-btn">
+                            <i class="fas fa-image"></i> Photo
+                        </button>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        
+                        <button class="action-btn" id="add-voice-btn">
+                            <i class="fas fa-microphone"></i> Voice Note
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="submit-post-btn">Post</button>
+                </div>
+            </div>
+        </div>
 
-        const appContainer = document.getElementById('app-container');
+        <div class="modal" id="go-live-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Go Live</h3>
+                    <button class="close-modal" id="close-live-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form class="go-live-form">
+                        <div class="form-group">
+                            <label class="form-label">Live Session Title</label>
+                            <input type="text" class="form-control" id="live-title" placeholder="Enter session title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Session Type</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="podcast" name="session-type" value="podcast" checked>
+                                    <label for="podcast">Podcast (Audio Only)</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="stream" name="session-type" value="stream">
+                                    <label for="stream">Live Stream (Video)</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">When do you want to start?</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="start-now" name="start-time" value="now" checked>
+                                    <label for="start-now">Start Now</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="schedule" name="start-time" value="schedule">
+                                    <label for="schedule">Schedule for Later</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="schedule-options" id="schedule-options">
+                            <div class="form-group">
+                                <label class="form-label">Date & Time</label>
+                                <input type="datetime-local" class="form-control" id="live-date">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Cover Image (Optional)</label>
+                            <input type="file" class="form-control" id="cover-image" accept="image/*">
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-primary" id="start-live-btn">Start Live Session</button>
+                            <button type="button" class="btn btn-outline" id="cancel-live-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="comments-modal" id="comments-modal">
+            <div class="comments-header">
+                <h3>Comments</h3>
+                <button class="close-comments" id="close-comments">&times;</button>
+            </div>
+            <div class="comments-container" id="comments-container"></div>
+        </div>
+
+        <div class="reels-viewer" id="reels-viewer">
+            <div class="reel-container">
+                <button class="reel-close" id="reel-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button class="reel-more-btn" id="reel-more-btn">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
+                <div class="reel-more-menu" id="reel-more-menu">
+                    <div class="reel-more-option" id="watch-with-friend">
+                        <i class="fas fa-user-friends"></i> Watch with a friend
+                    </div>
+                    <div class="reel-more-option">
+                        <i class="fas fa-bookmark"></i> Save
+                    </div>
+                    <div class="reel-more-option">
+                        <i class="fas fa-flag"></i> Report
+                    </div>
+                </div>
+                <video class="reel-video" id="reel-video" controls></video>
+                <div class="reel-overlay">
+                    <div class="reel-user">
+                        <img src="" class="reel-avatar" id="reel-user-avatar">
+                        <div>
+                            <div class="reel-user-name" id="reel-user-name"></div>
+                            <div class="reel-caption" id="reel-caption"></div>
+                        </div>
+                    </div>
+                    <div class="reel-actions">
+                        <div class="reel-action">
+                            <i class="fas fa-heart"></i>
+                            <span id="reel-likes">0</span>
+                        </div>
+                        <div class="reel-action">
+                            <i class="fas fa-comment"></i>
+                            <span id="reel-comments">0</span>
+                        </div>
+                        <div class="reel-action">
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stories-viewer" id="stories-viewer">
+            <div class="story-container">
+                <button class="story-close" id="story-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="story-progress" id="story-progress"></div>
+                <img class="story-image" id="story-image" src="">
+                <div class="story-nav">
+                    <button class="story-nav-btn" id="prev-story"></button>
+                    <button class="story-nav-btn" id="next-story"></button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="topup-modal">
+            <div class="modal-content topup-modal-content">
+                <div class="modal-header">
+                    <h3>Top Up Tokens</h3>
+                    <button class="close-modal" id="close-topup-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Enter Token Code</label>
+                        <input type="text" class="token-input" id="token-input" placeholder="XXXX-XXXX-XXXX">
+                    </div>
+                    <button class="buy-token-btn" id="buy-token-btn">
+                        <i class="fas fa-shopping-cart"></i> Buy Tokens
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="watch-together-modal" id="watch-together-modal">
+            <div class="watch-together-content">
+                <div class="modal-header">
+                    <h3>Watch Together</h3>
+                    <button class="close-modal" id="close-watch-together">&times;</button>
+                </div>
+                <div class="friends-list" id="friends-list">
+                    <div class="friend-item">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="friend-avatar">
+                        <div class="friend-info">
+                            <h4>Sarah Miller</h4>
+                            <div class="friend-status">
+                                <span class="status-online"></span>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="friend-checkbox" id="friend1"></div>
+                    </div>
+                    <div class="friend-item">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" class="friend-avatar">
+                        <div class="friend-info">
+                            <h4>Alex Johnson</h4>
+                            <div class="friend-status">
+                                <span class="status-online"></span>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="friend-checkbox" id="friend2"></div>
+                    </div>
+                    <div class="friend-item">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" class="friend-avatar">
+                        <div class="friend-info">
+                            <h4>David Wilson</h4>
+                            <div class="friend-status">
+                                <span class="status-online"></span>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="friend-checkbox" id="friend3"></div>
+                    </div>
+                    <div class="friend-item">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" class="friend-avatar">
+                        <div class="friend-info">
+                            <h4>Emma Watson</h4>
+                            <div class="friend-status">
+                                <span class="status-online"></span>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                        <div class="friend-checkbox" id="friend4"></div>
+                    </div>
+                </div>
+                <div class="watch-together-actions">
+                    <button class="btn btn-outline" id="cancel-watch">Cancel</button>
+                    <button class="btn btn-primary" id="start-watch">Start Watching</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="home.html" class="nav-item active" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="shop.html" class="nav-item" data-page="shop">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Shop</span>
+            </a>
+            <a href="wallet.html" class="nav-item" data-page="wallet">
+                <i class="fas fa-wallet"></i>
+                <span>Wallet</span>
+            </a>
+            <a href="fun.html" class="nav-item" data-page="fun">
+                <i class="fas fa-gamepad"></i>
+                <span>Fun</span>
+            </a>
+            <a href="profile.html" class="nav-item" data-page="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
         const loginContainer = document.getElementById('login-container');
-        const appContent = document.getElementById('app-content');
+        const appContainer = document.getElementById('app-container');
         const loginForm = document.getElementById('login-form-element');
         const signupForm = document.getElementById('signup-form-element');
         const loginBtn = document.getElementById('login-btn');
         const signupBtn = document.getElementById('signup-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const menuToggle = document.getElementById('menu-toggle');
-        const sidebar = document.getElementById('sidebar');
-        const themeToggle = document.getElementById('theme-toggle');
-        const notificationBtn = document.getElementById('notification-btn');
-        const notificationsDropdown = document.getElementById('notifications-dropdown');
-        const markAllReadBtn = document.getElementById('mark-all-read');
-        const topUpBtn = document.getElementById('top-up-btn');
-        const createPostBtn = document.getElementById('create-post-btn');
-        const createPostModal = document.getElementById('create-post-modal');
-        const closePostModalBtn = document.getElementById('close-post-modal');
-        const goLiveBtn = document.getElementById('go-live-btn');
-        const goLiveModal = document.getElementById('go-live-modal');
-        const closeLiveModalBtn = document.getElementById('close-live-modal');
-        const postText = document.getElementById('post-text');
-        const addImageBtn = document.getElementById('add-image-btn');
-        const imageUpload = document.getElementById('image-upload');
-        const imagePreview = document.getElementById('preview-image');
-        const imagePreviewContainer = document.getElementById('image-preview');
-        const addVoiceBtn = document.getElementById('add-voice-btn');
-        const recordingUI = document.getElementById('recording-ui');
-        const recordBtn = document.getElementById('record-btn');
-        const stopBtn = document.getElementById('stop-btn');
-        const timer = document.getElementById('timer');
-        const submitPostBtn = document.getElementById('submit-post-btn');
-        const usernameDisplay = document.getElementById('username-display');
-        const userAvatar = document.getElementById('user-avatar');
-        const userCoins = document.getElementById('user-coins');
-        const storiesContainer = document.getElementById('stories-container');
-        const liveRoomsContainer = document.getElementById('live-rooms');
-        const feedContainer = document.getElementById('feed-container');
         const showSignupLink = document.getElementById('show-signup');
         const showLoginLink = document.getElementById('show-login');
         const loginFormDiv = document.getElementById('login-form');
         const signupFormDiv = document.getElementById('signup-form');
-        const scheduleOptions = document.getElementById('schedule-options');
-        const startNowRadio = document.getElementById('start-now');
-        const scheduleRadio = document.getElementById('schedule');
-        const startLiveBtn = document.getElementById('start-live-btn');
-        const cancelLiveBtn = document.getElementById('cancel-live-btn');
-        const navItems = document.querySelectorAll('.nav-item');
         const configError = document.getElementById('config-error');
-        const loadingActivities = document.getElementById('loading-activities');
-        const filterBtn = document.getElementById('filter-btn');
-        const filterOptions = document.getElementById('filter-options');
-        const addStory = document.getElementById('add-story');
-        const floatingMic = document.getElementById('floating-mic');
         
+        const usernameDisplay = document.getElementById('username-display');
+        const userAvatar = document.getElementById('user-avatar');
+        const userCoins = document.getElementById('user-coins');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Firebase services
+        let auth, db;
+        
+        // Current user (will be set after login)
         let currentUser = null;
-        let currentUserData = null;
-        let recorder, audioChunks = [];
-        let audioData = "";
-        let recordingInterval;
-        let recordingSeconds = 0;
-        let posts = [];
-        let liveRooms = [];
-        let stories = [];
-        let currentFilter = 'all';
-
+        
+        // Show toast notification
         function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
             document.body.appendChild(toast);
             
             setTimeout(() => {
-                toast.remove();
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
         
-        function updateUIForAuthState(user) {
-            if (user) {
-                loginContainer.style.display = 'none';
-                appContent.style.display = 'flex';
-            } else {
-                loginContainer.style.display = 'flex';
-                appContent.style.display = 'none';
-            }
-        }
-
-        function init() {
-            setupEventListeners();
-            
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.body.setAttribute('data-theme', savedTheme);
-            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            
-            if (window.firebaseConfig) {
-                checkAuthState();
-            }
-        }
-
-        function checkAuthState() {
-            authService.onAuthStateChanged(async (user) => {
-                updateUIForAuthState(user);
-                
-                if (user) {
-                    currentUser = user;
-                    
-                    try {
-                        currentUserData = await firestoreService.getUserProfile(user.uid);
-                        if (!currentUserData) {
-                            currentUserData = {
-                                name: user.displayName || user.email.split('@')[0],
-                                avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
-                                coins: 100,
-                                following: []
-                            };
-                            await firestoreService.createUserProfile(user.uid, currentUserData);
-                        }
-                        
-                        updateUserProfile(currentUserData);
-                        
-                        try {
-                            await loadAppData();
-                        } catch (error) {
-                            showToast("Error loading app data");
-                        }
-                    } catch (error) {
-                        showToast("Error loading user profile");
-                    }
-                } else {
-                    currentUser = null;
-                    currentUserData = null;
-                }
-            });
-        }
-
-        function updateUserProfile(userData) {
-            usernameDisplay.textContent = userData.name;
-            userAvatar.src = userData.avatar;
-            userCoins.textContent = userData.coins;
-        }
-
-        async function loadAppData() {
-            try {
-                // Load stories
-                stories = [];
-                renderStories();
-                
-                // Load live rooms
-                liveRooms = await firestoreService.getLiveRooms();
-                renderLiveRooms(liveRooms);
-                
-                // Load posts
-                posts = await firestoreService.getPosts();
-                renderCommunityFeed(posts);
-            } catch (error) {
-                showToast("Failed to load app data");
-            } finally {
-                if (loadingActivities) {
-                    loadingActivities.remove();
-                }
-            }
-        }
-
-        function renderStories() {
-            storiesContainer.innerHTML = '';
-            
-            // Add "Add Story" button
-            const addStoryElement = document.createElement('div');
-            addStoryElement.className = 'story new';
-            addStoryElement.id = 'add-story';
-            addStoryElement.innerHTML = `
-                <div class="story-avatar">
-                    <div style="width: 100%; height: 100%; background: #e0e5eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-plus" style="font-size: 1.5rem; color: var(--text-color);"></i>
-                    </div>
-                </div>
-                <div class="story-username">Add Story</div>
-            `;
-            addStoryElement.addEventListener('click', createStory);
-            storiesContainer.appendChild(addStoryElement);
-            
-            // Add sample stories
-            const sampleStories = [
-                { id: 1, name: "Sarah", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
-                { id: 2, name: "Mike", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
-                { id: 3, name: "Emma", avatar: "https://randomuser.me/api/portraits/women/68.jpg" },
-                { id: 4, name: "David", avatar: "https://randomuser.me/api/portraits/men/22.jpg" }
-            ];
-            
-            sampleStories.forEach(story => {
-                const storyElement = document.createElement('div');
-                storyElement.className = 'story';
-                storyElement.innerHTML = `
-                    <div class="story-avatar">
-                        <img src="${story.avatar}" alt="${story.name}">
-                    </div>
-                    <div class="story-username">${story.name}</div>
-                `;
-                storiesContainer.appendChild(storyElement);
-            });
-        }
-
-        function renderLiveRooms(rooms) {
-            liveRoomsContainer.innerHTML = '';
-            
-            if (rooms.length === 0) {
-                liveRoomsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-video-slash"></i>
-                        <h3>No live rooms</h3>
-                        <p>Be the first to start a live session!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            rooms.forEach(room => {
-                const roomElement = document.createElement('div');
-                roomElement.className = 'live-room-card';
-                roomElement.innerHTML = `
-                    <div class="live-badge">
-                        <i class="fas fa-circle"></i> LIVE
-                    </div>
-                    <img src="${room.coverImage || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'}" alt="${room.title}" class="live-room-image">
-                    <div class="live-room-info">
-                        <h3 class="live-room-title">${room.title}</h3>
-                        <div class="live-room-members">
-                            <img src="${room.hostAvatar}" alt="${room.host}">
-                            <span>${room.host} • ${room.members} participants</span>
-                        </div>
-                        <button class="join-room-btn" data-id="${room.id}">
-                            <i class="fas fa-${room.type === 'podcast' ? 'headphones' : 'video'}"></i> 
-                            Join ${room.type === 'podcast' ? 'Podcast' : 'Stream'}
-                        </button>
-                    </div>
-                `;
-                liveRoomsContainer.appendChild(roomElement);
-            });
-            
-            document.querySelectorAll('.join-room-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const roomId = btn.dataset.id;
-                    joinRoom(roomId);
-                });
-            });
-        }
-
-        function renderCommunityFeed(posts) {
-            feedContainer.innerHTML = '';
-            
-            if (posts.length === 0) {
-                feedContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-newspaper"></i>
-                        <h3>No posts yet</h3>
-                        <p>Follow more users or create your own post to start seeing content in your feed.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Filter posts based on current filter
-            let filteredPosts = [...posts];
-            
-            if (currentFilter === 'my-posts') {
-                filteredPosts = filteredPosts.filter(post => post.userId === currentUser.uid);
-            } else if (currentFilter === 'popular') {
-                filteredPosts.sort((a, b) => b.likes - a.likes);
-            } else if (currentFilter === 'recent') {
-                filteredPosts.sort((a, b) => b.createdAt - a.createdAt);
-            }
-            
-            filteredPosts.forEach(post => {
-                const postElement = createPostElement(post);
-                feedContainer.appendChild(postElement);
-            });
-        }
-
-        function createPostElement(post) {
-            const postElement = document.createElement('div');
-            postElement.className = 'feed-card';
-            postElement.dataset.id = post.id;
-            
-            // Format date
-            const postDate = post.createdAt.toDate();
-            const options = { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' };
-            const formattedDate = postDate.toLocaleDateString('en-US', options);
-            
-            // Check if it's user's post
-            const isUsersPost = post.userId === currentUser.uid;
-            
-            postElement.innerHTML = `
-                <div class="feed-header">
-                    <img src="${post.userAvatar}" class="feed-user-avatar">
-                    <div class="feed-user-info">
-                        <h4>${post.userName} ${isUsersPost ? '<span class="admin-badge">YOU</span>' : ''}</h4>
-                        <p><i class="fas fa-clock"></i> ${formattedDate}</p>
-                    </div>
-                </div>
-                <div class="feed-content">
-                    <div class="feed-text">${post.content}</div>
-                    ${post.image ? `<img src="${post.image}" class="feed-image">` : ''}
-                </div>
-                <div class="feed-actions">
-                    <div class="feed-action like-btn" data-id="${post.id}">
-                        <i class="far fa-heart"></i>
-                        <span>${post.likes || 0} likes</span>
-                    </div>
-                    <div class="feed-action comment-toggle-btn" data-id="${post.id}">
-                        <i class="far fa-comment"></i>
-                        <span>${post.comments || 0} comments</span>
-                    </div>
-                    <div class="feed-action">
-                        <i class="far fa-share-square"></i>
-                        <span>Share</span>
-                    </div>
-                </div>
-            `;
-            
-            return postElement;
+        // Toggle between login and signup forms
+        function toggleAuthForm() {
+            loginFormDiv.classList.toggle('hidden');
+            signupFormDiv.classList.toggle('hidden');
         }
         
+        // Initialize Firebase with external config
+        function initializeFirebase() {
+            try {
+                // Check if firebaseConfig is defined in config.js
+                if (typeof firebaseConfig === 'undefined') {
+                    configError.classList.remove('hidden');
+                    return false;
+                }
+                
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+                
+                return true;
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                configError.classList.remove('hidden');
+                configError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Firebase initialization error: ${error.message}`;
+                return false;
+            }
+        }
+        
+        // Handle login
         async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -2920,18 +2690,44 @@
             }
             
             try {
-                // Set loading state on button
                 loginBtn.classList.add('loading');
+                loginBtn.innerHTML = '<span class="loading"></span> Logging in...';
                 
-                await authService.loginUser(email, password);
-                showToast('Login successful!');
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                
+                // Get user data from Firestore
+                const userDoc = await db.collection('users').doc(userCredential.user.uid).get();
+                
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    currentUser = {
+                        id: userCredential.user.uid,
+                        name: userData.name,
+                        avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
+                        coins: userData.coins || 100,
+                        role: userData.role || 'user'
+                    };
+                    
+                    showToast('Login successful!');
+                    
+                    // Hide login container, show app container
+                    loginContainer.style.display = 'none';
+                    appContainer.style.display = 'flex';
+                    
+                    // Initialize the dashboard with the current user
+                    initDashboard();
+                } else {
+                    showToast('User data not found');
+                }
             } catch (error) {
                 showToast(`Login failed: ${error.message}`);
             } finally {
                 loginBtn.classList.remove('loading');
+                loginBtn.textContent = 'Login';
             }
         }
-
+        
+        // Handle signup
         async function handleSignup(e) {
             e.preventDefault();
             const name = document.getElementById('signup-name').value;
@@ -2950,264 +2746,729 @@
             }
             
             try {
-                // Set loading state on button
                 signupBtn.classList.add('loading');
+                signupBtn.innerHTML = '<span class="loading"></span> Creating account...';
                 
-                await authService.registerUser(email, password, name);
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                
+                // Create user profile in Firestore
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    name: name,
+                    email: email,
+                    avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`,
+                    coins: 100,
+                    role: 'user',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
                 showToast('Account created successfully!');
+                
+                // Automatically log in
+                document.getElementById('login-email').value = email;
+                document.getElementById('login-password').value = password;
+                handleLogin(e);
             } catch (error) {
                 showToast(`Signup failed: ${error.message}`);
             } finally {
                 signupBtn.classList.remove('loading');
+                signupBtn.textContent = 'Create Account';
             }
         }
-
-        function logout() {
-            try {
-                authService.logoutUser()
-                    .then(() => showToast('Logged out successfully'))
-                    .catch(error => {
-                        showToast(`Logout failed: ${error.message}`);
-                    });
-            } catch (error) {
-                showToast(`Logout failed: ${error.message}`);
-            }
+        
+        // Initialize the dashboard
+        function initDashboard() {
+            // Update user profile in dashboard
+            usernameDisplay.textContent = currentUser.name;
+            userAvatar.src = currentUser.avatar;
+            userCoins.textContent = `${currentUser.coins} `;
+            
+            // Setup event listeners for dashboard
+            setupDashboardListeners();
+            
+            // Load content
+            loadStories();
+            loadLiveRooms();
+            loadNotifications();
+            loadCommunityFeed();
         }
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-        }
-
-        function toggleTheme() {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-        }
-
-        function toggleNotifications() {
-            notificationsDropdown.classList.toggle('active');
-        }
-
-        function markAllAsRead() {
-            document.querySelectorAll('.notification-badge, .message-badge').forEach(badge => {
-                badge.style.display = 'none';
+        
+        // Setup dashboard event listeners
+        function setupDashboardListeners() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const themeToggle = document.getElementById('theme-toggle');
+            const notificationBtn = document.getElementById('notification-btn');
+            const messageBtn = document.getElementById('message-btn');
+            const notificationsDropdown = document.getElementById('notifications-dropdown');
+            const markAllReadBtn = document.getElementById('mark-all-read');
+            const topUpBtn = document.getElementById('top-up-btn');
+            const createPostBtn = document.getElementById('create-post-btn');
+            const createPostModal = document.getElementById('create-post-modal');
+            const closePostModalBtn = document.getElementById('close-post-modal');
+            const goLiveBtn = document.getElementById('go-live-btn');
+            const goLiveModal = document.getElementById('go-live-modal');
+            const closeLiveModalBtn = document.getElementById('close-live-modal');
+            const closeCommentsBtn = document.getElementById('close-comments');
+            const commentsModal = document.getElementById('comments-modal');
+            const commentsContainer = document.getElementById('comments-container');
+            const postText = document.getElementById('post-text');
+            const addImageBtn = document.getElementById('add-image-btn');
+            const imageUpload = document.getElementById('image-upload');
+            const imagePreview = document.getElementById('preview-image');
+            const imagePreviewContainer = document.getElementById('image-preview');
+            const addVoiceBtn = document.getElementById('add-voice-btn');
+            const recordingUI = document.getElementById('recording-ui');
+            const recordBtn = document.getElementById('record-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const timer = document.getElementById('timer');
+            const submitPostBtn = document.getElementById('submit-post-btn');
+            const filterBtn = document.getElementById('filter-btn');
+            const filterOptions = document.getElementById('filter-options');
+            const addStory = document.getElementById('add-story');
+            const reelClose = document.getElementById('reel-close');
+            const reelMoreBtn = document.getElementById('reel-more-btn');
+            const reelMoreMenu = document.getElementById('reel-more-menu');
+            const floatingMic = document.getElementById('floating-mic');
+            const watchWithFriend = document.getElementById('watch-with-friend');
+            const closeTopupModal = document.getElementById('close-topup-modal');
+            const buyTokenBtn = document.getElementById('buy-token-btn');
+            const tokenInput = document.getElementById('token-input');
+            const closeWatchTogether = document.getElementById('close-watch-together');
+            const cancelWatch = document.getElementById('cancel-watch');
+            const startWatch = document.getElementById('start-watch');
+            
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('active');
             });
-            notificationsDropdown.classList.remove('active');
-            showToast('All notifications marked as read');
-        }
-
-        function addCoins() {
-            if (!currentUserData) return;
             
-            const newCoins = currentUserData.coins + 50;
-            userCoins.textContent = newCoins;
-            showToast('50 coins added to your account!');
+            notificationBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationsDropdown.classList.toggle('active');
+            });
             
-            firestoreService.updateUserCoins(currentUser.uid, 50);
+            messageBtn.addEventListener('click', () => {
+                showToast('Messages feature coming soon!');
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!notificationsDropdown.contains(e.target) && e.target !== notificationBtn) {
+                    notificationsDropdown.classList.remove('active');
+                }
+                if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+                    sidebar.classList.remove('active');
+                }
+                if (!createPostModal.contains(e.target) && e.target !== createPostBtn) {
+                    closePostModal();
+                }
+                if (!goLiveModal.contains(e.target) && e.target !== goLiveBtn) {
+                    closeLiveModal();
+                }
+                if (!filterOptions.contains(e.target) && e.target !== filterBtn) {
+                    filterOptions.classList.remove('active');
+                }
+                if (!reelMoreMenu.contains(e.target) && e.target !== reelMoreBtn) {
+                    reelMoreMenu.style.display = 'none';
+                }
+            });
+            
+            themeToggle.addEventListener('click', toggleTheme);
+            logoutBtn.addEventListener('click', logout);
+            topUpBtn.addEventListener('click', () => document.getElementById('topup-modal').style.display = 'flex');
+            createPostBtn.addEventListener('click', () => createPostModal.style.display = 'flex');
+            closePostModalBtn.addEventListener('click', closePostModal);
+            goLiveBtn.addEventListener('click', () => goLiveModal.style.display = 'flex');
+            closeLiveModalBtn.addEventListener('click', closeLiveModal);
+            closeCommentsBtn.addEventListener('click', () => commentsModal.style.display = 'none');
+            addImageBtn.addEventListener('click', () => imageUpload.click());
+            imageUpload.addEventListener('change', handleImageUpload);
+            addVoiceBtn.addEventListener('click', () => recordingUI.style.display = 'block');
+            submitPostBtn.addEventListener('click', submitPost);
+            filterBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                filterOptions.classList.toggle('active');
+            });
+            addStory.addEventListener('click', createStory);
+            reelClose.addEventListener('click', () => {
+                document.getElementById('reels-viewer').style.display = 'none';
+                floatingMic.style.display = 'none';
+            });
+            reelMoreBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                reelMoreMenu.style.display = reelMoreMenu.style.display === 'block' ? 'none' : 'block';
+            });
+            watchWithFriend.addEventListener('click', () => {
+                document.getElementById('watch-together-modal').style.display = 'flex';
+                reelMoreMenu.style.display = 'none';
+            });
+            floatingMic.addEventListener('click', toggleMic);
+            document.getElementById('story-close').addEventListener('click', () => document.getElementById('stories-viewer').style.display = 'none');
+            document.getElementById('prev-story').addEventListener('click', showPrevStory);
+            document.getElementById('next-story').addEventListener('click', showNextStory);
+            buyTokenBtn.addEventListener('click', () => window.location.href = 'https://www.getmemy.com');
+            closeWatchTogether.addEventListener('click', () => document.getElementById('watch-together-modal').style.display = 'none');
+            cancelWatch.addEventListener('click', () => document.getElementById('watch-together-modal').style.display = 'none');
+            startWatch.addEventListener('click', startWatchingTogether);
+            
+            markAllReadBtn.addEventListener('click', markAllAsRead);
+            
+            document.querySelectorAll('.filter-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    currentFilter = option.dataset.filter;
+                    document.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                    filterBtn.innerHTML = `${option.textContent} <i class="fas fa-chevron-down"></i>`;
+                    filterOptions.classList.remove('active');
+                    loadCommunityFeed();
+                });
+            });
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
         }
-
-        function showCreatePostModal() {
-            createPostModal.style.display = 'flex';
-            postText.value = '';
-            imagePreviewContainer.style.display = 'none';
-            recordingUI.style.display = 'none';
-        }
-
+        
+        // Close post modal
         function closePostModal() {
-            createPostModal.style.display = 'none';
+            document.getElementById('create-post-modal').style.display = 'none';
+            document.getElementById('post-text').value = '';
+            document.getElementById('image-preview').style.display = 'none';
+            document.getElementById('preview-image').src = '';
+            document.getElementById('image-upload').value = '';
+            document.getElementById('recording-ui').style.display = 'none';
+            document.getElementById('timer').textContent = '0:00';
         }
-
-        function showGoLiveModal() {
-            goLiveModal.style.display = 'flex';
+        
+        // Close live modal
+        function closeLiveModal() {
+            document.getElementById('go-live-modal').style.display = 'none';
+            document.getElementById('schedule-options').style.display = 'none';
             document.getElementById('live-title').value = '';
-            document.getElementById('podcast').checked = true;
+            document.getElementById('cover-image').value = '';
+            document.getElementById('live-date').value = '';
             document.getElementById('start-now').checked = true;
-            scheduleOptions.style.display = 'none';
         }
-
-        function closeGoLiveModal() {
-            goLiveModal.style.display = 'none';
-        }
-
+        
+        // Handle image upload
         function handleImageUpload(e) {
             const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                imagePreview.src = event.target.result;
-                imagePreviewContainer.style.display = 'block';
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('preview-image').src = event.target.result;
+                    document.getElementById('image-preview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
         }
-
-        function showRecordingUI() {
-            recordingUI.style.display = 'block';
-        }
-
-        function startRecording() {
-            recordBtn.disabled = true;
-            stopBtn.disabled = false;
-            recordingSeconds = 0;
-            
-            recordingInterval = setInterval(() => {
-                recordingSeconds++;
-                const minutes = Math.floor(recordingSeconds / 60);
-                const seconds = recordingSeconds % 60;
-                timer.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            }, 1000);
-            
-            showToast('Recording started...');
-        }
-
-        function stopRecording() {
-            clearInterval(recordingInterval);
-            recordBtn.disabled = false;
-            stopBtn.disabled = true;
-            showToast('Recording stopped');
-        }
-
-        async function submitPost() {
-            const text = postText.value.trim();
-            const imageFile = imageUpload.files[0];
+        
+        // Submit post
+        function submitPost() {
+            const text = document.getElementById('post-text').value.trim();
+            const imageFile = document.getElementById('image-upload').files[0];
             
             if (!text && !imageFile) {
-                showToast('Please add text or an image');
+                showToast('Please add text or image');
                 return;
             }
             
-            const postData = {
-                userId: currentUser.uid,
-                userName: currentUserData.name,
-                userAvatar: currentUserData.avatar,
-                content: text
-            };
-            
-            try {
-                // Set loading state on button
-                submitPostBtn.classList.add('loading');
-                
-                if (imageFile) {
-                    // In a real app, you would upload to Firebase Storage
-                    // For demo, we'll use a fake URL
-                    postData.image = URL.createObjectURL(imageFile);
-                }
-                
-                await firestoreService.createPost(postData);
-                
-                showToast('Post created successfully!');
-                closePostModal();
-                
-                // Refresh the feed
-                await loadAppData();
-            } catch (error) {
-                showToast(`Error creating post: ${error.message}`);
-            } finally {
-                submitPostBtn.classList.remove('loading');
-            }
-        }
-
-        function toggleScheduleOptions() {
-            scheduleOptions.style.display = scheduleRadio.checked ? 'block' : 'none';
-        }
-
-        async function startLiveSession() {
-            const title = document.getElementById('live-title').value;
-            if (!title) {
-                showToast('Please enter a title for your live session');
-                return;
-            }
-            
-            const sessionType = document.querySelector('input[name="session-type"]:checked').value;
-            const startTime = document.querySelector('input[name="start-time"]:checked').value;
-            const dateTime = document.getElementById('live-date').value;
-            
-            if (startTime === 'schedule' && !dateTime) {
-                showToast('Please select a date and time');
-                return;
-            }
-            
-            try {
-                // Set loading state on button
-                startLiveBtn.classList.add('loading');
-                
-                const roomData = {
-                    title: title,
-                    host: currentUserData.name,
-                    hostAvatar: currentUserData.avatar,
-                    type: sessionType,
-                    startTime: startTime === 'now' ? new Date() : new Date(dateTime)
-                };
-                
-                await firestoreService.createLiveRoom(roomData);
-                
-                showToast(`Live session ${startTime === 'now' ? 'started!' : 'scheduled!'}`);
-                closeGoLiveModal();
-                
-                // Refresh live rooms
-                await loadAppData();
-            } catch (error) {
-                showToast("Failed to start live session");
-            } finally {
-                startLiveBtn.classList.remove('loading');
-            }
-        }
-
-        function joinRoom(roomId) {
-            showToast(`Joining room ${roomId}...`);
-            // In a real app, you would redirect to the live room
-        }
-
-        function setActiveNav(e) {
-            e.preventDefault();
-            const page = this.dataset.page;
-            
-            navItems.forEach(item => {
-                item.classList.remove('active');
-            });
-            this.classList.add('active');
-            
-            showToast(`Navigating to ${page} page...`);
-        }
-
-        function closeModals(e) {
-            if (!notificationBtn.contains(e.target)) {
-                notificationsDropdown.classList.remove('active');
-            }
-            
-            if (createPostModal.style.display === 'flex' && !createPostModal.contains(e.target)) {
-                closePostModal();
-            }
-            
-            if (goLiveModal.style.display === 'flex' && !goLiveModal.contains(e.target)) {
-                closeGoLiveModal();
-            }
-        }
-
-        function toggleAuthForm() {
-            loginFormDiv.classList.toggle('hidden');
-            signupFormDiv.classList.toggle('hidden');
+            showToast('Post created successfully!');
+            closePostModal();
         }
         
+        // Toggle theme
+        function toggleTheme() {
+            const darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', darkMode ? '' : 'dark');
+            document.getElementById('theme-toggle').innerHTML = darkMode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', darkMode ? '' : 'dark');
+        }
+        
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                auth.signOut().then(() => {
+                    showToast('Logged out successfully');
+                    appContainer.style.display = 'none';
+                    loginContainer.style.display = 'flex';
+                    document.getElementById('login-email').value = '';
+                    document.getElementById('login-password').value = '';
+                });
+            }
+        }
+        
+        // Load stories
+        function loadStories() {
+            const storiesContainer = document.getElementById('stories-container');
+            storiesContainer.innerHTML = '';
+            
+            const addStoryElement = document.createElement('div');
+            addStoryElement.className = 'story new';
+            addStoryElement.id = 'add-story';
+            addStoryElement.innerHTML = `
+                <div class="story-avatar">
+                    <div style="width: 100%; height: 100%; background: #e0e5eb; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-plus" style="font-size: 1.5rem; color: var(--text-color);"></i>
+                    </div>
+                </div>
+                <div class="story-username">Add Story</div>
+            `;
+            addStoryElement.addEventListener('click', createStory);
+            storiesContainer.appendChild(addStoryElement);
+            
+            // Add sample stories
+            const stories = [
+                { 
+                    id: 1, 
+                    name: "Sarah", 
+                    avatar: "https://randomuser.me/api/portraits/women/44.jpg", 
+                    new: true
+                },
+                { 
+                    id: 2, 
+                    name: "Mike", 
+                    avatar: "https://randomuser.me/api/portraits/men/32.jpg", 
+                    new: true
+                },
+                { 
+                    id: 3, 
+                    name: "Emma", 
+                    avatar: "https://randomuser.me/api/portraits/women/68.jpg", 
+                    new: false
+                },
+                { 
+                    id: 4, 
+                    name: "David", 
+                    avatar: "https://randomuser.me/api/portraits/men/22.jpg", 
+                    new: false
+                }
+            ];
+            
+            stories.forEach(story => {
+                const storyElement = document.createElement('div');
+                storyElement.className = `story ${story.new ? 'new' : ''}`;
+                storyElement.dataset.userId = story.id;
+                storyElement.innerHTML = `
+                    <div class="story-avatar">
+                        <img src="${story.avatar}">
+                    </div>
+                    <div class="story-username">${story.name}</div>
+                `;
+                storyElement.addEventListener('click', () => {
+                    openStories(story.id);
+                });
+                storiesContainer.appendChild(storyElement);
+            });
+        }
+        
+        // Load live rooms
+        function loadLiveRooms() {
+            const liveRoomsContainer = document.getElementById('live-rooms');
+            liveRoomsContainer.innerHTML = '';
+            
+            const rooms = [
+                {
+                    id: 1,
+                    title: "Music & Chill - Late Night Vibes",
+                    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+                    host: "Sarah",
+                    hostAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                    members: 12
+                },
+                {
+                    id: 2,
+                    title: "Tech Talk: Future of Web Development",
+                    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+                    host: "Mike",
+                    hostAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
+                    members: 8
+                },
+                {
+                    id: 3,
+                    title: "Gaming Session - Join the Battle",
+                    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+                    host: "David",
+                    hostAvatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                    members: 15
+                }
+            ];
+            
+            rooms.forEach(room => {
+                const roomElement = document.createElement('div');
+                roomElement.className = 'live-room-card';
+                roomElement.innerHTML = `
+                    <div class="live-badge">LIVE</div>
+                    <img src="${room.image}" class="live-room-image">
+                    <div class="live-room-info">
+                        <h4 class="live-room-title">${room.title}</h4>
+                        <div class="live-room-members">
+                            <img src="${room.hostAvatar}">
+                            <span>${room.members} listening</span>
+                        </div>
+                    </div>
+                    <button class="join-room-btn" data-room="${room.id}">
+                        <i class="fas fa-headphones"></i> Join Room
+                    </button>
+                `;
+                liveRoomsContainer.appendChild(roomElement);
+            });
+            
+            document.querySelectorAll('.join-room-btn').forEach(btn => {
+                btn.addEventListener('click', () => showToast(`Joining room...`));
+            });
+        }
+        
+        // Load community feed
+        function loadCommunityFeed() {
+            const feedContainer = document.getElementById('feed-container');
+            const loadingActivities = document.getElementById('loading-activities');
+            
+            if (loadingActivities) loadingActivities.remove();
+            
+            // Add sample posts
+            const posts = [
+                {
+                    id: 'post1',
+                    userId: 'ceo1',
+                    userName: 'Alex Johnson',
+                    userAvatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+                    role: 'ceo',
+                    content: 'Exciting news! We just reached 1 million users on CallConnect! Thank you all for your support. Stay tuned for some amazing new features coming next month!',
+                    timestamp: new Date(Date.now() - 5 * 60000),
+                    likes: 125,
+                    comments: 12
+                },
+                {
+                    id: 'post2',
+                    userId: 'admin1',
+                    userName: 'David Wilson',
+                    userAvatar: 'https://randomuser.me/api/portraits/men/22.jpg',
+                    role: 'admin',
+                    content: 'We just deployed a performance update. Let us know if you notice any improvements!',
+                    timestamp: new Date(Date.now() - 30 * 60000),
+                    likes: 27,
+                    comments: 5
+                },
+                {
+                    id: 'post3',
+                    userId: 'user2',
+                    userName: 'Sarah Miller',
+                    userAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+                    role: 'user',
+                    content: 'Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic.',
+                    timestamp: new Date(Date.now() - 60 * 60000),
+                    likes: 18,
+                    comments: 0,
+                    audio: true
+                },
+                {
+                    id: 'post4',
+                    userId: 'user1',
+                    userName: 'John Doe',
+                    userAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                    role: 'user',
+                    content: 'Just created my first live room. Join me to discuss mobile app development!',
+                    timestamp: new Date(Date.now() - 90 * 60000),
+                    likes: 32,
+                    comments: 3
+                }
+            ];
+            
+            renderCommunityFeed(posts);
+        }
+        
+        // Render community feed
+        function renderCommunityFeed(posts) {
+            const feedContainer = document.getElementById('feed-container');
+            feedContainer.innerHTML = '';
+            
+            if (posts.length === 0) {
+                feedContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No posts yet</h3>
+                        <p>Follow more users or create your own post to start seeing content in your feed.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Insert reels at strategic positions in the feed
+            let reelCounter = 0;
+            const reels = [
+                {
+                    id: 1,
+                    video: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4",
+                    user: "Sarah Miller",
+                    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                    caption: "Exploring the city lights at night!",
+                    likes: 125,
+                    comments: 24
+                },
+                {
+                    id: 2,
+                    video: "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
+                    user: "Mike Thompson",
+                    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+                    caption: "Beach vibes this weekend!",
+                    likes: 89,
+                    comments: 12
+                },
+                {
+                    id: 3,
+                    video: "https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4",
+                    user: "David Wilson",
+                    avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                    caption: "Nature is beautiful!",
+                    likes: 156,
+                    comments: 18
+                },
+                {
+                    id: 4,
+                    video: "https://assets.mixkit.co/videos/preview/mixkit-sunset-over-the-mountains-1193-large.mp4",
+                    user: "Emma Watson",
+                    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+                    caption: "Mountain sunset view!",
+                    likes: 210,
+                    comments: 32
+                }
+            ];
+            
+            posts.forEach((post, index) => {
+                const postElement = createPostElement(post);
+                feedContainer.appendChild(postElement);
+                
+                // Insert a reel after every 2 posts (but not at the end)
+                if ((index + 1) % 2 === 0 && reelCounter < reels.length && index < posts.length - 1) {
+                    const reel = reels[reelCounter];
+                    const reelElement = createReelElement(reel);
+                    feedContainer.appendChild(reelElement);
+                    reelCounter++;
+                }
+            });
+        }
+        
+        // Create post element
+        function createPostElement(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'feed-card';
+            postElement.dataset.id = post.id;
+            
+            let roleBadge = '';
+            if (post.role === 'ceo') roleBadge = '<span class="ceo-badge">CEO</span>';
+            else if (post.role === 'admin') roleBadge = '<span class="admin-badge">ADMIN</span>';
+            
+            const formattedTime = formatDate(post.timestamp);
+            
+            postElement.innerHTML = `
+                <div class="feed-header">
+                    <img src="${post.userAvatar}" class="feed-user-avatar">
+                    <div class="feed-user-info">
+                        <h4>${post.userName} ${roleBadge}</h4>
+                        <p><i class="fas fa-clock"></i> ${formattedTime}</p>
+                    </div>
+                </div>
+                <div class="feed-content">
+                    <div class="feed-text">${post.content}</div>
+                    ${post.audio ? `
+                        <div class="voice-note-player">
+                            <button class="play-btn"><i class="fas fa-play"></i></button>
+                            <div class="wave-container">
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                                <div class="wave-bar"></div>
+                            </div>
+                            <div class="voice-duration">0:${Math.floor(Math.random() * 30 + 10)}</div>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="feed-actions">
+                    <div class="feed-action like-btn">
+                        <i class="far fa-heart"></i>
+                        <span>${post.likes} likes</span>
+                    </div>
+                    <div class="feed-action comment-btn">
+                        <i class="far fa-comment"></i>
+                        <span>${post.comments} comments</span>
+                    </div>
+                    <div class="feed-action share-btn">
+                        <i class="far fa-share-square"></i>
+                        <span>Share</span>
+                        <div class="share-dropdown">
+                            <div class="share-option" data-platform="facebook">
+                                <i class="fab fa-facebook"></i>
+                                <span>Facebook</span>
+                            </div>
+                            <div class="share-option" data-platform="twitter">
+                                <i class="fab fa-twitter"></i>
+                                <span>Twitter</span>
+                            </div>
+                            <div class="share-option" data-platform="whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>WhatsApp</span>
+                            </div>
+                            <div class="share-option" data-platform="copy">
+                                <i class="fas fa-link"></i>
+                                <span>Copy Link</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return postElement;
+        }
+        
+        // Create reel element
+        function createReelElement(reel) {
+            const reelElement = document.createElement('div');
+            reelElement.className = 'reel-card';
+            reelElement.dataset.id = reel.id;
+            
+            reelElement.innerHTML = `
+                <img src="https://i.ytimg.com/vi/7wtfhZwyrcc/maxresdefault.jpg" class="reel-thumb">
+                <div class="play-icon">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="reel-info">
+                    <div class="reel-user">
+                        <img src="${reel.avatar}" class="reel-avatar">
+                        <span>${reel.user}</span>
+                    </div>
+                    <div class="reel-stats">
+                        <div class="reel-stat">
+                            <i class="fas fa-heart"></i> ${reel.likes}
+                        </div>
+                        <div class="reel-stat">
+                            <i class="fas fa-comment"></i> ${reel.comments}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            reelElement.addEventListener('click', () => openReel(reel));
+            return reelElement;
+        }
+        
+        // Open reel
+        function openReel(reel) {
+            document.getElementById('reel-video').src = reel.video;
+            document.getElementById('reel-user-avatar').src = reel.avatar;
+            document.getElementById('reel-user-name').textContent = reel.user;
+            document.getElementById('reel-caption').textContent = reel.caption;
+            document.getElementById('reel-likes').textContent = reel.likes;
+            document.getElementById('reel-comments').textContent = reel.comments;
+            document.getElementById('reels-viewer').style.display = 'block';
+            document.getElementById('floating-mic').style.display = 'flex';
+        }
+        
+        // Start watching together
+        function startWatchingTogether() {
+            showToast('Starting watch party with friends!');
+            document.getElementById('watch-together-modal').style.display = 'none';
+        }
+        
+        // Toggle mic
+        function toggleMic() {
+            const floatingMic = document.getElementById('floating-mic');
+            floatingMic.classList.toggle('active');
+            showToast(floatingMic.classList.contains('active') ? 'Microphone on' : 'Microphone muted');
+        }
+        
+        // Create story
         function createStory() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*, video/*';
-            input.style.display = 'none';
-            document.body.appendChild(input);
-            
-            input.click();
-            
-            input.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    showToast('Story created successfully!');
-                }
-                input.remove();
-            });
+            showToast('Story created successfully!');
         }
         
-        function setupEventListeners() {
+        // Open stories
+        function openStories(userId) {
+            document.getElementById('stories-viewer').style.display = 'block';
+        }
+        
+        // Show previous story
+        function showPrevStory() {
+            // Story navigation logic
+        }
+        
+        // Show next story
+        function showNextStory() {
+            // Story navigation logic
+        }
+        
+        // Format date
+        function formatDate(date) {
+            if (!date) return "Just now";
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            if (minutes < 1) return "Just now";
+            if (minutes < 60) return `${minutes} min ago`;
+            if (minutes < 1440) return `${Math.floor(minutes / 60)} hours ago`;
+            return `${Math.floor(minutes / 1440)} days ago`;
+        }
+        
+        // Mark all as read
+        function markAllAsRead() {
+            showToast('All notifications marked as read');
+        }
+        
+        // Load notifications
+        function loadNotifications() {
+            const notifications = [
+                {
+                    id: 1,
+                    type: 'new_post',
+                    sender: 'Sarah Miller',
+                    senderAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+                    content: 'Sarah just posted a new update',
+                    timestamp: new Date(Date.now() - 10 * 60000),
+                    read: false
+                },
+                {
+                    id: 2,
+                    type: 'ceo_announcement',
+                    sender: 'CallConnect CEO',
+                    senderAvatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+                    content: 'New platform update is coming next week!',
+                    timestamp: new Date(Date.now() - 45 * 60000),
+                    read: false
+                },
+                {
+                    id: 3,
+                    type: 'like',
+                    sender: 'Mike Thompson',
+                    senderAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                    content: 'Mike liked your post',
+                    timestamp: new Date(Date.now() - 120 * 60000),
+                    read: true
+                }
+            ];
+            
+            document.querySelector('.notification-badge').textContent = notifications.filter(n => !n.read).length;
+        }
+        
+        // Initialize the application
+        function init() {
+            // Initialize Firebase
+            if (!initializeFirebase()) {
+                return;
+            }
+            
+            // Set theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            // Setup event listeners for login/signup
             loginForm.addEventListener('submit', handleLogin);
             signupForm.addEventListener('submit', handleSignup);
             
@@ -3221,59 +3482,31 @@
                 toggleAuthForm();
             });
             
-            menuToggle.addEventListener('click', toggleSidebar);
-            logoutBtn.addEventListener('click', logout);
-            themeToggle.addEventListener('click', toggleTheme);
-            
-            notificationBtn.addEventListener('click', toggleNotifications);
-            markAllReadBtn.addEventListener('click', markAllAsRead);
-            
-            topUpBtn.addEventListener('click', addCoins);
-            createPostBtn.addEventListener('click', showCreatePostModal);
-            closePostModalBtn.addEventListener('click', closePostModal);
-            goLiveBtn.addEventListener('click', showGoLiveModal);
-            closeLiveModalBtn.addEventListener('click', closeGoLiveModal);
-            cancelLiveBtn.addEventListener('click', closeGoLiveModal);
-            
-            addImageBtn.addEventListener('click', () => imageUpload.click());
-            imageUpload.addEventListener('change', handleImageUpload);
-            addVoiceBtn.addEventListener('click', showRecordingUI);
-            recordBtn.addEventListener('click', startRecording);
-            stopBtn.addEventListener('click', stopRecording);
-            submitPostBtn.addEventListener('click', submitPost);
-            
-            startNowRadio.addEventListener('change', toggleScheduleOptions);
-            scheduleRadio.addEventListener('change', toggleScheduleOptions);
-            startLiveBtn.addEventListener('click', startLiveSession);
-            
-            navItems.forEach(item => {
-                item.addEventListener('click', setActiveNav);
-            });
-            
-            document.addEventListener('click', closeModals);
-            
-            // Add story event listener
-            addStory.addEventListener('click', createStory);
-            
-            // Filter event listeners
-            filterBtn.addEventListener('click', () => {
-                filterOptions.classList.toggle('active');
-            });
-            
-            document.querySelectorAll('.filter-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    currentFilter = option.dataset.filter;
-                    document.querySelectorAll('.filter-option').forEach(opt => {
-                        opt.classList.remove('active');
+            // Check if user is already logged in
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    // User is signed in, show dashboard
+                    db.collection('users').doc(user.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            currentUser = {
+                                id: user.uid,
+                                name: userData.name,
+                                avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
+                                coins: userData.coins || 100,
+                                role: userData.role || 'user'
+                            };
+                            
+                            loginContainer.style.display = 'none';
+                            appContainer.style.display = 'flex';
+                            initDashboard();
+                        }
                     });
-                    option.classList.add('active');
-                    filterBtn.innerHTML = `${option.textContent} <i class="fas fa-chevron-down"></i>`;
-                    filterOptions.classList.remove('active');
-                    renderCommunityFeed(posts);
-                });
+                }
             });
         }
-
+        
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>

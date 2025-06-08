@@ -6,15 +6,6 @@
     <title>CallConnect - Enhanced Social Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    
-    <!-- External Firebase Configuration -->
-    <script src="config.js"></script>
-    
     <style>
         * {
             margin: 0;
@@ -2075,6 +2066,26 @@
             border: 2px solid var(--primary);
         }
         
+        /* Offline indicator */
+        .offline-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffa502;
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            z-index: 1000;
+            font-weight: 600;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .offline-indicator.show {
+            transform: translateY(0);
+        }
+        
         @media (min-width: 768px) {
             .header { padding: 0.75rem 2rem; }
             .main-content { padding: 2rem; }
@@ -2136,6 +2147,11 @@
     </style>
 </head>
 <body>
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offline-indicator">
+        <i class="fas fa-wifi"></i> You are currently offline. Some features may be limited.
+    </div>
+
     <!-- Login Container -->
     <div class="login-container" id="login-container">
         <div class="auth-card">
@@ -2624,6 +2640,7 @@
         const loginFormDiv = document.getElementById('login-form');
         const signupFormDiv = document.getElementById('signup-form');
         const configError = document.getElementById('config-error');
+        const offlineIndicator = document.getElementById('offline-indicator');
         
         const usernameDisplay = document.getElementById('username-display');
         const userAvatar = document.getElementById('user-avatar');
@@ -2669,6 +2686,13 @@
                 auth = firebase.auth();
                 db = firebase.firestore();
                 
+                // Enable offline persistence
+                db.enablePersistence()
+                  .catch((err) => {
+                    console.error('Firestore offline persistence failed:', err);
+                    showToast('Offline mode is limited: ' + err.message);
+                  });
+                
                 return true;
             } catch (error) {
                 console.error('Firebase initialization error:', error);
@@ -2695,29 +2719,49 @@
                 
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 
-                // Get user data from Firestore
-                const userDoc = await db.collection('users').doc(userCredential.user.uid).get();
-                
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    currentUser = {
-                        id: userCredential.user.uid,
-                        name: userData.name,
-                        avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
-                        coins: userData.coins || 100,
-                        role: userData.role || 'user'
-                    };
+                // Get user data from Firestore with offline fallback
+                try {
+                    const userDoc = await db.collection('users').doc(userCredential.user.uid).get();
                     
-                    showToast('Login successful!');
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        currentUser = {
+                            id: userCredential.user.uid,
+                            name: userData.name,
+                            avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
+                            coins: userData.coins || 100,
+                            role: userData.role || 'user'
+                        };
+                        
+                        // Store user data in localStorage for offline use
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        
+                        showToast('Login successful!');
+                        
+                        // Hide login container, show app container
+                        loginContainer.style.display = 'none';
+                        appContainer.style.display = 'flex';
+                        
+                        // Initialize the dashboard with the current user
+                        initDashboard();
+                    } else {
+                        showToast('User data not found');
+                    }
+                } catch (firestoreError) {
+                    console.error('Firestore error:', firestoreError);
                     
-                    // Hide login container, show app container
-                    loginContainer.style.display = 'none';
-                    appContainer.style.display = 'flex';
-                    
-                    // Initialize the dashboard with the current user
-                    initDashboard();
-                } else {
-                    showToast('User data not found');
+                    // Check if we have cached user data
+                    const cachedUser = localStorage.getItem('currentUser');
+                    if (cachedUser) {
+                        currentUser = JSON.parse(cachedUser);
+                        showToast('Using cached user data due to network issues');
+                        
+                        loginContainer.style.display = 'none';
+                        appContainer.style.display = 'flex';
+                        initDashboard();
+                    } else {
+                        showToast(`Login failed: ${firestoreError.message}`);
+                    }
                 }
             } catch (error) {
                 showToast(`Login failed: ${error.message}`);
@@ -2997,6 +3041,7 @@
                     loginContainer.style.display = 'flex';
                     document.getElementById('login-email').value = '';
                     document.getElementById('login-password').value = '';
+                    localStorage.removeItem('currentUser');
                 });
             }
         }
@@ -3482,26 +3527,52 @@
                 toggleAuthForm();
             });
             
+            // Check network status
+            window.addEventListener('online', () => {
+                offlineIndicator.classList.remove('show');
+                showToast('You are back online!');
+            });
+            
+            window.addEventListener('offline', () => {
+                offlineIndicator.classList.add('show');
+                showToast('You are now offline. Some features may be limited.');
+            });
+            
             // Check if user is already logged in
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    // User is signed in, show dashboard
-                    db.collection('users').doc(user.uid).get().then((doc) => {
-                        if (doc.exists) {
-                            const userData = doc.data();
-                            currentUser = {
-                                id: user.uid,
-                                name: userData.name,
-                                avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
-                                coins: userData.coins || 100,
-                                role: userData.role || 'user'
-                            };
-                            
-                            loginContainer.style.display = 'none';
-                            appContainer.style.display = 'flex';
-                            initDashboard();
-                        }
-                    });
+                    // Check if we have cached user data
+                    const cachedUser = localStorage.getItem('currentUser');
+                    if (cachedUser) {
+                        currentUser = JSON.parse(cachedUser);
+                        loginContainer.style.display = 'none';
+                        appContainer.style.display = 'flex';
+                        initDashboard();
+                    } else {
+                        // Get user data from Firestore
+                        db.collection('users').doc(user.uid).get().then((doc) => {
+                            if (doc.exists) {
+                                const userData = doc.data();
+                                currentUser = {
+                                    id: user.uid,
+                                    name: userData.name,
+                                    avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
+                                    coins: userData.coins || 100,
+                                    role: userData.role || 'user'
+                                };
+                                
+                                // Store user data in localStorage for offline use
+                                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                                
+                                loginContainer.style.display = 'none';
+                                appContainer.style.display = 'flex';
+                                initDashboard();
+                            }
+                        }).catch(error => {
+                            console.error('Error getting user data:', error);
+                            showToast('Error loading user data. Please check your connection.');
+                        });
+                    }
                 }
             });
         }

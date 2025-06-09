@@ -10,7 +10,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
-    <script src="config.js"></script>
     <style>
         * {
             margin: 0;
@@ -95,13 +94,6 @@
         
         .text-sm { font-size: 0.875rem; }
         .text-muted { color: var(--text-light); }
-        
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            position: relative;
-        }
         
         /* Login Container */
         .login-container {
@@ -243,6 +235,13 @@
         
         .hidden {
             display: none !important;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
         }
         
         .header {
@@ -1445,7 +1444,7 @@
             font-size: 1.75rem;
             cursor: pointer;
             color: var(--text-color);
-            transition: var(--transition);
+            transition: var(--transition;
         }
         
         .close-comments:hover {
@@ -2565,6 +2564,22 @@
     </div>
 
     <script>
+        // Firebase configuration - Replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkZQ1G4H9zQ4ZQZQZQZQZQZQZQZQZQZQZQ",
+            authDomain: "callconnect-app.firebaseapp.com",
+            projectId: "callconnect-app",
+            storageBucket: "callconnect-app.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        
         // DOM elements
         const loginContainer = document.getElementById('login-container');
         const appContainer = document.getElementById('app-container');
@@ -2583,9 +2598,6 @@
         const userAvatar = document.getElementById('user-avatar');
         const userCoins = document.getElementById('user-coins');
         const logoutBtn = document.getElementById('logout-btn');
-        
-        // Firebase services
-        let auth, db;
         
         // Current user (will be set after login)
         let currentUser = null;
@@ -2607,29 +2619,6 @@
         function toggleAuthForm() {
             loginFormDiv.classList.toggle('hidden');
             signupFormDiv.classList.toggle('hidden');
-        }
-        
-        // Initialize Firebase with external config
-        function initializeFirebase() {
-            try {
-                // Check if firebaseConfig is defined in config.js
-                if (!window.firebaseConfig) {
-                    configError.classList.remove('hidden');
-                    return false;
-                }
-                
-                // Initialize Firebase
-                firebase.initializeApp(window.firebaseConfig);
-                auth = firebase.auth();
-                db = firebase.firestore();
-                
-                return true;
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                configError.classList.remove('hidden');
-                configError.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Firebase initialization error: ${error.message}`;
-                return false;
-            }
         }
         
         // Handle login
@@ -2694,6 +2683,19 @@
                 signupBtn.innerHTML = '<span class="loading"></span> Creating account...';
                 
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                // Update user profile with name
+                await userCredential.user.updateProfile({
+                    displayName: name
+                });
+                
+                // Create user document in Firestore
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    name: name,
+                    email: email,
+                    coins: 100,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
                 currentUser = {
                     id: userCredential.user.uid,
                     name: name,
@@ -2752,7 +2754,6 @@
             const commentsModal = document.getElementById('comments-modal');
             const commentsContainer = document.getElementById('comments-container');
             const postText = document.getElementById('post-text');
-            const addImageBtn = document.getElementById('add-image-btn');
             const imageUpload = document.getElementById('image-upload');
             const imagePreview = document.getElementById('preview-image');
             const imagePreviewContainer = document.getElementById('image-preview');
@@ -2820,9 +2821,7 @@
             goLiveBtn.addEventListener('click', () => goLiveModal.style.display = 'flex');
             closeLiveModalBtn.addEventListener('click', closeLiveModal);
             closeCommentsBtn.addEventListener('click', () => commentsModal.style.display = 'none');
-            addImageBtn.addEventListener('click', () => imageUpload.click());
             imageUpload.addEventListener('change', handleImageUpload);
-            addVoiceBtn.addEventListener('click', () => recordingUI.style.display = 'block');
             submitPostBtn.addEventListener('click', submitPost);
             filterBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -3381,11 +3380,6 @@
         
         // Initialize the application
         function init() {
-            // Initialize Firebase
-            if (!initializeFirebase()) {
-                return;
-            }
-            
             // Set theme
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
@@ -3418,16 +3412,40 @@
             // Check if user is already logged in
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    currentUser = {
-                        id: user.uid,
-                        name: user.displayName || 'User',
-                        avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
-                        coins: 250
-                    };
-                    
-                    loginContainer.style.display = 'none';
-                    appContainer.style.display = 'flex';
-                    initDashboard();
+                    db.collection('users').doc(user.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            currentUser = {
+                                id: user.uid,
+                                name: userData.name || 'User',
+                                avatar: userData.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=random`,
+                                coins: userData.coins || 100
+                            };
+                            
+                            loginContainer.style.display = 'none';
+                            appContainer.style.display = 'flex';
+                            initDashboard();
+                        } else {
+                            // If user document doesn't exist, create one
+                            db.collection('users').doc(user.uid).set({
+                                name: user.displayName || 'User',
+                                email: user.email,
+                                coins: 100,
+                                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                            }).then(() => {
+                                currentUser = {
+                                    id: user.uid,
+                                    name: user.displayName || 'User',
+                                    avatar: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=random`,
+                                    coins: 100
+                                };
+                                
+                                loginContainer.style.display = 'none';
+                                appContainer.style.display = 'flex';
+                                initDashboard();
+                            });
+                        }
+                    });
                 }
             });
         }

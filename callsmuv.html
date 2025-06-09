@@ -6,18 +6,12 @@
     <title>CallConnect - Enhanced Social Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
-    
-    <!-- External Firebase Configuration -->
     <script src="config.js"></script>
-    
     <style>
-        /* All the CSS styles from your original code */
         * {
             margin: 0;
             padding: 0;
@@ -1376,7 +1370,6 @@
             margin: 0 auto;
         }
         
-        /* New styles for added features */
         .voice-note-player {
             display: flex;
             align-items: center;
@@ -1510,30 +1503,6 @@
         
         .comment-action:hover {
             color: var(--primary);
-        }
-        
-        .reply-input {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
-            padding-left: 42px;
-        }
-        
-        .reply-input input {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            background-color: var(--input-bg);
-        }
-        
-        .reply-input button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.25rem;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
         }
         
         .reels-viewer {
@@ -1750,38 +1719,6 @@
             width: 0;
             background-color: white;
             transition: width 0.1s linear;
-        }
-        
-        .share-dropdown {
-            position: absolute;
-            bottom: 100%;
-            right: 0;
-            background-color: var(--card-bg);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-md);
-            padding: 0.75rem;
-            min-width: 200px;
-            z-index: 10;
-            display: none;
-        }
-        
-        .share-dropdown.active {
-            display: block;
-        }
-        
-        .share-option {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .share-option:hover {
-            background-color: var(--input-bg);
-            color: var(--primary);
         }
         
         .floating-mic {
@@ -2391,17 +2328,6 @@
                         </div>
                     </div>
                     
-                    <div class="post-actions">
-                        <button class="action-btn" id="add-image-btn">
-                            <i class="fas fa-image"></i> Photo
-                        </button>
-                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
-                        
-                        <button class="action-btn" id="add-voice-btn">
-                            <i class="fas fa-microphone"></i> Voice Note
-                        </button>
-                    </div>
-                    
                     <button class="btn btn-primary" id="submit-post-btn">Post</button>
                 </div>
             </div>
@@ -2697,13 +2623,6 @@
                 auth = firebase.auth();
                 db = firebase.firestore();
                 
-                // Enable offline persistence
-                db.enablePersistence()
-                  .catch((err) => {
-                    console.error('Firestore offline persistence failed:', err);
-                    showToast('Offline mode is limited: ' + err.message);
-                  });
-                
                 return true;
             } catch (error) {
                 console.error('Firebase initialization error:', error);
@@ -2729,51 +2648,21 @@
                 loginBtn.innerHTML = '<span class="loading"></span> Logging in...';
                 
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                currentUser = {
+                    id: userCredential.user.uid,
+                    name: userCredential.user.displayName || 'User',
+                    avatar: userCredential.user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
+                    coins: 250
+                };
                 
-                // Get user data from Firestore with offline fallback
-                try {
-                    const userDoc = await db.collection('users').doc(userCredential.user.uid).get();
-                    
-                    if (userDoc.exists) {
-                        const userData = userDoc.data();
-                        currentUser = {
-                            id: userCredential.user.uid,
-                            name: userData.name,
-                            avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
-                            coins: userData.coins || 100,
-                            role: userData.role || 'user'
-                        };
-                        
-                        // Store user data in localStorage for offline use
-                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                        
-                        showToast('Login successful!');
-                        
-                        // Hide login container, show app container
-                        loginContainer.style.display = 'none';
-                        appContainer.style.display = 'flex';
-                        
-                        // Initialize the dashboard with the current user
-                        initDashboard();
-                    } else {
-                        showToast('User data not found');
-                    }
-                } catch (firestoreError) {
-                    console.error('Firestore error:', firestoreError);
-                    
-                    // Check if we have cached user data
-                    const cachedUser = localStorage.getItem('currentUser');
-                    if (cachedUser) {
-                        currentUser = JSON.parse(cachedUser);
-                        showToast('Using cached user data due to network issues');
-                        
-                        loginContainer.style.display = 'none';
-                        appContainer.style.display = 'flex';
-                        initDashboard();
-                    } else {
-                        showToast(`Login failed: ${firestoreError.message}`);
-                    }
-                }
+                showToast('Login successful!');
+                
+                // Hide login container, show app container
+                loginContainer.style.display = 'none';
+                appContainer.style.display = 'flex';
+                
+                // Initialize the dashboard with the current user
+                initDashboard();
             } catch (error) {
                 showToast(`Login failed: ${error.message}`);
             } finally {
@@ -2805,16 +2694,12 @@
                 signupBtn.innerHTML = '<span class="loading"></span> Creating account...';
                 
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                
-                // Create user profile in Firestore
-                await db.collection('users').doc(userCredential.user.uid).set({
+                currentUser = {
+                    id: userCredential.user.uid,
                     name: name,
-                    email: email,
                     avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`,
-                    coins: 100,
-                    role: 'user',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                    coins: 100
+                };
                 
                 showToast('Account created successfully!');
                 
@@ -2969,7 +2854,7 @@
             
             document.querySelectorAll('.filter-option').forEach(option => {
                 option.addEventListener('click', () => {
-                    currentFilter = option.dataset.filter;
+                    const currentFilter = option.dataset.filter;
                     document.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
                     option.classList.add('active');
                     filterBtn.innerHTML = `${option.textContent} <i class="fas fa-chevron-down"></i>`;
@@ -3052,7 +2937,6 @@
                     loginContainer.style.display = 'flex';
                     document.getElementById('login-email').value = '';
                     document.getElementById('login-password').value = '';
-                    localStorage.removeItem('currentUser');
                 });
             }
         }
@@ -3360,24 +3244,6 @@
                     <div class="feed-action share-btn">
                         <i class="far fa-share-square"></i>
                         <span>Share</span>
-                        <div class="share-dropdown">
-                            <div class="share-option" data-platform="facebook">
-                                <i class="fab fa-facebook"></i>
-                                <span>Facebook</span>
-                            </div>
-                            <div class="share-option" data-platform="twitter">
-                                <i class="fab fa-twitter"></i>
-                                <span>Twitter</span>
-                            </div>
-                            <div class="share-option" data-platform="whatsapp">
-                                <i class="fab fa-whatsapp"></i>
-                                <span>WhatsApp</span>
-                            </div>
-                            <div class="share-option" data-platform="copy">
-                                <i class="fas fa-link"></i>
-                                <span>Copy Link</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             `;
@@ -3552,58 +3418,22 @@
             // Check if user is already logged in
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    // Check if we have cached user data
-                    const cachedUser = localStorage.getItem('currentUser');
-                    if (cachedUser) {
-                        currentUser = JSON.parse(cachedUser);
-                        loginContainer.style.display = 'none';
-                        appContainer.style.display = 'flex';
-                        initDashboard();
-                    } else {
-                        // Get user data from Firestore
-                        db.collection('users').doc(user.uid).get().then((doc) => {
-                            if (doc.exists) {
-                                const userData = doc.data();
-                                currentUser = {
-                                    id: user.uid,
-                                    name: userData.name,
-                                    avatar: userData.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
-                                    coins: userData.coins || 100,
-                                    role: userData.role || 'user'
-                                };
-                                
-                                // Store user data in localStorage for offline use
-                                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                                
-                                loginContainer.style.display = 'none';
-                                appContainer.style.display = 'flex';
-                                initDashboard();
-                            }
-                        }).catch(error => {
-                            console.error('Error getting user data:', error);
-                            showToast('Error loading user data. Please check your connection.');
-                        });
-                    }
+                    currentUser = {
+                        id: user.uid,
+                        name: user.displayName || 'User',
+                        avatar: user.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
+                        coins: 250
+                    };
+                    
+                    loginContainer.style.display = 'none';
+                    appContainer.style.display = 'flex';
+                    initDashboard();
                 }
             });
         }
         
         // Initialize the application
         document.addEventListener('DOMContentLoaded', init);
-    </script>
-    
-    <!-- Dummy config.js content for demonstration -->
-    <script>
-        // This is a dummy config.js file for demonstration purposes
-        // In a real application, you would replace this with your actual Firebase config
-        window.firebaseConfig = {
-            apiKey: "AIzaSyDummyAPIKey1234567890",
-            authDomain: "callconnect-demo.firebaseapp.com",
-            projectId: "callconnect-demo",
-            storageBucket: "callconnect-demo.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890abcdef"
-        };
     </script>
 </body>
 </html>

@@ -6,7 +6,18 @@
     <title>CallConnect - Enhanced Social Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    
+    <!-- External Firebase Configuration -->
+    <script src="config.js"></script>
+    
     <style>
+        /* All the CSS styles from your original code */
         * {
             margin: 0;
             padding: 0;
@@ -2657,7 +2668,7 @@
         function showToast(message) {
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
             document.body.appendChild(toast);
             
             setTimeout(() => {
@@ -2676,13 +2687,13 @@
         function initializeFirebase() {
             try {
                 // Check if firebaseConfig is defined in config.js
-                if (typeof firebaseConfig === 'undefined') {
+                if (!window.firebaseConfig) {
                     configError.classList.remove('hidden');
                     return false;
                 }
                 
                 // Initialize Firebase
-                firebase.initializeApp(firebaseConfig);
+                firebase.initializeApp(window.firebaseConfig);
                 auth = firebase.auth();
                 db = firebase.firestore();
                 
@@ -3579,6 +3590,20 @@
         
         // Initialize the application
         document.addEventListener('DOMContentLoaded', init);
+    </script>
+    
+    <!-- Dummy config.js content for demonstration -->
+    <script>
+        // This is a dummy config.js file for demonstration purposes
+        // In a real application, you would replace this with your actual Firebase config
+        window.firebaseConfig = {
+            apiKey: "AIzaSyDummyAPIKey1234567890",
+            authDomain: "callconnect-demo.firebaseapp.com",
+            projectId: "callconnect-demo",
+            storageBucket: "callconnect-demo.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890abcdef"
+        };
     </script>
 </body>
 </html>

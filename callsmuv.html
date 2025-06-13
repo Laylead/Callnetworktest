@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CallConnect - Social Platform</title>
+    <title>CallConnect - Enhanced Social Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    <!-- External configuration file -->
     <script src="config.js"></script>
     <style>
-        /* Combined CSS from both files with all dashboard styling */
         * {
             margin: 0;
             padding: 0;
@@ -97,324 +93,6 @@
         .text-sm { font-size: 0.875rem; }
         .text-muted { color: var(--text-light); }
         
-        /* Login Container */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            transform: rotate(30deg);
-            pointer-events: none;
-        }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .auth-card {
-            background-color: var(--card-bg);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            width: 100%;
-            max-width: 450px;
-            padding: 2.5rem;
-            transition: var(--transition);
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-        }
-        
-        .auth-card::after {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background: var(--gradient-primary);
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.1;
-        }
-        
-        .auth-card::before {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            left: -50px;
-            width: 150px;
-            height: 150px;
-            background: var(--gradient-purple);
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.1;
-        }
-        
-        .auth-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-        
-        .auth-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.5px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .auth-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background: var(--gradient-primary);
-            color: white;
-            border-radius: var(--radius-md);
-            font-size: 1.1rem;
-            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
-        }
-        
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-        
-        .input-group {
-            position: relative;
-        }
-        
-        .auth-input {
-            padding: 1rem 1.25rem 1rem 3.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            background-color: var(--input-bg);
-            font-size: 1rem;
-            transition: var(--transition);
-            width: 100%;
-        }
-        
-        .auth-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.2);
-        }
-        
-        .input-icon {
-            position: absolute;
-            left: 1.25rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-            transition: var(--transition);
-        }
-        
-        .auth-input:focus + .input-icon {
-            color: var(--primary);
-        }
-        
-        .password-toggle {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-light);
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        .auth-btn {
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: var(--radius-sm);
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            box-shadow: 0 4px 8px rgba(255, 71, 87, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .auth-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255,255,255,0.1);
-            transform: rotate(30deg);
-            transition: var(--transition);
-            opacity: 0;
-        }
-        
-        .auth-btn:hover::after {
-            opacity: 1;
-        }
-        
-        .auth-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(255, 71, 87, 0.3);
-        }
-        
-        .auth-btn.loading {
-            opacity: 0.8;
-            cursor: not-allowed;
-        }
-        
-        .auth-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9375rem;
-            position: relative;
-        }
-        
-        .auth-footer a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            position: relative;
-        }
-        
-        .auth-footer a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: var(--transition);
-        }
-        
-        .auth-footer a:hover::after {
-            width: 100%;
-        }
-        
-        .config-error {
-            background-color: #ffebee;
-            color: #b71c1c;
-            padding: 1rem;
-            border-radius: var(--radius-sm);
-            margin-top: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-weight: 500;
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        /* Social login buttons */
-        .social-login {
-            margin-top: 1.5rem;
-        }
-        
-        .social-title {
-            text-align: center;
-            position: relative;
-            margin-bottom: 1.5rem;
-            color: var(--text-light);
-        }
-        
-        .social-title::before,
-        .social-title::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 30%;
-            height: 1px;
-            background: var(--border-color);
-        }
-        
-        .social-title::before {
-            left: 0;
-        }
-        
-        .social-title::after {
-            right: 0;
-        }
-        
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-        
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            box-shadow: var(--shadow-sm);
-            color: white;
-        }
-        
-        .social-btn.google {
-            background: #db4437;
-        }
-        
-        .social-btn.facebook {
-            background: #4267B2;
-        }
-        
-        .social-btn.twitter {
-            background: #1DA1F2;
-        }
-        
-        .social-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        /* Dashboard styles */
         .app-container {
             display: flex;
             flex-direction: column;
@@ -1117,7 +795,7 @@
             color: var(--text-light);
             text-decoration: none;
             font-size: 0.8125rem;
-            transition: var(--transition);
+            transition: var(--transition;
             padding: 0.5rem;
             border-radius: var(--radius-sm);
             flex: 1;
@@ -2309,127 +1987,7 @@
     </style>
 </head>
 <body>
-    <!-- Login Container -->
-    <div class="login-container" id="login-container">
-        <div class="auth-card">
-            <div id="login-form">
-                <div class="auth-header">
-                    <div class="auth-logo">
-                        <span class="auth-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </span>
-                        CallConnect
-                    </div>
-                    <h2>Welcome Back</h2>
-                    <p class="text-muted">Connect with friends through audio and video calls</p>
-                </div>
-                
-                <form class="auth-form" id="login-form-element">
-                    <div class="input-group">
-                        <input type="email" id="login-email" class="auth-input" placeholder="Email" required>
-                        <i class="fas fa-envelope input-icon"></i>
-                    </div>
-                    
-                    <div class="input-group">
-                        <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
-                        <i class="fas fa-lock input-icon"></i>
-                        <button type="button" class="password-toggle" id="login-password-toggle">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    
-                    <button class="auth-btn" id="login-btn">Login</button>
-                </form>
-                
-                <div class="auth-footer">
-                    <p><a href="#" id="forgot-password">Forgot password?</a></p>
-                    <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
-                </div>
-                
-                <div class="social-login">
-                    <p class="social-title">Or continue with</p>
-                    <div class="social-buttons">
-                        <button class="social-btn google" id="google-login">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button class="social-btn facebook" id="facebook-login">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
-                        <button class="social-btn twitter" id="twitter-login">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="signup-form" class="hidden">
-                <div class="auth-header">
-                    <div class="auth-logo">
-                        <span class="auth-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </span>
-                        CallConnect
-                    </div>
-                    <h2>Create Account</h2>
-                    <p class="text-muted">Join our community of audio and video enthusiasts</p>
-                </div>
-                
-                <form class="auth-form" id="signup-form-element">
-                    <div class="input-group">
-                        <input type="text" id="signup-name" class="auth-input" placeholder="Full Name" required>
-                        <i class="fas fa-user input-icon"></i>
-                    </div>
-                    
-                    <div class="input-group">
-                        <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
-                        <i class="fas fa-envelope input-icon"></i>
-                    </div>
-                    
-                    <div class="input-group">
-                        <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
-                        <i class="fas fa-lock input-icon"></i>
-                        <button type="button" class="password-toggle" id="signup-password-toggle">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="input-group">
-                        <input type="password" id="signup-confirm-password" class="auth-input" placeholder="Confirm Password" required>
-                        <i class="fas fa-lock input-icon"></i>
-                    </div>
-                    
-                    <button class="auth-btn" id="signup-btn">Create Account</button>
-                </form>
-                
-                <div class="auth-footer">
-                    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
-                </div>
-                
-                <div class="social-login">
-                    <p class="social-title">Or sign up with</p>
-                    <div class="social-buttons">
-                        <button class="social-btn google" id="google-signup">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button class="social-btn facebook" id="facebook-signup">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
-                        <button class="social-btn twitter" id="twitter-signup">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="config-error" class="config-error hidden">
-                <i class="fas fa-exclamation-triangle"></i>
-                Firebase configuration not found. Please check your config.js file.
-            </div>
-        </div>
-    </div>
-
-    <!-- Dashboard Container (hidden by default) -->
-    <div class="app-container" id="app-container" style="display:none;">
+    <div class="app-container" id="app-container">
         <div class="header">
             <div class="logo">
                 <span class="logo-icon">
@@ -2822,23 +2380,23 @@
         </div>
 
         <div class="bottom-nav">
-            <a href="home.html" class="nav-item active" data-page="home">
+            <a href="#" class="nav-item active" data-page="home">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="shop.html" class="nav-item" data-page="shop">
+            <a href="#" class="nav-item" data-page="shop">
                 <i class="fas fa-shopping-bag"></i>
                 <span>Shop</span>
             </a>
-            <a href="wallet.html" class="nav-item" data-page="wallet">
+            <a href="#" class="nav-item" data-page="wallet">
                 <i class="fas fa-wallet"></i>
                 <span>Wallet</span>
             </a>
-            <a href="fun.html" class="nav-item" data-page="fun">
+            <a href="#" class="nav-item" data-page="fun">
                 <i class="fas fa-gamepad"></i>
                 <span>Fun</span>
             </a>
-            <a href="profile.html" class="nav-item" data-page="profile">
+            <a href="#" class="nav-item" data-page="profile">
                 <i class="fas fa-user"></i>
                 <span>Profile</span>
             </a>
@@ -2846,55 +2404,84 @@
     </div>
 
     <script>
-        // Initialize Firebase with config from external config.js
-        if (typeof firebaseConfig !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
-        } else {
-            document.getElementById('config-error').classList.remove('hidden');
-        }
-        
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-        
+        // Configuration manager
+        const ConfigManager = {
+            config: null,
+            
+            // Fetch configuration from external file
+            async fetchConfig() {
+                try {
+                    if (!window.appConfig) {
+                        throw new Error('Config file not loaded');
+                    }
+                    
+                    this.config = window.appConfig;
+                    return this.config;
+                } catch (error) {
+                    console.error('Error loading configuration:', error);
+                    return this.getDefaultConfig();
+                }
+            },
+            
+            // Fallback to default configuration
+            getDefaultConfig() {
+                return {
+                    APP_NAME: 'CallConnect',
+                    API_BASE_URL: 'https://api.callconnect.example.com',
+                    MAX_POST_LENGTH: 500,
+                    MAX_COMMENT_LENGTH: 200,
+                    MAX_LIVE_TITLE_LENGTH: 60,
+                    MAX_STORIES: 10,
+                    MAX_LIVE_ROOMS: 20,
+                    TOAST_DURATION: 3000,
+                    DEFAULT_THEME: 'light',
+                    DEFAULT_USER_COINS: 250,
+                    FEATURES: {
+                        VOICE_NOTES: true,
+                        LIVE_SESSIONS: true,
+                        STORIES: true
+                    }
+                };
+            },
+            
+            // Get configuration value
+            get(key) {
+                return this.config ? this.config[key] : this.getDefaultConfig()[key];
+            }
+        };
+
+        // Application state
+        const appState = {
+            currentUser: {
+                id: 'user1',
+                name: 'John Doe',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                coins: ConfigManager.get('DEFAULT_USER_COINS'),
+                role: 'user',
+                following: ['user2', 'user3', 'ceo1'],
+                likedPosts: []
+            },
+            posts: [],
+            notifications: [],
+            stories: [],
+            liveRooms: [],
+            currentFilter: 'all',
+            audioRecording: null
+        };
+
         // DOM elements
-        const loginContainer = document.getElementById('login-container');
-        const appContainer = document.getElementById('app-container');
-        const loginForm = document.getElementById('login-form-element');
-        const signupForm = document.getElementById('signup-form-element');
-        const loginBtn = document.getElementById('login-btn');
-        const signupBtn = document.getElementById('signup-btn');
-        const showSignupLink = document.getElementById('show-signup');
-        const showLoginLink = document.getElementById('show-login');
-        const loginFormDiv = document.getElementById('login-form');
-        const signupFormDiv = document.getElementById('signup-form');
-        const googleLoginBtn = document.getElementById('google-login');
-        const facebookLoginBtn = document.getElementById('facebook-login');
-        const twitterLoginBtn = document.getElementById('twitter-login');
-        const googleSignupBtn = document.getElementById('google-signup');
-        const facebookSignupBtn = document.getElementById('facebook-signup');
-        const twitterSignupBtn = document.getElementById('twitter-signup');
-        
-        // Password toggle functionality
-        const loginPasswordToggle = document.getElementById('login-password-toggle');
-        const loginPasswordInput = document.getElementById('login-password');
-        const signupPasswordToggle = document.getElementById('signup-password-toggle');
-        const signupPasswordInput = document.getElementById('signup-password');
-        
-        // Dashboard elements
         const menuToggle = document.getElementById('menu-toggle');
         const sidebar = document.getElementById('sidebar');
         const themeToggle = document.getElementById('theme-toggle');
+        const logoutBtn = document.getElementById('logout-btn');
         const notificationBtn = document.getElementById('notification-btn');
-        const messageBtn = document.getElementById('message-btn');
         const notificationsDropdown = document.getElementById('notifications-dropdown');
         const markAllReadBtn = document.getElementById('mark-all-read');
         const topUpBtn = document.getElementById('top-up-btn');
         const createPostBtn = document.getElementById('create-post-btn');
-        const goLiveBtn = document.getElementById('go-live-btn');
-        const logoutBtn = document.getElementById('logout-btn');
         const createPostModal = document.getElementById('create-post-modal');
         const closePostModalBtn = document.getElementById('close-post-modal');
+        const goLiveBtn = document.getElementById('go-live-btn');
         const goLiveModal = document.getElementById('go-live-modal');
         const closeLiveModalBtn = document.getElementById('close-live-modal');
         const closeCommentsBtn = document.getElementById('close-comments');
@@ -2926,24 +2513,6 @@
         const filterBtn = document.getElementById('filter-btn');
         const filterOptions = document.getElementById('filter-options');
         const addStory = document.getElementById('add-story');
-        const reelsViewer = document.getElementById('reels-viewer');
-        const reelVideo = document.getElementById('reel-video');
-        const reelClose = document.getElementById('reel-close');
-        const reelMoreBtn = document.getElementById('reel-more-btn');
-        const reelMoreMenu = document.getElementById('reel-more-menu');
-        const reelUserAvatar = document.getElementById('reel-user-avatar');
-        const reelUserName = document.getElementById('reel-user-name');
-        const reelCaption = document.getElementById('reel-caption');
-        const reelLikes = document.getElementById('reel-likes');
-        const reelComments = document.getElementById('reel-comments');
-        const storiesViewer = document.getElementById('stories-viewer');
-        const storyImage = document.getElementById('story-image');
-        const storyClose = document.getElementById('story-close');
-        const prevStoryBtn = document.getElementById('prev-story');
-        const nextStoryBtn = document.getElementById('next-story');
-        const storyProgress = document.getElementById('story-progress');
-        const floatingMic = document.getElementById('floating-mic');
-        const watchWithFriend = document.getElementById('watch-with-friend');
         const topupModal = document.getElementById('topup-modal');
         const closeTopupModal = document.getElementById('close-topup-modal');
         const buyTokenBtn = document.getElementById('buy-token-btn');
@@ -2952,293 +2521,347 @@
         const closeWatchTogether = document.getElementById('close-watch-together');
         const cancelWatch = document.getElementById('cancel-watch');
         const startWatch = document.getElementById('start-watch');
-        const friendsList = document.getElementById('friends-list');
         
-        // Firebase references
-        const usersRef = db.collection('users');
-        const postsRef = db.collection('posts');
-        const storiesRef = db.collection('stories');
-        const liveRoomsRef = db.collection('liveRooms');
-        const notificationsRef = db.collection('notifications');
-        
-        // Current user
-        let currentUser = null;
-        let currentUserData = null;
-        
-        // Toggle password visibility
-        function togglePasswordVisibility(input, toggleBtn) {
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
-            toggleBtn.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        // Initialize the app
+        async function init() {
+            // Load configuration
+            await ConfigManager.fetchConfig();
+            
+            // Apply configuration settings
+            document.title = ConfigManager.get('APP_NAME');
+            document.querySelector('.logo').textContent = ConfigManager.get('APP_NAME');
+            
+            // Set theme from config
+            document.documentElement.setAttribute('data-theme', ConfigManager.get('DEFAULT_THEME'));
+            themeToggle.innerHTML = ConfigManager.get('DEFAULT_THEME') === 'dark' ? 
+                '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            
+            loadSampleData();
+            setupEventListeners();
+            updateUI();
         }
-        
-        // Show toast notification
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
-            document.body.appendChild(toast);
+
+        // Load sample data for demonstration
+        function loadSampleData() {
+            appState.posts = [
+                {
+                    id: 'post1',
+                    userId: 'ceo1',
+                    userName: 'Abdulhakeem M',
+                    userAvatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+                    role: 'ceo',
+                    content: 'Exciting news! We just reached 1 million users on CallConnect! Thank you all for your support. Stay tuned for some amazing new features coming next month!',
+                    timestamp: new Date(Date.now() - 5 * 60000),
+                    likes: 125,
+                    comments: [
+                        {
+                            id: 'comment1',
+                            userId: 'user1',
+                            userName: 'John Doe',
+                            userAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                            content: 'Congratulations! This is amazing news!',
+                            timestamp: new Date(Date.now() - 4 * 60000),
+                            likes: 12
+                        },
+                        {
+                            id: 'comment2',
+                            userId: 'user2',
+                            userName: 'Sarah Miller',
+                            userAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+                            content: 'So proud to be part of this community!',
+                            timestamp: new Date(Date.now() - 3 * 60000),
+                            likes: 8
+                        }
+                    ],
+                    image: null
+                },
+                {
+                    id: 'post2',
+                    userId: 'admin1',
+                    userName: 'David Wilson',
+                    userAvatar: 'https://randomuser.me/api/portraits/men/22.jpg',
+                    role: 'admin',
+                    content: 'We just deployed a performance update. Let us know if you notice any improvements!',
+                    timestamp: new Date(Date.now() - 30 * 60000),
+                    likes: 27,
+                    comments: [
+                        {
+                            id: 'comment3',
+                            userId: 'user1',
+                            userName: 'John Doe',
+                            userAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                            content: 'The app is much faster now! Great work!',
+                            timestamp: new Date(Date.now() - 25 * 60000),
+                            likes: 5
+                        }
+                    ],
+                    image: null
+                },
+                {
+                    id: 'post3',
+                    userId: 'user2',
+                    userName: 'Sarah Miller',
+                    userAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+                    role: 'user',
+                    content: 'Had an amazing voice chat with friends last night on CallConnect! The audio quality is fantastic.',
+                    timestamp: new Date(Date.now() - 60 * 60000),
+                    likes: 18,
+                    comments: [],
+                    image: null,
+                    audio: true
+                },
+                {
+                    id: 'post4',
+                    userId: 'user1',
+                    userName: 'John Doe',
+                    userAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                    role: 'user',
+                    content: 'Just created my first live room. Join me to discuss mobile app development!',
+                    timestamp: new Date(Date.now() - 90 * 60000),
+                    likes: 32,
+                    comments: [
+                        {
+                            id: 'comment4',
+                            userId: 'admin1',
+                            userName: 'David Wilson',
+                            userAvatar: 'https://randomuser.me/api/portraits/men/22.jpg',
+                            content: 'Great topic! I\'ll join as soon as I can.',
+                            timestamp: new Date(Date.now() - 85 * 60000),
+                            likes: 3
+                        }
+                    ],
+                    image: null
+                }
+            ];
             
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            appState.notifications = [
+                {
+                    id: 1,
+                    type: 'new_post',
+                    sender: 'Sarah Miller',
+                    senderAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+                    content: 'Sarah just posted a new update',
+                    timestamp: new Date(Date.now() - 10 * 60000),
+                    read: false
+                },
+                {
+                    id: 2,
+                    type: 'ceo_announcement',
+                    sender: 'CallConnect CEO',
+                    senderAvatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+                    content: 'New platform update is coming next week!',
+                    timestamp: new Date(Date.now() - 45 * 60000),
+                    read: false
+                },
+                {
+                    id: 3,
+                    type: 'like',
+                    sender: 'Mike Thompson',
+                    senderAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                    content: 'Mike liked your post',
+                    timestamp: new Date(Date.now() - 120 * 60000),
+                    read: true
+                }
+            ];
+            
+            appState.stories = [
+                { 
+                    id: 1, 
+                    name: "Sarah", 
+                    avatar: "https://randomuser.me/api/portraits/women/44.jpg", 
+                    new: true,
+                    items: [
+                        { id: 'story1', type: 'image', content: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80' },
+                        { id: 'story2', type: 'video', content: 'https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4' }
+                    ]
+                },
+                { 
+                    id: 2, 
+                    name: "Mike", 
+                    avatar: "https://randomuser.me/api/portraits/men/32.jpg", 
+                    new: true,
+                    items: [
+                        { id: 'story3', type: 'image', content: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80' }
+                    ]
+                },
+                { 
+                    id: 3, 
+                    name: "Emma", 
+                    avatar: "https://randomuser.me/api/portraits/women/68.jpg", 
+                    new: false,
+                    items: [
+                        { id: 'story4', type: 'image', content: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80' }
+                    ]
+                },
+                { 
+                    id: 4, 
+                    name: "David", 
+                    avatar: "https://randomuser.me/api/portraits/men/22.jpg", 
+                    new: false,
+                    items: [
+                        { id: 'story5', type: 'image', content: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80' }
+                    ]
+                }
+            ];
+            
+            appState.liveRooms = [
+                {
+                    id: 1,
+                    title: "Music & Chill - Late Night Vibes",
+                    image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+                    host: "Sarah",
+                    hostAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                    members: 12
+                },
+                {
+                    id: 2,
+                    title: "Tech Talk: Future of Web Development",
+                    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+                    host: "Mike",
+                    hostAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
+                    members: 8
+                },
+                {
+                    id: 3,
+                    title: "Gaming Session - Join the Battle",
+                    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+                    host: "David",
+                    hostAvatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                    members: 15
+                }
+            ];
         }
-        
-        // Toggle between login and signup forms
-        function toggleAuthForm() {
-            loginFormDiv.classList.toggle('hidden');
-            signupFormDiv.classList.toggle('hidden');
-        }
-        
-        // Handle login
-        async function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            if (!email || !password) {
-                showToast('Please enter email and password');
-                return;
-            }
-            
-            try {
-                loginBtn.classList.add('loading');
-                loginBtn.innerHTML = '<span class="loading"></span> Logging in...';
-                
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                currentUser = userCredential.user;
-                
-                showToast('Login successful!');
-                
-                // Hide login container, show app container
-                loginContainer.style.display = 'none';
-                appContainer.style.display = 'flex';
-                
-                // Initialize the dashboard with the current user
-                initDashboard();
-            } catch (error) {
-                showToast(`Login failed: ${error.message}`);
-            } finally {
-                loginBtn.classList.remove('loading');
-                loginBtn.textContent = 'Login';
-            }
-        }
-        
-        // Handle signup
-        async function handleSignup(e) {
-            e.preventDefault();
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            const confirmPassword = document.getElementById('signup-confirm-password').value;
-            
-            if (!name || !email || !password || !confirmPassword) {
-                showToast('Please fill all fields');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showToast('Passwords do not match');
-                return;
-            }
-            
-            try {
-                signupBtn.classList.add('loading');
-                signupBtn.innerHTML = '<span class="loading"></span> Creating account...';
-                
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                currentUser = userCredential.user;
-                
-                // Save additional user data to Firestore
-                await usersRef.doc(currentUser.uid).set({
-                    name: name,
-                    email: email,
-                    coins: 100,
-                    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                showToast('Account created successfully!');
-                
-                // Hide login container, show app container
-                loginContainer.style.display = 'none';
-                appContainer.style.display = 'flex';
-                
-                // Initialize the dashboard with the current user
-                initDashboard();
-            } catch (error) {
-                showToast(`Signup failed: ${error.message}`);
-            } finally {
-                signupBtn.classList.remove('loading');
-                signupBtn.textContent = 'Create Account';
-            }
-        }
-        
-        // Handle Google login
-        async function handleGoogleLogin() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try {
-                const result = await auth.signInWithPopup(provider);
-                currentUser = result.user;
-                
-                // Save user data if it's a new user
-                const userDoc = await usersRef.doc(currentUser.uid).get();
-                if (!userDoc.exists) {
-                    await usersRef.doc(currentUser.uid).set({
-                        name: currentUser.displayName,
-                        email: currentUser.email,
-                        coins: 100,
-                        avatar: currentUser.photoURL || 'https://randomuser.me/api/portraits/men/32.jpg',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                
-                showToast('Google login successful!');
-                loginContainer.style.display = 'none';
-                appContainer.style.display = 'flex';
-                initDashboard();
-            } catch (error) {
-                showToast(`Google login failed: ${error.message}`);
-            }
-        }
-        
-        // Initialize the dashboard
-        async function initDashboard() {
-            // Get user data from Firestore
-            const userDoc = await usersRef.doc(currentUser.uid).get();
-            currentUserData = userDoc.data();
-            
-            // Update user profile in dashboard
-            document.getElementById('username-display').textContent = currentUserData.name;
-            document.getElementById('user-avatar').src = currentUserData.avatar;
-            document.getElementById('user-coins').textContent = `${currentUserData.coins} `;
-            
-            // Setup event listeners for dashboard
-            setupDashboardListeners();
-            
-            // Load content
-            loadStories();
-            loadLiveRooms();
-            loadNotifications();
-            loadCommunityFeed();
-            
-            // Set theme
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            themeToggle.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        }
-        
-        // Setup dashboard event listeners
-        function setupDashboardListeners() {
-            menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('active');
-            });
-            
-            notificationBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                notificationsDropdown.classList.toggle('active');
-            });
-            
-            messageBtn.addEventListener('click', () => {
-                showToast('Messages feature coming soon!');
-            });
-            
-            document.addEventListener('click', (e) => {
-                if (!notificationsDropdown.contains(e.target) && e.target !== notificationBtn) {
-                    notificationsDropdown.classList.remove('active');
-                }
-                if (!sidebar.contains(e.target) && e.target !== menuToggle) {
-                    sidebar.classList.remove('active');
-                }
-                if (!createPostModal.contains(e.target) && e.target !== createPostBtn) {
-                    closePostModal();
-                }
-                if (!goLiveModal.contains(e.target) && e.target !== goLiveBtn) {
-                    closeLiveModal();
-                }
-                if (!filterOptions.contains(e.target) && e.target !== filterBtn) {
-                    filterOptions.classList.remove('active');
-                }
-                if (!reelMoreMenu.contains(e.target) && e.target !== reelMoreBtn) {
-                    reelMoreMenu.style.display = 'none';
-                }
-                if (!topupModal.contains(e.target) && e.target !== topUpBtn) {
-                    topupModal.style.display = 'none';
-                }
-                if (!watchTogetherModal.contains(e.target) && e.target !== watchWithFriend) {
-                    watchTogetherModal.style.display = 'none';
-                }
-            });
-            
+
+        // Setup event listeners
+        function setupEventListeners() {
+            menuToggle.addEventListener('click', toggleSidebar);
             themeToggle.addEventListener('click', toggleTheme);
             logoutBtn.addEventListener('click', logout);
-            topUpBtn.addEventListener('click', () => topupModal.style.display = 'flex');
-            closeTopupModal.addEventListener('click', () => topupModal.style.display = 'none');
-            createPostBtn.addEventListener('click', () => createPostModal.style.display = 'flex');
-            closePostModalBtn.addEventListener('click', closePostModal);
-            goLiveBtn.addEventListener('click', () => goLiveModal.style.display = 'flex');
-            closeLiveModalBtn.addEventListener('click', closeLiveModal);
-            closeCommentsBtn.addEventListener('click', () => commentsModal.style.display = 'none');
-            startNowRadio.addEventListener('change', toggleScheduleOptions);
-            scheduleRadio.addEventListener('change', toggleScheduleOptions);
-            startLiveBtn.addEventListener('click', startLiveSession);
-            addImageBtn.addEventListener('click', () => imageUpload.click());
+            notificationBtn.addEventListener('click', toggleNotificationsDropdown);
+            markAllReadBtn.addEventListener('click', markAllAsRead);
+            topUpBtn.addEventListener('click', showTopUpModal);
+            createPostBtn.addEventListener('click', showCreatePostModal);
+            closePostModalBtn.addEventListener('click', closeCreatePostModal);
+            goLiveBtn.addEventListener('click', showGoLiveModal);
+            closeLiveModalBtn.addEventListener('click', closeGoLiveModal);
+            closeCommentsBtn.addEventListener('click', closeCommentsModal);
+            addImageBtn.addEventListener('click', triggerImageUpload);
             imageUpload.addEventListener('change', handleImageUpload);
-            addVoiceBtn.addEventListener('click', () => recordingUI.style.display = 'block');
+            addVoiceBtn.addEventListener('click', showRecordingUI);
             recordBtn.addEventListener('click', startRecording);
             stopBtn.addEventListener('click', stopRecording);
             submitPostBtn.addEventListener('click', submitPost);
-            filterBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                filterOptions.classList.toggle('active');
-            });
+            startNowRadio.addEventListener('change', toggleScheduleOptions);
+            scheduleRadio.addEventListener('change', toggleScheduleOptions);
+            startLiveBtn.addEventListener('click', startLiveSession);
+            filterBtn.addEventListener('click', toggleFilterOptions);
             addStory.addEventListener('click', createStory);
-            reelClose.addEventListener('click', () => {
-                reelsViewer.style.display = 'none';
-                floatingMic.style.display = 'none';
-            });
-            reelMoreBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                reelMoreMenu.style.display = reelMoreMenu.style.display === 'block' ? 'none' : 'block';
-            });
-            watchWithFriend.addEventListener('click', () => {
-                watchTogetherModal.style.display = 'flex';
-                reelMoreMenu.style.display = 'none';
-            });
-            floatingMic.addEventListener('click', toggleMic);
-            storyClose.addEventListener('click', () => storiesViewer.style.display = 'none');
-            prevStoryBtn.addEventListener('click', showPrevStory);
-            nextStoryBtn.addEventListener('click', showNextStory);
-            buyTokenBtn.addEventListener('click', () => window.location.href = 'https://www.getmemy.com');
-            closeWatchTogether.addEventListener('click', () => watchTogetherModal.style.display = 'none');
-            cancelWatch.addEventListener('click', () => watchTogetherModal.style.display = 'none');
+            closeTopupModal.addEventListener('click', closeTopUpModal);
+            buyTokenBtn.addEventListener('click', buyTokens);
+            closeWatchTogether.addEventListener('click', closeWatchTogetherModal);
+            cancelWatch.addEventListener('click', closeWatchTogetherModal);
             startWatch.addEventListener('click', startWatchingTogether);
+            
+            document.addEventListener('click', handleDocumentClick);
             
             navItems.forEach(item => {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
-                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
+                    setActiveNav(item);
                 });
             });
             
-            markAllReadBtn.addEventListener('click', markAllAsRead);
-            
             document.querySelectorAll('.filter-option').forEach(option => {
                 option.addEventListener('click', () => {
-                    const filter = option.dataset.filter;
+                    appState.currentFilter = option.dataset.filter;
                     document.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
                     option.classList.add('active');
                     filterBtn.innerHTML = `${option.textContent} <i class="fas fa-chevron-down"></i>`;
                     filterOptions.classList.remove('active');
-                    loadCommunityFeed(filter);
+                    loadCommunityFeed();
                 });
             });
         }
-        
-        function closePostModal() {
+
+        // Update UI with current data
+        function updateUI() {
+            usernameDisplay.textContent = appState.currentUser.name;
+            userAvatar.src = appState.currentUser.avatar;
+            userCoins.textContent = `${appState.currentUser.coins} `;
+            
+            loadNotifications();
+            loadStories();
+            loadLiveRooms();
+            loadCommunityFeed();
+        }
+
+        // Toggle sidebar visibility
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+        }
+
+        // Toggle theme between light/dark
+        function toggleTheme() {
+            const darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', darkMode ? '' : 'dark');
+            themeToggle.innerHTML = darkMode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', darkMode ? '' : 'dark');
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                showToast('Logging out...');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            }
+        }
+
+        // Toggle notifications dropdown
+        function toggleNotificationsDropdown() {
+            notificationsDropdown.classList.toggle('active');
+        }
+
+        // Mark all notifications as read
+        function markAllAsRead() {
+            appState.notifications.forEach(notification => notification.read = true);
+            loadNotifications();
+            showToast('All notifications marked as read');
+        }
+
+        // Show top-up modal
+        function showTopUpModal() {
+            topupModal.style.display = 'flex';
+        }
+
+        // Close top-up modal
+        function closeTopUpModal() {
+            topupModal.style.display = 'none';
+        }
+
+        // Buy tokens function
+        function buyTokens() {
+            const tokenCode = tokenInput.value.trim();
+            if (!tokenCode) {
+                showToast('Please enter a token code');
+                return;
+            }
+            
+            // Add coins to user
+            appState.currentUser.coins += 100;
+            userCoins.textContent = `${appState.currentUser.coins} `;
+            closeTopUpModal();
+            showToast('100 coins added to your account!');
+        }
+
+        // Show create post modal
+        function showCreatePostModal() {
+            createPostModal.style.display = 'flex';
+        }
+
+        // Close create post modal
+        function closeCreatePostModal() {
             createPostModal.style.display = 'none';
             postText.value = '';
             imagePreviewContainer.style.display = 'none';
@@ -3246,14 +2869,20 @@
             imageUpload.value = '';
             recordingUI.style.display = 'none';
             stopRecording();
-            clearInterval(recordingInterval);
-            recordingSeconds = 0;
+            clearInterval(appState.recordingInterval);
+            appState.recordingSeconds = 0;
             timer.textContent = '0:00';
             recordBtn.disabled = false;
             stopBtn.disabled = true;
         }
-        
-        function closeLiveModal() {
+
+        // Show go live modal
+        function showGoLiveModal() {
+            goLiveModal.style.display = 'flex';
+        }
+
+        // Close go live modal
+        function closeGoLiveModal() {
             goLiveModal.style.display = 'none';
             scheduleOptions.style.display = 'none';
             document.getElementById('live-title').value = '';
@@ -3261,7 +2890,97 @@
             document.getElementById('live-date').value = '';
             startNowRadio.checked = true;
         }
-        
+
+        // Close comments modal
+        function closeCommentsModal() {
+            commentsModal.style.display = 'none';
+        }
+
+        // Close watch together modal
+        function closeWatchTogetherModal() {
+            watchTogetherModal.style.display = 'none';
+        }
+
+        // Trigger image upload
+        function triggerImageUpload() {
+            imageUpload.click();
+        }
+
+        // Handle image upload
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imagePreview.src = event.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Show recording UI
+        function showRecordingUI() {
+            recordingUI.style.display = 'block';
+        }
+
+        // Start recording
+        function startRecording() {
+            recordBtn.disabled = true;
+            stopBtn.disabled = false;
+            
+            appState.recordingSeconds = 0;
+            appState.recordingInterval = setInterval(() => {
+                appState.recordingSeconds++;
+                const minutes = Math.floor(appState.recordingSeconds / 60);
+                const seconds = appState.recordingSeconds % 60;
+                timer.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+            }, 1000);
+        }
+
+        // Stop recording
+        function stopRecording() {
+            clearInterval(appState.recordingInterval);
+            recordBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+
+        // Submit post
+        function submitPost() {
+            const text = postText.value.trim();
+            const maxLength = ConfigManager.get('MAX_POST_LENGTH');
+            
+            if (text.length > maxLength) {
+                showToast(`Post exceeds maximum length of ${maxLength} characters`);
+                return;
+            }
+            
+            if (!text && !imagePreview.src && !appState.recordingInterval) {
+                showToast('Please add text, image, or audio.');
+                return;
+            }
+            
+            const newPost = {
+                id: 'post' + Date.now(),
+                userId: appState.currentUser.id,
+                userName: appState.currentUser.name,
+                userAvatar: appState.currentUser.avatar,
+                role: 'user',
+                content: text,
+                image: imagePreview.src || null,
+                audio: appState.recordingInterval ? true : false,
+                timestamp: new Date(),
+                likes: 0,
+                comments: []
+            };
+            
+            appState.posts.unshift(newPost);
+            closeCreatePostModal();
+            loadCommunityFeed();
+            showToast('Post created successfully!');
+        }
+
+        // Toggle schedule options
         function toggleScheduleOptions() {
             if (scheduleRadio.checked) {
                 scheduleOptions.style.display = 'block';
@@ -3269,11 +2988,19 @@
                 scheduleOptions.style.display = 'none';
             }
         }
-        
-        async function startLiveSession() {
+
+        // Start live session
+        function startLiveSession() {
             const title = document.getElementById('live-title').value;
+            const maxLength = ConfigManager.get('MAX_LIVE_TITLE_LENGTH');
+            
             if (!title) {
                 showToast('Please enter a title for your live session');
+                return;
+            }
+            
+            if (title.length > maxLength) {
+                showToast(`Title exceeds maximum length of ${maxLength} characters`);
                 return;
             }
             
@@ -3286,138 +3013,140 @@
                 return;
             }
             
-            try {
-                // Generate live link
-                const liveId = Math.random().toString(36).substring(7);
-                const liveLink = `https://callconnect.live/${liveId}`;
-                
-                // Create post for the live session
-                const postData = {
-                    userId: currentUser.uid,
-                    userName: currentUserData.name,
-                    userAvatar: currentUserData.avatar,
-                    role: 'user',
-                    content: `I'm live now! Join me: ${liveLink}`,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: 0,
-                    comments: []
-                };
-                
-                await postsRef.add(postData);
-                
-                showToast('Live session started!');
-                closeLiveModal();
-                loadCommunityFeed();
-            } catch (error) {
-                showToast(`Error starting live session: ${error.message}`);
-            }
-        }
-        
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    imagePreview.src = event.target.result;
-                    imagePreviewContainer.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        
-        async function startRecording() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                audioChunks = [];
-                recorder = new MediaRecorder(stream);
-                
-                recorder.ondataavailable = e => audioChunks.push(e.data);
-                
-                recorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                    
-                    // Upload audio to Firebase Storage
-                    const storageRef = storage.ref();
-                    const audioRef = storageRef.child(`audio/${Date.now()}.mp3`);
-                    await audioRef.put(audioBlob);
-                    const audioUrl = await audioRef.getDownloadURL();
-                    
-                    // Save the audio URL
-                    audioData = audioUrl;
-                };
-                
-                recorder.start();
-                recordBtn.disabled = true;
-                stopBtn.disabled = false;
-                
-                recordingSeconds = 0;
-                recordingInterval = setInterval(() => {
-                    recordingSeconds++;
-                    const minutes = Math.floor(recordingSeconds / 60);
-                    const seconds = recordingSeconds % 60;
-                    timer.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-                }, 1000);
-            } catch (err) {
-                showToast('Error accessing microphone. Please check permissions.');
-            }
-        }
-        
-        function stopRecording() {
-            if (recorder && recorder.state === 'recording') {
-                recorder.stop();
-                clearInterval(recordingInterval);
-                recordBtn.disabled = false;
-                stopBtn.disabled = true;
-            }
-        }
-        
-        async function submitPost() {
-            const text = postText.value.trim();
-            const imageFile = imageUpload.files[0];
+            // Create a new live room
+            const newLiveRoom = {
+                id: 'room' + Date.now(),
+                title: title,
+                image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+                host: appState.currentUser.name,
+                hostAvatar: appState.currentUser.avatar,
+                members: 0
+            };
             
-            if (!text && !imageFile && !audioData) {
-                showToast('Please add text, image, or audio.');
-                return;
-            }
+            appState.liveRooms.unshift(newLiveRoom);
+            closeGoLiveModal();
+            loadLiveRooms();
+            showToast('Live session started!');
+        }
+
+        // Toggle filter options
+        function toggleFilterOptions() {
+            filterOptions.classList.toggle('active');
+        }
+
+        // Create story
+        function createStory() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*, video/*';
+            input.style.display = 'none';
+            document.body.appendChild(input);
             
-            try {
-                let imageUrl = '';
-                
-                if (imageFile) {
-                    // Upload image to Firebase Storage
-                    const storageRef = storage.ref();
-                    const imageRef = storageRef.child(`images/${Date.now()}_${imageFile.name}`);
-                    await imageRef.put(imageFile);
-                    imageUrl = await imageRef.getDownloadURL();
+            input.click();
+            
+            input.addEventListener('change', () => {
+                if (input.files.length > 0) {
+                    showToast('Story created successfully!');
                 }
-                
-                const postData = {
-                    userId: currentUser.uid,
-                    userName: currentUserData.name,
-                    userAvatar: currentUserData.avatar,
-                    role: 'user',
-                    content: text,
-                    image: imageUrl,
-                    audio: audioData,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: 0,
-                    comments: []
-                };
-                
-                await postsRef.add(postData);
-                
-                showToast('Post created successfully!');
-                closePostModal();
-                loadCommunityFeed();
-            } catch (error) {
-                showToast(`Error creating post: ${error.message}`);
+                input.remove();
+            });
+        }
+
+        // Start watching together
+        function startWatchingTogether() {
+            showToast('Starting watch party with friends');
+            closeWatchTogetherModal();
+        }
+
+        // Set active navigation item
+        function setActiveNav(activeItem) {
+            navItems.forEach(item => item.classList.remove('active'));
+            activeItem.classList.add('active');
+        }
+
+        // Handle document click for closing dropdowns
+        function handleDocumentClick(e) {
+            if (!notificationsDropdown.contains(e.target) && e.target !== notificationBtn) {
+                notificationsDropdown.classList.remove('active');
+            }
+            if (!sidebar.contains(e.target) && e.target !== menuToggle) {
+                sidebar.classList.remove('active');
+            }
+            if (!createPostModal.contains(e.target) && e.target !== createPostBtn) {
+                closeCreatePostModal();
+            }
+            if (!goLiveModal.contains(e.target) && e.target !== goLiveBtn) {
+                closeGoLiveModal();
+            }
+            if (!filterOptions.contains(e.target) && e.target !== filterBtn) {
+                filterOptions.classList.remove('active');
+            }
+            if (!topupModal.contains(e.target) && e.target !== topUpBtn) {
+                closeTopUpModal();
+            }
+            if (!watchTogetherModal.contains(e.target) && e.target !== watchWithFriend) {
+                closeWatchTogetherModal();
             }
         }
-        
-        async function loadStories() {
-            const storiesSnapshot = await storiesRef.orderBy('timestamp', 'desc').limit(5).get();
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, ConfigManager.get('TOAST_DURATION'));
+        }
+
+        // Format date for display
+        function formatDate(date) {
+            if (!date) return "Just now";
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            if (minutes < 1) return "Just now";
+            if (minutes < 60) return `${minutes} min ago`;
+            if (minutes < 1440) return `${Math.floor(minutes / 60)} hours ago`;
+            return `${Math.floor(minutes / 1440)} days ago`;
+        }
+
+        // Load notifications
+        function loadNotifications() {
+            const unreadCount = appState.notifications.filter(n => !n.read).length;
+            document.querySelector('.notification-badge').textContent = unreadCount;
+            
+            const list = document.getElementById('notifications-list');
+            list.innerHTML = '';
+            
+            appState.notifications.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.className = `notification-item ${notification.read ? '' : 'unread'}`;
+                notificationElement.innerHTML = `
+                    <img src="${notification.senderAvatar}" class="notification-avatar">
+                    <div class="notification-content">
+                        <div class="notification-text">${notification.content}</div>
+                        <div class="notification-time">${formatDate(notification.timestamp)}</div>
+                    </div>
+                `;
+                notificationElement.addEventListener('click', () => {
+                    if (!notification.read) {
+                        notification.read = true;
+                        loadNotifications();
+                    }
+                });
+                list.appendChild(notificationElement);
+            });
+        }
+
+        // Load stories
+        function loadStories() {
             storiesContainer.innerHTML = '';
             
+            // Add story button
             const addStoryElement = document.createElement('div');
             addStoryElement.className = 'story new';
             addStoryElement.id = 'add-story';
@@ -3432,41 +3161,26 @@
             addStoryElement.addEventListener('click', createStory);
             storiesContainer.appendChild(addStoryElement);
             
-            storiesSnapshot.forEach(doc => {
-                const story = doc.data();
+            // User stories
+            appState.stories.forEach(story => {
                 const storyElement = document.createElement('div');
                 storyElement.className = `story ${story.new ? 'new' : ''}`;
-                storyElement.dataset.id = doc.id;
+                storyElement.dataset.userId = story.id;
                 storyElement.innerHTML = `
                     <div class="story-avatar">
                         <img src="${story.avatar}">
                     </div>
                     <div class="story-username">${story.name}</div>
                 `;
-                storyElement.addEventListener('click', () => {
-                    openStories(story.id);
-                });
                 storiesContainer.appendChild(storyElement);
             });
         }
-        
-        async function loadLiveRooms() {
-            const roomsSnapshot = await liveRoomsRef.where('isLive', '==', true).limit(3).get();
+
+        // Load live rooms
+        function loadLiveRooms() {
             liveRoomsContainer.innerHTML = '';
             
-            if (roomsSnapshot.empty) {
-                liveRoomsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-video-slash"></i>
-                        <h3>No live rooms</h3>
-                        <p>Start a live session to be the first one!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            roomsSnapshot.forEach(doc => {
-                const room = doc.data();
+            appState.liveRooms.forEach(room => {
                 const roomElement = document.createElement('div');
                 roomElement.className = 'live-room-card';
                 roomElement.innerHTML = `
@@ -3479,7 +3193,7 @@
                             <span>${room.members} listening</span>
                         </div>
                     </div>
-                    <button class="join-room-btn" data-room="${doc.id}">
+                    <button class="join-room-btn" data-room="${room.id}">
                         <i class="fas fa-headphones"></i> Join Room
                     </button>
                 `;
@@ -3490,65 +3204,29 @@
                 btn.addEventListener('click', () => showToast(`Joining room...`));
             });
         }
-        
-        async function loadNotifications() {
-            const notificationsSnapshot = await notificationsRef
-                .where('userId', '==', currentUser.uid)
-                .orderBy('timestamp', 'desc')
-                .limit(10)
-                .get();
-            
-            const unreadCount = notificationsSnapshot.docs.filter(doc => !doc.data().read).length;
-            document.querySelector('.notification-badge').textContent = unreadCount;
-            
-            const list = document.getElementById('notifications-list');
-            list.innerHTML = '';
-            
-            if (notificationsSnapshot.empty) {
-                list.innerHTML = '<div class="empty-state">No notifications</div>';
-                return;
-            }
-            
-            notificationsSnapshot.forEach(doc => {
-                const notification = doc.data();
-                const notificationElement = document.createElement('div');
-                notificationElement.className = `notification-item ${notification.read ? '' : 'unread'}`;
-                notificationElement.innerHTML = `
-                    <img src="${notification.senderAvatar}" class="notification-avatar">
-                    <div class="notification-content">
-                        <div class="notification-text">${notification.content}</div>
-                        <div class="notification-time">${formatDate(notification.timestamp.toDate())}</div>
-                    </div>
-                `;
-                notificationElement.addEventListener('click', async () => {
-                    if (!notification.read) {
-                        await notificationsRef.doc(doc.id).update({ read: true });
-                        loadNotifications();
-                    }
-                });
-                list.appendChild(notificationElement);
-            });
-        }
-        
-        async function loadCommunityFeed(filter = 'all') {
+
+        // Load community feed
+        function loadCommunityFeed() {
             if (loadingActivities) loadingActivities.remove();
             
-            let postsQuery = postsRef.orderBy('timestamp', 'desc').limit(20);
+            let filteredPosts = [...appState.posts];
             
-            if (filter === 'my-posts') {
-                postsQuery = postsRef.where('userId', '==', currentUser.uid).orderBy('timestamp', 'desc').limit(20);
-            } else if (filter === 'popular') {
-                postsQuery = postsRef.orderBy('likes', 'desc').limit(20);
+            if (appState.currentFilter === 'my-posts') {
+                filteredPosts = filteredPosts.filter(post => post.userId === appState.currentUser.id);
+            } else if (appState.currentFilter === 'popular') {
+                filteredPosts.sort((a, b) => b.likes - a.likes);
+            } else if (appState.currentFilter === 'recent') {
+                filteredPosts.sort((a, b) => b.timestamp - a.timestamp);
             }
             
-            const postsSnapshot = await postsQuery.get();
-            renderCommunityFeed(postsSnapshot);
+            renderCommunityFeed(filteredPosts);
         }
-        
-        function renderCommunityFeed(postsSnapshot) {
+
+        // Render community feed
+        function renderCommunityFeed(posts) {
             feedContainer.innerHTML = '';
             
-            if (postsSnapshot.empty) {
+            if (posts.length === 0) {
                 feedContainer.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-newspaper"></i>
@@ -3559,24 +3237,26 @@
                 return;
             }
             
-            postsSnapshot.forEach(doc => {
-                const post = doc.data();
-                const postElement = createPostElement(post, doc.id);
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
                 feedContainer.appendChild(postElement);
             });
         }
-        
-        function createPostElement(post, postId) {
+
+        // Create post element
+        function createPostElement(post) {
             const postElement = document.createElement('div');
             postElement.className = 'feed-card';
-            postElement.dataset.id = postId;
+            postElement.dataset.id = post.id;
             
+            // CEO badge for Abdulhakeem M
             let roleBadge = '';
-            if (post.role === 'ceo') roleBadge = '<span class="ceo-badge">CEO</span>';
-            else if (post.role === 'admin') roleBadge = '<span class="admin-badge">ADMIN</span>';
+            if (post.userName === 'Abdulhakeem M') {
+                roleBadge = '<span class="ceo-badge">CEO</span>';
+            }
             
-            const formattedTime = formatDate(post.timestamp.toDate());
-            const isLiked = post.likedBy && post.likedBy.includes(currentUser.uid);
+            const formattedTime = formatDate(post.timestamp);
+            const isLiked = appState.currentUser.likedPosts.includes(post.id);
             
             postElement.innerHTML = `
                 <div class="feed-header">
@@ -3608,13 +3288,13 @@
                     ` : ''}
                 </div>
                 <div class="feed-actions">
-                    <div class="feed-action like-btn ${isLiked ? 'liked' : ''}" data-id="${postId}">
+                    <div class="feed-action like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}">
                         <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
                         <span>${post.likes} likes</span>
                     </div>
-                    <div class="feed-action comment-btn" data-id="${postId}">
+                    <div class="feed-action comment-btn" data-id="${post.id}">
                         <i class="far fa-comment"></i>
-                        <span>${post.comments ? post.comments.length : 0} comments</span>
+                        <span>${post.comments.length} comments</span>
                     </div>
                     <div class="feed-action share-btn">
                         <i class="far fa-share-square"></i>
@@ -3642,26 +3322,17 @@
             `;
             
             const likeBtn = postElement.querySelector('.like-btn');
-            if (likeBtn) likeBtn.addEventListener('click', () => handleLikePost(postId, post));
+            likeBtn.addEventListener('click', () => handleLikePost(post.id));
             
             const commentBtn = postElement.querySelector('.comment-btn');
-            if (commentBtn) commentBtn.addEventListener('click', () => openComments(postId));
+            commentBtn.addEventListener('click', () => openComments(post.id));
             
             const shareBtn = postElement.querySelector('.share-btn');
-            if (shareBtn) {
-                shareBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const dropdown = shareBtn.querySelector('.share-dropdown');
-                    dropdown.classList.toggle('active');
-                    
-                    setTimeout(() => {
-                        document.addEventListener('click', function closeDropdown() {
-                            dropdown.classList.remove('active');
-                            document.removeEventListener('click', closeDropdown);
-                        });
-                    }, 100);
-                });
-            }
+            shareBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dropdown = shareBtn.querySelector('.share-dropdown');
+                dropdown.classList.toggle('active');
+            });
             
             postElement.querySelectorAll('.share-option').forEach(option => {
                 option.addEventListener('click', () => {
@@ -3672,47 +3343,38 @@
             
             return postElement;
         }
-        
-        async function handleLikePost(postId, post) {
-            try {
-                const isLiked = post.likedBy && post.likedBy.includes(currentUser.uid);
-                let newLikes = post.likes;
-                let newLikedBy = post.likedBy || [];
-                
-                if (isLiked) {
-                    newLikes--;
-                    newLikedBy = newLikedBy.filter(id => id !== currentUser.uid);
-                } else {
-                    newLikes++;
-                    newLikedBy.push(currentUser.uid);
-                }
-                
-                await postsRef.doc(postId).update({
-                    likes: newLikes,
-                    likedBy: newLikedBy
-                });
-                
-                showToast(isLiked ? 'Like removed' : 'Liked the post!');
-                loadCommunityFeed();
-            } catch (error) {
-                showToast(`Error updating like: ${error.message}`);
-            }
-        }
-        
-        async function openComments(postId) {
-            const postDoc = await postsRef.doc(postId).get();
-            if (!postDoc.exists) return;
+
+        // Handle like post
+        function handleLikePost(postId) {
+            const post = appState.posts.find(p => p.id === postId);
+            if (!post) return;
             
-            const post = postDoc.data();
-            currentPostId = postId;
+            const index = appState.currentUser.likedPosts.indexOf(postId);
+            if (index === -1) {
+                // User hasn't liked this post yet
+                post.likes++;
+                appState.currentUser.likedPosts.push(postId);
+            } else {
+                // User is unliking the post
+                post.likes--;
+                appState.currentUser.likedPosts.splice(index, 1);
+            }
+            
+            loadCommunityFeed();
+            showToast(index === -1 ? 'Liked the post!' : 'Like removed');
+        }
+
+        // Open comments
+        function openComments(postId) {
+            const post = appState.posts.find(p => p.id === postId);
+            if (!post) return;
+            
             commentsContainer.innerHTML = '';
             
-            if (post.comments && post.comments.length > 0) {
-                post.comments.forEach(comment => {
-                    const commentElement = createCommentElement(comment);
-                    commentsContainer.appendChild(commentElement);
-                });
-            }
+            post.comments.forEach(comment => {
+                const commentElement = createCommentElement(comment);
+                commentsContainer.appendChild(commentElement);
+            });
             
             const commentInput = document.createElement('div');
             commentInput.className = 'comment-input';
@@ -3724,11 +3386,36 @@
             `;
             commentsContainer.appendChild(commentInput);
             
-            document.getElementById('submit-comment').addEventListener('click', addComment);
+            document.getElementById('submit-comment').addEventListener('click', () => {
+                const commentText = document.getElementById('new-comment').value.trim();
+                const maxLength = ConfigManager.get('MAX_COMMENT_LENGTH');
+                
+                if (!commentText) return;
+                
+                if (commentText.length > maxLength) {
+                    showToast(`Comment exceeds maximum length of ${maxLength} characters`);
+                    return;
+                }
+                
+                const newComment = {
+                    id: 'comment' + Date.now(),
+                    userId: appState.currentUser.id,
+                    userName: appState.currentUser.name,
+                    userAvatar: appState.currentUser.avatar,
+                    content: commentText,
+                    timestamp: new Date(),
+                    likes: 0
+                };
+                
+                post.comments.push(newComment);
+                openComments(postId);
+                showToast('Comment added!');
+            });
             
             commentsModal.style.display = 'block';
         }
-        
+
+        // Create comment element
         function createCommentElement(comment) {
             const commentElement = document.createElement('div');
             commentElement.className = 'comment';
@@ -3737,7 +3424,7 @@
                     <img src="${comment.userAvatar}" class="comment-avatar">
                     <div>
                         <div class="comment-user">${comment.userName}</div>
-                        <div class="comment-time">${formatDate(comment.timestamp.toDate())}</div>
+                        <div class="comment-time">${formatDate(comment.timestamp)}</div>
                     </div>
                 </div>
                 <div class="comment-content">
@@ -3750,172 +3437,32 @@
             `;
             return commentElement;
         }
-        
-        async function addComment() {
-            const commentText = document.getElementById('new-comment').value.trim();
-            if (!commentText) return;
+
+        // Share post
+        function sharePost(post, platform) {
+            const postUrl = `${ConfigManager.get('API_BASE_URL')}/post/${post.id}`;
+            let message = '';
             
-            try {
-                const commentData = {
-                    userId: currentUser.uid,
-                    userName: currentUserData.name,
-                    userAvatar: currentUserData.avatar,
-                    content: commentText,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    likes: 0
-                };
-                
-                await postsRef.doc(currentPostId).update({
-                    comments: firebase.firestore.FieldValue.arrayUnion(commentData)
-                });
-                
-                showToast('Comment added!');
-                openComments(currentPostId);
-            } catch (error) {
-                showToast(`Error adding comment: ${error.message}`);
+            switch(platform) {
+                case 'facebook':
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`, '_blank');
+                    break;
+                case 'twitter':
+                    message = `Check out this post on CallConnect: ${post.content.substring(0, 100)}...`;
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(postUrl)}`, '_blank');
+                    break;
+                case 'whatsapp':
+                    message = `Check out this post on CallConnect: ${postUrl}`;
+                    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(postUrl);
+                    showToast('Link copied to clipboard!');
+                    break;
             }
         }
-        
-        function formatDate(date) {
-            if (!date) return "Just now";
-            const now = new Date();
-            const diff = now - date;
-            const minutes = Math.floor(diff / 60000);
-            if (minutes < 1) return "Just now";
-            if (minutes < 60) return `${minutes} min ago`;
-            if (minutes < 1440) return `${Math.floor(minutes / 60)} hours ago`;
-            return `${Math.floor(minutes / 1440)} days ago`;
-        }
-        
-        function markAllAsRead() {
-            // In a real app, you would update all notifications to read status
-            showToast('All notifications marked as read');
-        }
-        
-        function createStory() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*, video/*';
-            input.style.display = 'none';
-            document.body.appendChild(input);
-            
-            input.click();
-            
-            input.addEventListener('change', async (e) => {
-                if (e.target.files.length > 0) {
-                    const file = e.target.files[0];
-                    
-                    try {
-                        // Upload story to Firebase Storage
-                        const storageRef = storage.ref();
-                        const storyRef = storageRef.child(`stories/${Date.now()}_${file.name}`);
-                        await storyRef.put(file);
-                        const storyUrl = await storyRef.getDownloadURL();
-                        
-                        // Save story to Firestore
-                        await storiesRef.add({
-                            userId: currentUser.uid,
-                            userName: currentUserData.name,
-                            avatar: currentUserData.avatar,
-                            content: storyUrl,
-                            type: file.type.startsWith('image') ? 'image' : 'video',
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                            new: true
-                        });
-                        
-                        showToast('Story created successfully!');
-                        loadStories();
-                    } catch (error) {
-                        showToast(`Error creating story: ${error.message}`);
-                    }
-                }
-                input.remove();
-            });
-        }
-        
-        function toggleTheme() {
-            const darkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-            document.documentElement.setAttribute('data-theme', darkMode ? '' : 'dark');
-            themeToggle.innerHTML = darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem('theme', darkMode ? '' : 'dark');
-        }
-        
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                auth.signOut().then(() => {
-                    showToast('Logged out successfully');
-                    appContainer.style.display = 'none';
-                    loginContainer.style.display = 'flex';
-                    document.getElementById('login-email').value = '';
-                    document.getElementById('login-password').value = '';
-                }).catch((error) => {
-                    showToast(`Logout failed: ${error.message}`);
-                });
-            }
-        }
-        
-        function toggleMic() {
-            floatingMic.classList.toggle('active');
-            showToast(floatingMic.classList.contains('active') ? 'Microphone on' : 'Microphone muted');
-        }
-        
-        function startWatchingTogether() {
-            showToast(`Starting watch party with friends`);
-            watchTogetherModal.style.display = 'none';
-        }
-        
-        // Initialize the application
-        function init() {
-            // Password toggle event listeners
-            loginPasswordToggle.addEventListener('click', () => {
-                togglePasswordVisibility(loginPasswordInput, loginPasswordToggle);
-            });
-            
-            signupPasswordToggle.addEventListener('click', () => {
-                togglePasswordVisibility(signupPasswordInput, signupPasswordToggle);
-            });
-            
-            // Form event listeners
-            loginForm.addEventListener('submit', handleLogin);
-            signupForm.addEventListener('submit', handleSignup);
-            
-            // Toggle between login/signup
-            showSignupLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleAuthForm();
-            });
-            
-            showLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                toggleAuthForm();
-            });
-            
-            // Forgot password
-            document.getElementById('forgot-password').addEventListener('click', (e) => {
-                e.preventDefault();
-                showToast('Password reset feature coming soon!');
-            });
-            
-            // Social login buttons
-            googleLoginBtn.addEventListener('click', handleGoogleLogin);
-            facebookLoginBtn.addEventListener('click', handleGoogleLogin); // Simplified for demo
-            twitterLoginBtn.addEventListener('click', handleGoogleLogin); // Simplified for demo
-            googleSignupBtn.addEventListener('click', handleGoogleLogin);
-            facebookSignupBtn.addEventListener('click', handleGoogleLogin); // Simplified for demo
-            twitterSignupBtn.addEventListener('click', handleGoogleLogin); // Simplified for demo
-            
-            // Check if user is already logged in
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    currentUser = user;
-                    loginContainer.style.display = 'none';
-                    appContainer.style.display = 'flex';
-                    initDashboard();
-                }
-            });
-        }
-        
-        // Initialize the application
+
+        // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
